@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Search, Home, Users, Mail, X, Upload, Check, AlertCircle, LogIn, UserPlus, Info, TrendingUp } from 'lucide-react';
 
@@ -15,7 +16,7 @@ const AllInfluencerPlatform = () => {
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [showAllRisingStar, setShowAllRisingStar] = useState(false);
-
+  
   const translations = {
     de: {
       home: 'HOME',
@@ -76,7 +77,7 @@ const AllInfluencerPlatform = () => {
       message: 'Nachricht',
       sendMessage: 'Nachricht senden',
       price: 'Preis'
-    },
+      },
     en: {
       home: 'HOME',
       workWith: 'WORK WITH US',
@@ -136,7 +137,7 @@ const AllInfluencerPlatform = () => {
       message: 'Message',
       sendMessage: 'Send Message',
       price: 'Price'
-    },
+      },
     es: {
       home: 'INICIO',
       workWith: 'TRABAJA CON NOSOTROS',
@@ -213,6 +214,7 @@ const AllInfluencerPlatform = () => {
 
   const brands = ['PUMA', 'AUDI', 'MARRIOTT', 'BMW', 'GUCCI', 'PRADA', 'LOUIS VUITTON', 'DIOR', 'CHANEL', 'VERSACE', 'TESLA', 'APPLE'];
 
+  // Data
   const diamondInfluencer = {
     id: 1,
     name: 'Elena Martinez',
@@ -223,7 +225,7 @@ const AllInfluencerPlatform = () => {
     minFollowers: '20M',
     available: false,
     image: '👑',
-    bookedMonths: [0, 1, 2]
+    bookedMonths: [0, 1, 2, 4]
   };
 
   const platinumInfluencers = Array.from({length: 10}, (_, i) => ({
@@ -273,6 +275,7 @@ const AllInfluencerPlatform = () => {
     };
   });
 
+  // Components
   const Logo3D = ({ size = 'large' }) => {
     const dimensions = size === 'large' ? 'w-16 h-16' : 'w-12 h-12';
     const fontSize = size === 'large' ? 'text-3xl' : 'text-xl';
@@ -305,15 +308,18 @@ const AllInfluencerPlatform = () => {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
-    const nextYear = currentMonth >= 10 ? currentYear + 1 : currentYear;
+    const nextYear = currentMonth >= 10 ? currentYear + 1 : currentYear; // Switch to next year if we're in Nov/Dec
     
+    // All 12 months of the display year
     const allMonths = Array.from({length: 12}, (_, i) => i);
+    
+    // Only next 3 months are bookable
     const bookableMonths = Array.from({length: 3}, (_, i) => (currentMonth + i) % 12);
     
     const isMonthBookable = (monthIndex) => {
       return bookableMonths.includes(monthIndex);
     };
-    
+
     const isMonthBooked = (monthIndex) => {
       const bookableIndex = bookableMonths.indexOf(monthIndex);
       return bookableIndex !== -1 && influencer.bookedMonths?.includes(bookableIndex);
@@ -384,7 +390,7 @@ const AllInfluencerPlatform = () => {
           <button onClick={onClose} className="text-gray-400 hover:text-white">
             <X size={24} />
           </button>
-        </div>
+</div>
         <div className="space-y-4 mb-6">
           <div>
             <label className="block text-sm text-gray-400 mb-2">{t.platformLink}</label>
@@ -418,7 +424,7 @@ const AllInfluencerPlatform = () => {
     </div>
   );
 
-  const PaymentModal = ({ influencer, onClose }) => (
+const PaymentModal = ({ influencer, onClose }) => (
     <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4" onClick={onClose}>
       <div className="bg-gradient-to-br from-gray-900 to-black border-2 border-green-600 rounded-lg max-w-md w-full p-6" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-6">
@@ -488,4 +494,407 @@ const AllInfluencerPlatform = () => {
             <X size={24} />
           </button>
         </div>
-        <div className="text-gray-300 lea
+        <div className="text-gray-300 leading-relaxed">{content}</div>
+      </div>
+    </div>
+  );
+
+  const ContactModal = ({ type, onClose }) => (
+    <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4" onClick={onClose}>
+      <div className="bg-gradient-to-br from-gray-900 to-black border-2 border-blue-500 rounded-lg max-w-md w-full p-6" onClick={e => e.stopPropagation()}>
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-xl font-bold text-white">
+            {type === 'influencer' ? t.footerForInfluencers : t.footerForCompanies}
+          </h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
+            <X size={24} />
+          </button>
+        </div>
+        <form className="space-y-4">
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">{t.name}</label>
+            <input 
+              type="text"
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-600"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">{t.email}</label>
+            <input 
+              type="email"
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-600"
+            />
+          </div>
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">{t.message}</label>
+            <textarea 
+              rows="4"
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-600"
+            />
+          </div>
+<button 
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition"
+          >
+            {t.sendMessage}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+
+  const InfluencerCard = ({ inf, size }) => {
+    const tierColors = {
+      diamond: 'border-purple-500 bg-gradient-to-br from-purple-900/20 to-pink-900/20',
+      platinum: 'border-blue-400 bg-gradient-to-br from-blue-900/20 to-cyan-900/20',
+      gold: 'border-yellow-500 bg-gradient-to-br from-yellow-900/20 to-amber-900/20',
+      risingStar: inf.available ? 'border-green-700' : 'border-gray-700'
+    };
+
+    const handleClick = () => {
+      setSelectedInfluencer(inf);
+      if (!inf.available) {
+        setShowCalendar(true);
+      } else {
+        setShowVerification(true);
+      }
+    };
+
+    return (
+      <div
+        onClick={handleClick}
+        className={`${size} ${tierColors[inf.tier]} border-2 rounded-lg p-3 cursor-pointer hover:scale-105 transition-all flex flex-col items-center justify-center relative overflow-hidden group bg-black`}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition"></div>
+        <div className="text-3xl mb-2 relative z-10">{inf.image}</div>
+        {inf.name && (
+          <>
+            <h3 className="text-sm font-bold mb-1 relative z-10 text-center">{inf.name}</h3>
+            <p className="text-xs text-gray-400 mb-1 relative z-10">{inf.category}</p>
+            <p className="text-xs text-gray-500 mb-2 relative z-10">{inf.followers} {t.followers}</p>
+          </>
+        )}
+        {inf.number && !inf.name && (
+          <p className="text-xs text-green-500 font-bold relative z-10">#{inf.number}</p>
+        )}
+        <p className="text-sm font-bold relative z-10 text-yellow-400">{formatPrice(inf.price)}</p>
+        {inf.isSpecial && (
+          <div className="absolute top-1 right-1 bg-yellow-500 text-black px-2 py-0.5 rounded-full text-xs font-bold z-20">
+            SPECIAL
+          </div>
+        )}
+        {!inf.available && (
+          <div className="absolute top-1 left-1 bg-red-600 text-white px-2 py-0.5 rounded-full text-xs font-bold z-20">
+            {t.reserved}
+          </div>
+                 )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <header className="border-b border-gray-800 bg-gradient-to-r from-gray-900 to-black sticky top-0 z-40">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <Logo3D size="large" />
+              <div>
+                <h1 className="text-2xl font-bold text-white tracking-wide">ALL INFLUENCER</h1>
+                <p className="text-xs text-gray-400">Premium Network</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <button className="hidden md:flex items-center gap-2 bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition text-sm">
+                <LogIn size={16} />
+                {t.login}
+              </button>
+              <button className="hidden md:flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition text-sm">
+                <UserPlus size={16} />
+                {t.register}
+              </button>
+              <div className="flex gap-2">
+                {['de', 'en', 'es'].map(lang => (
+                  <button
+                    key={lang}
+                    onClick={() => setLanguage(lang)}
+                    className={`px-3 py-1 rounded text-sm ${language === lang ? 'bg-white text-black' : 'bg-gray-800 text-gray-400'}`}
+                  >
+                    {lang.toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <nav className="flex items-center justify-center gap-8 text-sm">
+            <button className="flex items-center gap-2 hover:text-white transition text-gray-400">
+              <Home size={18} />
+              <span className="hidden md:inline">{t.home}</span>
+            </button>
+            <button onClick={() => setShowAbout(true)} className="flex items-center gap-2 hover:text-white transition text-gray-400">
+              <Info size={18} />
+              <span className="hidden md:inline">{t.footerAbout}</span>
+            </button>
+            <button onClick={() => setShowContactInfluencer(true)} className="flex items-center gap-2 hover:text-white transition text-gray-400">
+              <Mail size={18} />
+              <span className="hidden md:inline">{t.contact}</span>
+            </button>
+            <button onClick={() => setShowContactCompany(true)} className="flex items-center gap-2 hover:text-white transition text-gray-400">
+              <Users size={18} />
+              <span className="hidden md:inline">{t.workWith}</span>
+            </button>
+          </nav>
+        </div>
+      </header>
+
+      <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 border-b border-gray-800 overflow-hidden py-3">
+        <div className="flex items-center whitespace-nowrap animate-scroll">
+          {[...brands, ...brands, ...brands].map((brand, i) => (
+            <span key={i} className="inline-flex items-center mx-8 text-gray-500 text-sm font-bold">
+              <TrendingUp size={16} className="mr-2 text-yellow-600" />
+              {brand}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-gray-900 border-b border-gray-800 py-4">
+        <div className="container mx-auto px-4">
+          <div className="relative max-w-2xl mx-auto">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder={t.search}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-black border border-gray-700 rounded-lg pl-12 pr-4 py-3 text-white focus:outline-none focus:border-white"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-4xl">💎</span>
+            <div>
+              <h2 className="text-3xl font-bold text-purple-400">{t.diamond}</h2>
+              <p className="text-sm text-gray-400">{t.minFollowers} 20M {t.onePlatform}</p>
+            </div>
+          </div>
+          <InfluencerCard inf={diamondInfluencer} size="h-64 w-full" />
+        </div>
+
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-4xl">🏆</span>
+            <div>
+              <h2 className="text-3xl font-bold text-blue-400">{t.platinum}</h2>
+              <p className="text-sm text-gray-400">{t.minFollowers} 10M {t.onePlatform} • 10 {t.spots}</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            {platinumInfluencers.map((inf) => (
+              <InfluencerCard key={inf.id} inf={inf} size="h-48" />
+            ))}
+          </div>
+        </div>
+
+
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-4xl">🥇</span>
+            <div>
+              <h2 className="text-3xl font-bold text-yellow-400">{t.gold}</h2>
+              <p className="text-sm text-gray-400">{t.minFollowers} 5M {t.onePlatform} • 20 {t.spots}</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {goldInfluencers.map((inf) => (
+              <InfluencerCard key={inf.id} inf={inf} size="h-40" />
+            ))}
+          </div>
+        </div>
+
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-4xl">⭐</span>
+            <div>
+              <h2 className="text-3xl font-bold text-green-400">{t.risingStar}</h2>
+              <p className="text-sm text-gray-400">{t.minFollowers} 1M {t.onePlatform} • 302 {t.spots}</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 md:grid-cols-9 gap-2">
+            {(showAllRisingStar ? risingStarInfluencers : risingStarInfluencers.slice(0, 54)).map((inf) => (
+              <InfluencerCard key={inf.id} inf={inf} size="aspect-square" />
+            ))}
+          </div>
+          {!showAllRisingStar && (
+            <div className="text-center mt-8">
+              <p className="text-gray-400 mb-4">+ 248 {t.moreSpots}</p>
+              <button 
+                onClick={() => setShowAllRisingStar(true)}
+                className="bg-gray-800 hover:bg-gray-700 px-8 py-3 rounded-lg transition font-bold"
+              >
+                {t.showAllSpots}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 border-y border-gray-800 py-12">
+        <div className="container mx-auto px-4 text-center">
+          <h3 className="text-2xl font-bold mb-4">{t.newsletter}</h3>
+          <p className="text-gray-400 mb-6">{t.newsletterSubtitle}</p>
+          <div className="max-w-md mx-auto flex gap-3">
+            <input 
+              type="email" 
+              placeholder={t.emailPlaceholder}
+              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white"
+            />
+            <button className="bg-white hover:bg-gray-200 text-black px-6 py-3 rounded-lg font-bold transition">
+              {t.subscribe}
+            </button>
+          </div>
+          <p className="text-xs text-gray-500 mt-3">{t.gdprNotice}</p>
+        </div>
+      </div>
+
+      <footer className="bg-black border-t border-gray-800 py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Logo3D size="small" />
+                <span className="font-bold text-white">ALL INFLUENCER</span>
+              </div>
+              <p className="text-sm text-gray-400">Premium Network</p>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4 text-white">{t.footerContact}</h4>
+              <button onClick={() => setShowContactInfluencer(true)} className="block text-sm text-gray-400 hover:text-white mb-2">
+                {t.footerForInfluencers}
+              </button>
+              <button onClick={() => setShowContactCompany(true)} className="block text-sm text-gray-400 hover:text-white">
+                {t.footerForCompanies}
+              </button>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4 text-white">{t.footerAbout}</h4>
+              <button onClick={() => setShowAbout(true)} className="block text-sm text-gray-400 hover:text-white">
+                {t.footerAbout}
+              </button>
+            </div>
+            <div>
+              <h4 className="font-bold mb-4 text-white">Legal</h4>
+              <button onClick={() => setShowImprint(true)} className="block text-sm text-gray-400 hover:text-white mb-2">
+                {t.footerImprint}
+              </button>
+              <button onClick={() => setShowPrivacy(true)} className="block text-sm text-gray-400 hover:text-white mb-2">
+                {t.footerPrivacy}
+              </button>
+              <button onClick={() => setShowTerms(true)} className="block text-sm text-gray-400 hover:text-white">
+                {t.footerTerms}
+              </button>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
+            <p>© 2025 ALL INFLUENCER. {t.allRightsReserved}</p>
+          </div>
+        </div>
+      </footer>
+
+      {showCalendar && selectedInfluencer && (
+        <CalendarModal 
+          influencer={selectedInfluencer} 
+          onClose={() => { setShowCalendar(false); setSelectedInfluencer(null); }} 
+        />
+      )}
+
+      {showVerification && (
+        <VerificationModal 
+          onClose={() => { setShowVerification(false); setSelectedInfluencer(null); }} 
+        />
+      )}
+
+      {showPayment && selectedInfluencer && (
+        <PaymentModal 
+          influencer={selectedInfluencer} 
+          onClose={() => { setShowPayment(false); setSelectedInfluencer(null); }} 
+        />
+      )}
+
+      {showContactInfluencer && (
+        <ContactModal 
+          type="influencer"
+          onClose={() => setShowContactInfluencer(false)} 
+        />
+      )}
+
+      {showContactCompany && (
+        <ContactModal 
+          type="company"
+          onClose={() => setShowContactCompany(false)} 
+        />
+      )}
+
+      {showAbout && (
+        <InfoModal 
+          title={t.footerAbout}
+          content={
+            <p>{language === 'de' ? 'ALL INFLUENCER ist die Premium-Plattform, die Top-Influencer mit führenden Marken verbindet.' : language === 'en' ? 'ALL INFLUENCER is the premium platform connecting top influencers with leading brands.' : 'ALL INFLUENCER es la plataforma premium que conecta influencers top con marcas líderes.'}</p>
+          }
+          onClose={() => setShowAbout(false)} 
+        />
+      )}
+
+      {showImprint && (
+        <InfoModal 
+          title={t.footerImprint}
+          content={
+            <div>
+              <p className="mb-2"><strong>ALL INFLUENCER GmbH</strong></p>
+              <p>Musterstraße 123</p>
+              <p>30159 Hannover</p>
+              <p className="mt-4">Email: info@all-influencer.com</p>
+            </div>
+          }
+          onClose={() => setShowImprint(false)} 
+        />
+      )}
+
+      {showPrivacy && (
+        <InfoModal 
+          title={t.footerPrivacy}
+          content={
+            <p>{language === 'de' ? 'Wir nehmen den Schutz Ihrer persönlichen Daten sehr ernst und behandeln Ihre personenbezogenen Daten vertraulich entsprechend der DSGVO.' : language === 'en' ? 'We take the protection of your personal data very seriously and treat your personal data confidentially in accordance with GDPR.' : 'Nos tomamos muy en serio la protección de sus datos personales.'}</p>
+          }
+          onClose={() => setShowPrivacy(false)} 
+        />
+      )}
+
+      {showTerms && (
+        <InfoModal 
+          title={t.footerTerms}
+          content={
+            <p>{language === 'de' ? 'Diese AGB gelten für alle Verträge zwischen ALL INFLUENCER und den Nutzern der Plattform. Für jede erfolgreiche Vermittlung berechnen wir eine Gebühr von 10% des Projektwertes.' : language === 'en' ? 'These terms apply to all contracts between ALL INFLUENCER and users. For each successful placement, we charge a fee of 10% of the project value.' : 'Estos términos se aplican a todos los contratos. Cobramos una tarifa del 10% del valor del proyecto.'}</p>
+          }
+          onClose={() => setShowTerms(false)} 
+        />
+      )}
+
+      <style>{`
+        @keyframes scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-33.33%); }
+        }
+        .animate-scroll {
+          animation: scroll 30s linear infinite;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default AllInfluencerPlatform;
