@@ -46,14 +46,19 @@ const translations = {
       screenshotHint: 'Ziehe eine Datei hierher oder klicke zum Auswählen',
       minFollowersRequired: 'Mindest-Follower für diese Kategorie',
       submit: 'Zur Prüfung einreichen',
-      uploading: 'Wird hochgeladen...'
+      uploading: 'Wird eingereicht...',
+      email: 'Deine E-Mail-Adresse',
+      emailPlaceholder: 'deine@email.com',
+      emailRequired: 'Bitte gib deine E-Mail-Adresse ein',
+      success: 'Erfolgreich eingereicht! Du erhältst eine Bestätigung per E-Mail.',
+      error: 'Fehler beim Einreichen. Bitte versuche es erneut.'
     },
-        loadMore: 'Mehr anzeigen',
+    loadMore: 'Mehr anzeigen',
     login: {
       title: 'Login',
       email: 'E-Mail',
       password: 'Passwort',
-      forgotPassword: 'Passwort vergessen?',
+            forgotPassword: 'Passwort vergessen?',
       submit: 'Einloggen',
       noAccount: 'Noch kein Konto?',
       registerLink: 'Registrieren'
@@ -65,15 +70,27 @@ const translations = {
       password: 'Passwort',
       confirmPassword: 'Passwort bestätigen',
       submit: 'Registrieren',
+      submitting: 'Wird registriert...',
       hasAccount: 'Bereits ein Konto?',
-      loginLink: 'Login'
+      loginLink: 'Login',
+      success: 'Registrierung erfolgreich! Prüfe deine E-Mails.',
+      error: 'Registrierung fehlgeschlagen. Bitte versuche es erneut.',
+      passwordMismatch: 'Passwörter stimmen nicht überein'
     },
     contact: {
       title: 'Kontakt',
       text: 'Hast du Fragen oder möchtest mehr erfahren? Kontaktiere uns!',
       email: 'E-Mail',
       phone: 'Telefon',
-      address: 'Adresse'
+      address: 'Adresse',
+      name: 'Dein Name',
+      yourEmail: 'Deine E-Mail',
+      message: 'Deine Nachricht',
+      messagePlaceholder: 'Schreibe uns deine Nachricht...',
+      send: 'Nachricht senden',
+      sending: 'Wird gesendet...',
+      success: 'Nachricht erfolgreich gesendet!',
+      error: 'Fehler beim Senden. Bitte versuche es erneut.'
     },
     about: {
       title: 'Über uns',
@@ -89,7 +106,7 @@ const translations = {
       title: 'Datenschutz',
       text: 'Wir nehmen den Schutz deiner Daten sehr ernst. Diese Datenschutzerklärung informiert dich über die Art, den Umfang und Zweck der Verarbeitung personenbezogener Daten auf unserer Website. Verantwortlicher für die Datenverarbeitung ist ALL INFLUENCER, Berlin, Deutschland. Wir erheben nur Daten, die für die Nutzung unserer Dienste erforderlich sind. Deine Daten werden nicht an Dritte verkauft.'
     },
-    terms: {
+       terms: {
       title: 'AGB',
       text: 'Mit der Nutzung unserer Plattform akzeptierst du diese Allgemeinen Geschäftsbedingungen. Die Buchung eines Spots erfolgt auf monatlicher Basis. Die Mindest-Follower-Anforderungen müssen erfüllt sein. Nach erfolgreicher Prüfung wird dein Profil freigeschaltet. Stornierungen sind bis 7 Tage vor Beginn des Buchungszeitraums möglich.'
     },
@@ -98,7 +115,7 @@ const translations = {
       quickLinks: 'Quick Links',
       legal: 'Rechtliches',
       privacy: 'Datenschutz',
-           terms: 'AGB',
+      terms: 'AGB',
       imprint: 'Impressum',
       copyright: '© 2025 ALL INFLUENCER. Alle Rechte vorbehalten.'
     }
@@ -146,17 +163,21 @@ const translations = {
       screenshotHint: 'Drag a file here or click to select',
       minFollowersRequired: 'Minimum followers for this category',
       submit: 'Submit for Review',
-      uploading: 'Uploading...'
+      uploading: 'Submitting...',
+      email: 'Your Email Address',
+      emailPlaceholder: 'your@email.com',
+      emailRequired: 'Please enter your email address',
+      success: 'Successfully submitted! You will receive a confirmation email.',
+      error: 'Error submitting. Please try again.'
     },
-        loadMore: 'Load More',
+    loadMore: 'Load More',
     login: {
       title: 'Login',
       email: 'Email',
       password: 'Password',
       forgotPassword: 'Forgot password?',
       submit: 'Login',
-      noAccount: 'No account yet?',
-      registerLink: 'Register'
+        registerLink: 'Register'
     },
     register: {
       title: 'Register',
@@ -165,15 +186,27 @@ const translations = {
       password: 'Password',
       confirmPassword: 'Confirm Password',
       submit: 'Register',
+      submitting: 'Registering...',
       hasAccount: 'Already have an account?',
-      loginLink: 'Login'
+      loginLink: 'Login',
+      success: 'Registration successful! Check your email.',
+      error: 'Registration failed. Please try again.',
+      passwordMismatch: 'Passwords do not match'
     },
     contact: {
       title: 'Contact',
       text: 'Do you have questions or want to learn more? Contact us!',
       email: 'Email',
       phone: 'Phone',
-      address: 'Address'
+      address: 'Address',
+      name: 'Your Name',
+      yourEmail: 'Your Email',
+      message: 'Your Message',
+      messagePlaceholder: 'Write us your message...',
+      send: 'Send Message',
+      sending: 'Sending...',
+      success: 'Message sent successfully!',
+      error: 'Error sending. Please try again.'
     },
     about: {
       title: 'About Us',
@@ -198,11 +231,12 @@ const translations = {
       quickLinks: 'Quick Links',
       legal: 'Legal',
       privacy: 'Privacy Policy',
-            terms: 'Terms',
+      terms: 'Terms',
       imprint: 'Imprint',
       copyright: '© 2025 ALL INFLUENCER. All rights reserved.'
     }
   },
+  es: {
   es: {
     nav: {
       home: 'INICIO',
@@ -246,9 +280,14 @@ const translations = {
       screenshotHint: 'Arrastra un archivo aquí o haz clic para seleccionar',
       minFollowersRequired: 'Seguidores mínimos para esta categoría',
       submit: 'Enviar para Revisión',
-      uploading: 'Subiendo...'
+      uploading: 'Enviando...',
+      email: 'Tu Correo Electrónico',
+      emailPlaceholder: 'tu@email.com',
+      emailRequired: 'Por favor ingresa tu dirección de correo',
+      success: '¡Enviado exitosamente! Recibirás un correo de confirmación.',
+      error: 'Error al enviar. Por favor intenta de nuevo.'
     },
-        loadMore: 'Cargar Más',
+    loadMore: 'Cargar Más',
     login: {
       title: 'Iniciar sesión',
       email: 'Correo electrónico',
@@ -265,15 +304,27 @@ const translations = {
       password: 'Contraseña',
       confirmPassword: 'Confirmar Contraseña',
       submit: 'Registrarse',
+      submitting: 'Registrando...',
       hasAccount: '¿Ya tienes una cuenta?',
-      loginLink: 'Iniciar sesión'
+      loginLink: 'Iniciar sesión',
+      success: '¡Registro exitoso! Revisa tu correo.',
+      error: 'Registro fallido. Por favor intenta de nuevo.',
+      passwordMismatch: 'Las contraseñas no coinciden'
     },
-    contact: {
+        contact: {
       title: 'Contacto',
       text: '¿Tienes preguntas o quieres saber más? ¡Contáctanos!',
       email: 'Correo electrónico',
       phone: 'Teléfono',
-      address: 'Dirección'
+      address: 'Dirección',
+      name: 'Tu Nombre',
+      yourEmail: 'Tu Correo',
+      message: 'Tu Mensaje',
+      messagePlaceholder: 'Escríbenos tu mensaje...',
+      send: 'Enviar Mensaje',
+      sending: 'Enviando...',
+      success: '¡Mensaje enviado exitosamente!',
+      error: 'Error al enviar. Por favor intenta de nuevo.'
     },
     about: {
       title: 'Sobre Nosotros',
@@ -298,7 +349,7 @@ const translations = {
       quickLinks: 'Enlaces Rápidos',
       legal: 'Legal',
       privacy: 'Privacidad',
-            terms: 'Términos',
+      terms: 'Términos',
       imprint: 'Aviso Legal',
       copyright: '© 2025 ALL INFLUENCER. Todos los derechos reservados.'
     }
@@ -318,16 +369,19 @@ const brands = ['GUCCI', 'PRADA', 'LOUIS VUITTON', 'DIOR', 'CHANEL', 'VERSACE', 
 
 // ==================== MAIN COMPONENT ====================
 export default function Home() {
-    const [language, setLanguage] = useState('de');
+  const [language, setLanguage] = useState('de');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
   const [selectedSpot, setSelectedSpot] = useState(null);
   const [selectedMonths, setSelectedMonths] = useState([]);
   const [risingStarVisible, setRisingStarVisible] = useState(54);
   const [bookedMonths, setBookedMonths] = useState({});
-  const [verificationData, setVerificationData] = useState({ profileLink: '', screenshot: null });
+  const [verificationData, setVerificationData] = useState({ profileLink: '', screenshot: null, email: '' });
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [registerData, setRegisterData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+  const [contactData, setContactData] = useState({ name: '', email: '', message: '' });
+  const [isLoading, setIsLoading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState({ type: '', message: '' });
 
   const t = translations[language];
 
@@ -343,12 +397,29 @@ export default function Home() {
     setBookedMonths(booked);
   }, []);
 
+  // ==================== EMAIL FUNCTION ====================
+  const sendEmail = async (type, data) => {
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type, data })
+      });
+      const result = await response.json();
+      return { success: response.ok, ...result };
+    } catch (error) {
+      console.error('Email error:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
   const openCalendarModal = (category, spotIndex) => {
     setSelectedSpot({ category, spotIndex, id: `${category}-${spotIndex}` });
     setSelectedMonths([]);
+    setStatusMessage({ type: '', message: '' });
     setActiveModal('calendar');
   };
-  
+
   const toggleMonth = (monthIndex) => {
     const spotId = selectedSpot?.id;
     if (bookedMonths[spotId]?.includes(monthIndex)) return;
@@ -372,15 +443,113 @@ export default function Home() {
       alert(t.calendar.selectMonths);
       return;
     }
+    setStatusMessage({ type: '', message: '' });
     setActiveModal('verification');
   };
 
-  const handleVerificationSubmit = () => {
-    // Here would be the API call to submit verification
-    console.log('Submitting verification:', { spot: selectedSpot, months: selectedMonths, ...verificationData });
-    alert('Verification submitted! You will receive an email after review.');
-    setActiveModal(null);
-    setVerificationData({ profileLink: '', screenshot: null });
+  const handleVerificationSubmit = async () => {
+    if (!verificationData.email) {
+      setStatusMessage({ type: 'error', message: t.verification.emailRequired });
+      return;
+    }
+    if (!verificationData.profileLink || !verificationData.screenshot) {
+      return;
+    }
+
+    setIsLoading(true);
+    setStatusMessage({ type: '', message: '' });
+
+    try {
+      // Send booking notification to admin
+      await sendEmail('booking', {
+        category: selectedSpot.category,
+        spotIndex: selectedSpot.spotIndex,
+        months: selectedMonths,
+        profileLink: verificationData.profileLink,
+        screenshotName: verificationData.screenshot.name
+      });
+
+      // Send confirmation to user
+      await sendEmail('booking-confirmation', {
+        email: verificationData.email
+      });
+
+      setStatusMessage({ type: 'success', message: t.verification.success });
+      
+      setTimeout(() => {
+        setActiveModal(null);
+        setVerificationData({ profileLink: '', screenshot: null, email: '' });
+        setStatusMessage({ type: '', message: '' });
+      }, 3000);
+
+     } catch (error) {
+      setStatusMessage({ type: 'error', message: t.verification.error });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRegisterSubmit = async () => {
+    if (registerData.password !== registerData.confirmPassword) {
+      setStatusMessage({ type: 'error', message: t.register.passwordMismatch });
+      return;
+    }
+
+    setIsLoading(true);
+    setStatusMessage({ type: '', message: '' });
+
+    try {
+      const result = await sendEmail('registration', {
+        name: registerData.name,
+        email: registerData.email
+      });
+
+      if (result.success) {
+        setStatusMessage({ type: 'success', message: t.register.success });
+        setTimeout(() => {
+          setActiveModal('login');
+          setRegisterData({ name: '', email: '', password: '', confirmPassword: '' });
+          setStatusMessage({ type: '', message: '' });
+        }, 3000);
+      } else {
+        setStatusMessage({ type: 'error', message: t.register.error });
+      }
+    } catch (error) {
+      setStatusMessage({ type: 'error', message: t.register.error });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleContactSubmit = async () => {
+    if (!contactData.name || !contactData.email || !contactData.message) {
+      return;
+    }
+
+      setIsLoading(true);
+    setStatusMessage({ type: '', message: '' });
+
+    try {
+      const result = await sendEmail('contact', {
+        name: contactData.name,
+        email: contactData.email,
+        message: contactData.message
+      });
+
+      if (result.success) {
+        setStatusMessage({ type: 'success', message: t.contact.success });
+        setTimeout(() => {
+          setContactData({ name: '', email: '', message: '' });
+          setStatusMessage({ type: '', message: '' });
+        }, 3000);
+      } else {
+        setStatusMessage({ type: 'error', message: t.contact.error });
+      }
+    } catch (error) {
+      setStatusMessage({ type: 'error', message: t.contact.error });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleFileUpload = (e) => {
@@ -394,11 +563,25 @@ export default function Home() {
     setActiveModal(null);
     setSelectedSpot(null);
     setSelectedMonths([]);
+    setStatusMessage({ type: '', message: '' });
+  };
+
+  // ==================== STATUS MESSAGE COMPONENT ====================
+  const StatusMessage = () => {
+    if (!statusMessage.message) return null;
+    return (
+      <div className={`p-4 rounded-xl mb-4 ${
+        statusMessage.type === 'success' ? 'bg-green-500/20 border border-green-500/30 text-green-300' :
+        statusMessage.type === 'error' ? 'bg-red-500/20 border border-red-500/30 text-red-300' : ''
+      }`}>
+        {statusMessage.message}
+      </div>
+    );
   };
 
   // ==================== RENDER SPOTS ====================
   const renderSpots = (category, data) => {
-        const spots = [];
+    const spots = [];
     const totalSpots = category === 'risingStar' ? risingStarVisible : data.spots;
     
     for (let i = 0; i < totalSpots; i++) {
@@ -434,7 +617,7 @@ export default function Home() {
   };
 
   return (
-        <>
+    <>
       <Head>
         <title>ALL INFLUENCER - Premium Influencer Network</title>
         <meta name="description" content="Die exklusivste Plattform für Premium-Influencer" />
@@ -498,7 +681,7 @@ export default function Home() {
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
               >
-                                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   {mobileMenuOpen ? (
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   ) : (
@@ -599,7 +782,7 @@ export default function Home() {
             <div className="flex flex-wrap justify-center gap-4 max-w-xl mx-auto">
               {renderSpots('platinum', categoryData.platinum)}
             </div>
-                          </div>
+          </div>
         </section>
 
         {/* ==================== GOLD SECTION ==================== */}
@@ -620,7 +803,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ==================== RISING STAR SECTION ==================== */}
+         {/* ==================== RISING STAR SECTION ==================== */}
         <section className="py-16 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-8">
@@ -635,7 +818,7 @@ export default function Home() {
             <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
               {renderSpots('risingStar', categoryData.risingStar)}
             </div>
-                            {risingStarVisible < categoryData.risingStar.spots && (
+            {risingStarVisible < categoryData.risingStar.spots && (
               <div className="text-center mt-8">
                 <button
                   onClick={() => setRisingStarVisible(prev => Math.min(prev + 9, categoryData.risingStar.spots))}
@@ -733,7 +916,7 @@ export default function Home() {
                         onClick={() => toggleMonth(index)}
                         disabled={isBooked}
                         className={`
-                          py-3 px-2 rounded-lg text-sm font-medium transition-all
+                                py-3 px-2 rounded-lg text-sm font-medium transition-all
                           ${isBooked ? 'bg-red-500/30 text-red-300 cursor-not-allowed' : 
                             isSelected ? 'bg-green-500 text-white' : 
                             'bg-white/10 hover:bg-white/20 text-white'}
@@ -800,11 +983,25 @@ export default function Home() {
                 </button>
               </div>
 
+              <StatusMessage />
+
               {/* Min Followers Info */}
               <div className="bg-gradient-to-r from-yellow-400/20 to-amber-600/20 border border-yellow-500/30 rounded-xl p-4 mb-6">
                 <p className="text-sm text-yellow-200">
                   <span className="font-semibold">{t.verification.minFollowersRequired}:</span> {categoryData[selectedSpot.category].minFollowers}
                 </p>
+              </div>
+
+              {/* Email Field */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">{t.verification.email}</label>
+                <input
+                  type="email"
+                  value={verificationData.email}
+                  onChange={(e) => setVerificationData(prev => ({ ...prev, email: e.target.value }))}
+                  placeholder={t.verification.emailPlaceholder}
+                  className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500 transition-colors"
+                />
               </div>
 
               {/* Profile Link */}
@@ -841,16 +1038,22 @@ export default function Home() {
 
               <button
                 onClick={handleVerificationSubmit}
-                disabled={!verificationData.profileLink || !verificationData.screenshot}
-                className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl text-white font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!verificationData.profileLink || !verificationData.screenshot || !verificationData.email || isLoading}
+                className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl text-white font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                {t.verification.submit}
+                {isLoading && (
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                )}
+                {isLoading ? t.verification.uploading : t.verification.submit}
               </button>
             </div>
           </div>
         )}
 
-       {/* Login Modal */}
+        {/* Login Modal */}
         {activeModal === 'login' && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={closeModal}>
             <div className="bg-gray-900 rounded-2xl p-6 max-w-md w-full border border-white/10" onClick={e => e.stopPropagation()}>
@@ -912,6 +1115,8 @@ export default function Home() {
                 </button>
               </div>
 
+              <StatusMessage />
+
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">{t.register.name}</label>
@@ -948,13 +1153,23 @@ export default function Home() {
                     onChange={(e) => setRegisterData(prev => ({ ...prev, confirmPassword: e.target.value }))}
                     className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500 transition-colors"
                   />
-                                 </div>
-                <button className="w-full py-4 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl text-white font-bold text-lg hover:from-blue-600 hover:to-blue-800 transition-all">
-                  {t.register.submit}
+                </div>
+                <button 
+                  onClick={handleRegisterSubmit}
+                  disabled={!registerData.name || !registerData.email || !registerData.password || !registerData.confirmPassword || isLoading}
+                  className="w-full py-4 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl text-white font-bold text-lg hover:from-blue-600 hover:to-blue-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isLoading && (
+                     <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                  )}
+                  {isLoading ? t.register.submitting : t.register.submit}
                 </button>
                 <p className="text-center text-sm text-gray-400">
                   {t.register.hasAccount}{' '}
-                  <button onClick={() => setActiveModal('login')} className="text-yellow-400 hover:text-yellow-300">
+                  <button onClick={() => { setActiveModal('login'); setStatusMessage({ type: '', message: '' }); }} className="text-yellow-400 hover:text-yellow-300">
                     {t.register.loginLink}
                   </button>
                 </p>
@@ -966,9 +1181,8 @@ export default function Home() {
         {/* Contact Modal */}
         {activeModal === 'contact' && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={closeModal}>
-            <div className="bg-gray-900 rounded-2xl p-6 max-w-md w-full border border-white/10" onClick={e => e.stopPropagation()}>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="font-['Playfair_Display'] text-2xl font-bold">{t.contact.title}</h2>
+            <div className="bg-gray-900 rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto border border-white/10" onClick={e => e.stopPropagation()}>
+                  <h2 className="font-['Playfair_Display'] text-2xl font-bold">{t.contact.title}</h2>
                 <button onClick={closeModal} className="p-2 hover:bg-white/10 rounded-lg transition-colors">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -978,7 +1192,55 @@ export default function Home() {
 
               <p className="text-gray-400 mb-6">{t.contact.text}</p>
 
-              <div className="space-y-4">
+              <StatusMessage />
+
+              {/* Contact Form */}
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t.contact.name}</label>
+                  <input
+                    type="text"
+                    value={contactData.name}
+                    onChange={(e) => setContactData(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t.contact.yourEmail}</label>
+                  <input
+                    type="email"
+                    value={contactData.email}
+                    onChange={(e) => setContactData(prev => ({ ...prev, email: e.target.value }))}
+                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">{t.contact.message}</label>
+                  <textarea
+                    value={contactData.message}
+                    onChange={(e) => setContactData(prev => ({ ...prev, message: e.target.value }))}
+                    placeholder={t.contact.messagePlaceholder}
+                    rows={4}
+                    className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500 transition-colors resize-none"
+                  />
+                </div>
+                <button
+                  onClick={handleContactSubmit}
+                  disabled={!contactData.name || !contactData.email || !contactData.message || isLoading}
+                  className="w-full py-4 bg-gradient-to-r from-yellow-500 to-amber-600 rounded-xl text-white font-bold text-lg hover:from-yellow-600 hover:to-amber-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isLoading && (
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                  )}
+                  {isLoading ? t.contact.sending : t.contact.send}
+                </button>
+              </div>
+
+              {/* Contact Info */}
+              <div className="border-t border-white/10 pt-6 space-y-4">
                 <div className="flex items-center gap-3 p-4 bg-white/5 rounded-xl">
                   <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -996,7 +1258,7 @@ export default function Home() {
                     <p className="text-xs text-gray-400">{t.contact.phone}</p>
                     <p className="font-medium">+49 123 456 789</p>
                   </div>
-                </div>     
+                </div>
                 <div className="flex items-center gap-3 p-4 bg-white/5 rounded-xl">
                   <svg className="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -1010,6 +1272,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+        )}
         )}
 
         {/* About Modal */}
@@ -1037,7 +1300,7 @@ export default function Home() {
                     <p className="text-sm text-gray-300">{data.price}{t.categories.priceMonth}</p>
                   </div>
                 ))}
-              </div>
+                </div>
             </div>
           </div>
         )}
@@ -1110,7 +1373,7 @@ export default function Home() {
                   </svg>
                 </button>
               </div>
-             <div className="space-y-2 text-gray-400">
+              <div className="space-y-2 text-gray-400">
                 <p><strong className="text-white">ALL INFLUENCER</strong></p>
                 <p>Musterstraße 123</p>
                 <p>10115 Berlin</p>
@@ -1143,4 +1406,4 @@ export default function Home() {
       `}</style>
     </>
   );
-}
+          }
