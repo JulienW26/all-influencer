@@ -48,7 +48,7 @@ const translations = {
       submit: 'Zur Prüfung einreichen',
       uploading: 'Wird eingereicht...',
       email: 'Deine E-Mail-Adresse',
-      emailPlaceholder: 'deine@email.com',
+            emailPlaceholder: 'deine@email.com',
       emailRequired: 'Bitte gib deine E-Mail-Adresse ein',
       success: 'Erfolgreich eingereicht! Du erhältst eine Bestätigung per E-Mail.',
       error: 'Fehler beim Einreichen. Bitte versuche es erneut.'
@@ -58,7 +58,7 @@ const translations = {
       title: 'Login',
       email: 'E-Mail',
       password: 'Passwort',
-            forgotPassword: 'Passwort vergessen?',
+      forgotPassword: 'Passwort vergessen?',
       submit: 'Einloggen',
       noAccount: 'Noch kein Konto?',
       registerLink: 'Registrieren'
@@ -101,12 +101,12 @@ const translations = {
       title: 'Arbeiten mit uns',
       text: 'Du möchtest Teil unseres Teams werden? Wir suchen immer nach talentierten Menschen, die unsere Vision teilen. Ob Marketing, Design oder Entwicklung - bewirb dich jetzt!',
       apply: 'Jetzt bewerben'
-    },
+          },
     privacy: {
       title: 'Datenschutz',
       text: 'Wir nehmen den Schutz deiner Daten sehr ernst. Diese Datenschutzerklärung informiert dich über die Art, den Umfang und Zweck der Verarbeitung personenbezogener Daten auf unserer Website. Verantwortlicher für die Datenverarbeitung ist ALL INFLUENCER, Berlin, Deutschland. Wir erheben nur Daten, die für die Nutzung unserer Dienste erforderlich sind. Deine Daten werden nicht an Dritte verkauft.'
     },
-       terms: {
+    terms: {
       title: 'AGB',
       text: 'Mit der Nutzung unserer Plattform akzeptierst du diese Allgemeinen Geschäftsbedingungen. Die Buchung eines Spots erfolgt auf monatlicher Basis. Die Mindest-Follower-Anforderungen müssen erfüllt sein. Nach erfolgreicher Prüfung wird dein Profil freigeschaltet. Stornierungen sind bis 7 Tage vor Beginn des Buchungszeitraums möglich.'
     },
@@ -174,10 +174,11 @@ const translations = {
     login: {
       title: 'Login',
       email: 'Email',
-      password: 'Password',
+        password: 'Password',
       forgotPassword: 'Forgot password?',
       submit: 'Login',
-        registerLink: 'Register'
+      noAccount: 'No account yet?',
+      registerLink: 'Register'
     },
     register: {
       title: 'Register',
@@ -220,7 +221,7 @@ const translations = {
     },
     privacy: {
       title: 'Privacy Policy',
-      text: 'We take the protection of your data very seriously. This privacy policy informs you about the type, scope and purpose of processing personal data on our website. The person responsible for data processing is ALL INFLUENCER, Berlin, Germany. We only collect data that is necessary for the use of our services. Your data will not be sold to third parties.'
+         text: 'We take the protection of your data very seriously. This privacy policy informs you about the type, scope and purpose of processing personal data on our website. The person responsible for data processing is ALL INFLUENCER, Berlin, Germany. We only collect data that is necessary for the use of our services. Your data will not be sold to third parties.'
     },
     terms: {
       title: 'Terms & Conditions',
@@ -236,7 +237,6 @@ const translations = {
       copyright: '© 2025 ALL INFLUENCER. All rights reserved.'
     }
   },
-  es: {
   es: {
     nav: {
       home: 'INICIO',
@@ -275,7 +275,7 @@ const translations = {
       title: 'Enviar Verificación',
       subtitle: 'Después de la revisión por nuestro administrador, recibirás la activación por correo electrónico',
       profileLink: 'Enlace a tu perfil',
-      profilePlaceholder: 'https://instagram.com/tuperfil',
+        profilePlaceholder: 'https://instagram.com/tuperfil',
       screenshot: 'Subir Captura de Pantalla',
       screenshotHint: 'Arrastra un archivo aquí o haz clic para seleccionar',
       minFollowersRequired: 'Seguidores mínimos para esta categoría',
@@ -311,7 +311,7 @@ const translations = {
       error: 'Registro fallido. Por favor intenta de nuevo.',
       passwordMismatch: 'Las contraseñas no coinciden'
     },
-        contact: {
+    contact: {
       title: 'Contacto',
       text: '¿Tienes preguntas o quieres saber más? ¡Contáctanos!',
       email: 'Correo electrónico',
@@ -323,7 +323,7 @@ const translations = {
       messagePlaceholder: 'Escríbenos tu mensaje...',
       send: 'Enviar Mensaje',
       sending: 'Enviando...',
-      success: '¡Mensaje enviado exitosamente!',
+            success: '¡Mensaje enviado exitosamente!',
       error: 'Error al enviar. Por favor intenta de nuevo.'
     },
     about: {
@@ -421,7 +421,7 @@ export default function Home() {
   };
 
   const toggleMonth = (monthIndex) => {
-    const spotId = selectedSpot?.id;
+        const spotId = selectedSpot?.id;
     if (bookedMonths[spotId]?.includes(monthIndex)) return;
 
     setSelectedMonths(prev => {
@@ -460,7 +460,7 @@ export default function Home() {
     setStatusMessage({ type: '', message: '' });
 
     try {
-      // Send booking notification to admin
+         // Send booking notification to admin
       await sendEmail('booking', {
         category: selectedSpot.category,
         spotIndex: selectedSpot.spotIndex,
@@ -482,7 +482,7 @@ export default function Home() {
         setStatusMessage({ type: '', message: '' });
       }, 3000);
 
-     } catch (error) {
+    } catch (error) {
       setStatusMessage({ type: 'error', message: t.verification.error });
     } finally {
       setIsLoading(false);
@@ -515,7 +515,7 @@ export default function Home() {
         setStatusMessage({ type: 'error', message: t.register.error });
       }
     } catch (error) {
-      setStatusMessage({ type: 'error', message: t.register.error });
+        setStatusMessage({ type: 'error', message: t.register.error });
     } finally {
       setIsLoading(false);
     }
@@ -526,7 +526,7 @@ export default function Home() {
       return;
     }
 
-      setIsLoading(true);
+    setIsLoading(true);
     setStatusMessage({ type: '', message: '' });
 
     try {
@@ -552,7 +552,7 @@ export default function Home() {
     }
   };
 
-  const handleFileUpload = (e) => {
+   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       setVerificationData(prev => ({ ...prev, screenshot: file }));
@@ -685,7 +685,7 @@ export default function Home() {
                   {mobileMenuOpen ? (
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   )}
                 </svg>
               </button>
@@ -706,7 +706,7 @@ export default function Home() {
                     <button onClick={() => { setActiveModal('register'); setMobileMenuOpen(false); }} className="flex-1 py-2 bg-blue-600 rounded-lg text-sm font-semibold">
                       {t.nav.register}
                     </button>
-                  </div>
+                       </div>
                   <div className="flex gap-2 pt-2">
                     {['de', 'en', 'es'].map((lang) => (
                       <button
@@ -803,7 +803,7 @@ export default function Home() {
           </div>
         </section>
 
-         {/* ==================== RISING STAR SECTION ==================== */}
+        {/* ==================== RISING STAR SECTION ==================== */}
         <section className="py-16 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-8">
@@ -916,7 +916,7 @@ export default function Home() {
                         onClick={() => toggleMonth(index)}
                         disabled={isBooked}
                         className={`
-                                py-3 px-2 rounded-lg text-sm font-medium transition-all
+                          py-3 px-2 rounded-lg text-sm font-medium transition-all
                           ${isBooked ? 'bg-red-500/30 text-red-300 cursor-not-allowed' : 
                             isSelected ? 'bg-green-500 text-white' : 
                             'bg-white/10 hover:bg-white/20 text-white'}
@@ -935,7 +935,7 @@ export default function Home() {
                   <div className="w-4 h-4 bg-white/10 rounded" />
                   <span className="text-gray-400">{t.calendar.available}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-red-500/30 rounded" />
                   <span className="text-gray-400">{t.calendar.booked}</span>
                 </div>
@@ -1160,7 +1160,7 @@ export default function Home() {
                   className="w-full py-4 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl text-white font-bold text-lg hover:from-blue-600 hover:to-blue-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isLoading && (
-                     <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
@@ -1182,7 +1182,8 @@ export default function Home() {
         {activeModal === 'contact' && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={closeModal}>
             <div className="bg-gray-900 rounded-2xl p-6 max-w-md w-full max-h-[90vh] overflow-y-auto border border-white/10" onClick={e => e.stopPropagation()}>
-                  <h2 className="font-['Playfair_Display'] text-2xl font-bold">{t.contact.title}</h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="font-['Playfair_Display'] text-2xl font-bold">{t.contact.title}</h2>
                 <button onClick={closeModal} className="p-2 hover:bg-white/10 rounded-lg transition-colors">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -1212,7 +1213,7 @@ export default function Home() {
                     value={contactData.email}
                     onChange={(e) => setContactData(prev => ({ ...prev, email: e.target.value }))}
                     className="w-full bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500 transition-colors"
-                  />
+                     />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">{t.contact.message}</label>
@@ -1255,7 +1256,7 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   <div>
-                    <p className="text-xs text-gray-400">{t.contact.phone}</p>
+                     <p className="text-xs text-gray-400">{t.contact.phone}</p>
                     <p className="font-medium">+49 123 456 789</p>
                   </div>
                 </div>
@@ -1272,7 +1273,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-        )}
         )}
 
         {/* About Modal */}
@@ -1344,7 +1344,7 @@ export default function Home() {
           </div>
         )}
 
-        {/* Terms Modal */}
+        {/* Terms Modal */}                
         {activeModal === 'terms' && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={closeModal}>
             <div className="bg-gray-900 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto border border-white/10" onClick={e => e.stopPropagation()}>
@@ -1363,7 +1363,7 @@ export default function Home() {
 
         {/* Imprint Modal */}
         {activeModal === 'imprint' && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={closeModal}>
+                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={closeModal}>
             <div className="bg-gray-900 rounded-2xl p-6 max-w-lg w-full border border-white/10" onClick={e => e.stopPropagation()}>
               <div className="flex justify-between items-center mb-6">
                 <h2 className="font-['Playfair_Display'] text-2xl font-bold">{t.footer.imprint}</h2>
@@ -1406,4 +1406,4 @@ export default function Home() {
       `}</style>
     </>
   );
-          }
+}
