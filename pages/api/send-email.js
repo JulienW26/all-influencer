@@ -43,13 +43,13 @@ export default async function handler(req, res) {
               </style>
             </head>
             <body>
-                         <div class="container">
+              <div class="container">
                 <div class="logo">
                   <span class="logo-text">💎 ALL INFLUENCER</span>
                 </div>
                 <div class="content">
                   <h1>Willkommen, ${data.name}!</h1>
-                  <p>Vielen Dank für deine Registrierung bei ALL INFLUENCER - dem exklusivsten Premium Influencer Network.</p>
+                      <p>Vielen Dank für deine Registrierung bei ALL INFLUENCER - dem exklusivsten Premium Influencer Network.</p>
                   <p>Du kannst dich jetzt einloggen und deinen Spot unter den Top-Influencern sichern.</p>
                   <a href="https://all-influencer.com" class="button">Jetzt einloggen</a>
                   <p style="margin-top: 30px;">Bei Fragen stehen wir dir jederzeit zur Verfügung.</p>
@@ -90,7 +90,7 @@ export default async function handler(req, res) {
               </style>
             </head>
             <body>
-              <div class="container">
+                <div class="container">
                 <div class="header">
                   <h1>📬 Neue Kontaktanfrage</h1>
                 </div>
@@ -104,7 +104,7 @@ export default async function handler(req, res) {
                     <div class="value">${data.email}</div>
                   </div>
                   <div class="field">
-                                      <div class="label">Nachricht:</div>
+                    <div class="label">Nachricht:</div>
                     <div class="value message">${data.message}</div>
                   </div>
                 </div>
@@ -192,7 +192,7 @@ export default async function handler(req, res) {
             <head>
               <meta charset="utf-8">
               <style>
-                              body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #0a0a0a; color: #ffffff; margin: 0; padding: 0; }
+                body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #0a0a0a; color: #ffffff; margin: 0; padding: 0; }
                 .container { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
                 .logo { text-align: center; margin-bottom: 30px; }
                 .logo-text { font-size: 28px; font-weight: bold; color: #fbbf24; }
@@ -228,7 +228,7 @@ export default async function handler(req, res) {
                   <p>Bei Fragen stehen wir dir jederzeit zur Verfügung unter <a href="mailto:contact@all-influencer.com" style="color: #fbbf24;">contact@all-influencer.com</a></p>
                   <p style="margin-top: 30px;">Dein ALL INFLUENCER Team</p>
                 </div>
-                <div class="footer">
+                        <div class="footer">
                   <p>© 2025 ALL INFLUENCER. Alle Rechte vorbehalten.</p>
                 </div>
               </div>
