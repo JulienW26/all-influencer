@@ -45,7 +45,7 @@ body {
 }
 
 .animate-marquee {
-    animation: marquee 30s linear infinite;
+  animation: marquee 30s linear infinite;
 }
 
 /* Gradient Text */
@@ -65,7 +65,7 @@ body {
 
 /* Spot Hover Effects */
 .spot-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .spot-hover:hover {
