@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
     const result = await resend.emails.send({
       from: 'contact@all-influencer.com',
-      to: 'bruderino@proton.me',
+      to: 'all-influencer@pt.me',
       subject: 'TEST API - Direkter Versand',
       html: '<h1>Test erfolgreich!</h1><p>Diese E-Mail wurde direkt von der Test-API gesendet.</p>',
     });
