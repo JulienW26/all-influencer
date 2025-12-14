@@ -62,12 +62,12 @@ export default async function handler(req, res) {
 
     console.log('=== VERSUCHE E-MAIL ZU SENDEN ===');
     console.log('Von: contact@all-influencer.com');
-    console.log('An: bruderino@proton.me');
+    console.log('An: all-influencer@pt.me');
     console.log('Betreff: [Weitergeleitet]', subject);
 
     const sendResult = await resend.emails.send({
       from: 'contact@all-influencer.com',
-      to: 'bruderino@proton.me',
+      to: 'all-influencer@pt.me',
       subject: `[Weitergeleitet] ${subject}`,
       html: `
         <div style="background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
