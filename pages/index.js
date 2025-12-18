@@ -1,13 +1,18 @@
 /**
- * ALL INFLUENCER Platform v4.4
+ * ALL INFLUENCER Platform v4.6
  * 
- * CHANGELOG v4.4:
+ * CHANGELOG v4.6:
+ * - NEU: Gesamte Reichweite Display im Hero-Bereich (Entwurf 4)
+ * - NEU: Animierter Zähler beim Laden der Seite
+ * - NEU: Weltkugel-Icon mit goldener Box
+ * - Nachweis-Fenster (ProofModal) nach Buchung/Einladungscode
+ * - Screenshot-Upload für Follower-Nachweis
+ * - E-Mail mit Nachweis an Administrator
  * - Kalender ab Januar 2026
- * - Einladungscode-Modal für Influencer-Kacheln (wie Goldene Kunden)
- * - Kontakt/Arbeiten-Formulare mit E-Mail-Versand via Resend API
+ * - Einladungscode-Modal für Influencer-Kacheln
+ * - Kontakt/Arbeiten-Formulare mit E-Mail-Versand
  * - "Ausschließlich 50 Plätze verfügbar"
  * - Alle Daten an contact@all-influencer.com
- * - Hinweis: Freigabe durch Administrator
  * 
  * KEINE ÄNDERUNG OHNE SCHRIFTLICHE GENEHMIGUNG
  */
@@ -30,6 +35,13 @@ const DEFAULT_CONFIG = {
   },
   goldenClients: { maxSpots: 50, itemsPerPage: 4 },
   marquee: { enabled: true, speed: 30, brands: ['LOUIS VUITTON', 'DIOR', 'CHANEL', 'VERSACE', 'TESLA', 'APPLE', 'GUCCI', 'PRADA', 'ROLEX', 'BMW', 'MERCEDES-BENZ', 'PORSCHE', 'FERRARI', 'CARTIER', 'HERMÈS'] },
+  // Influencer-Daten für Follower-Berechnung (wird durch config.json überschrieben)
+  influencerData: {
+    diamond: [],
+    platinum: [],
+    gold: [],
+    risingStar: []
+  },
   translations: {
     de: {
       clickToBook: 'Klicken zum Buchen',
@@ -87,7 +99,19 @@ const DEFAULT_CONFIG = {
       sending: 'Wird gesendet...',
       sent: 'Gesendet!',
       error: 'Fehler',
-      adminApproval: 'Freigabe erfolgt ausschließlich durch den Administrator.'
+      adminApproval: 'Freigabe erfolgt ausschließlich durch den Administrator.',
+      submitProof: 'Nachweis einreichen',
+      proofSubtitle: 'Nach Prüfung durch unseren Administrator erhältst du eine Freischaltung per E-Mail',
+      minFollowersCategory: 'Mindest-Follower für diese Kategorie',
+      yourEmail: 'Deine E-Mail-Adresse',
+      profileLink: 'Link zu deinem Profil',
+      uploadScreenshot: 'Screenshot hochladen',
+      dragOrClick: 'Ziehe eine Datei hierher oder klicke zum Auswählen',
+      submitForReview: 'Zur Prüfung einreichen',
+      proofSubmitted: 'Nachweis eingereicht!',
+      totalReach: 'Gesamte Reichweite',
+      followers: 'Followers',
+      updatedMonthly: 'Aktualisiert am 1. jeden Monats'
     },
     en: {
       clickToBook: 'Click to book',
@@ -145,7 +169,19 @@ const DEFAULT_CONFIG = {
       sending: 'Sending...',
       sent: 'Sent!',
       error: 'Error',
-      adminApproval: 'Approval is exclusively granted by the administrator.'
+      adminApproval: 'Approval is exclusively granted by the administrator.',
+      submitProof: 'Submit Proof',
+      proofSubtitle: 'After review by our administrator, you will receive activation via email',
+      minFollowersCategory: 'Minimum followers for this category',
+      yourEmail: 'Your email address',
+      profileLink: 'Link to your profile',
+      uploadScreenshot: 'Upload screenshot',
+      dragOrClick: 'Drag a file here or click to select',
+      submitForReview: 'Submit for review',
+      proofSubmitted: 'Proof submitted!',
+      totalReach: 'Total Reach',
+      followers: 'Followers',
+      updatedMonthly: 'Updated on the 1st of each month'
     },
     es: {
       clickToBook: 'Clic para reservar',
@@ -203,7 +239,19 @@ const DEFAULT_CONFIG = {
       sending: 'Enviando...',
       sent: '¡Enviado!',
       error: 'Error',
-      adminApproval: 'La aprobación es otorgada exclusivamente por el administrador.'
+      adminApproval: 'La aprobación es otorgada exclusivamente por el administrador.',
+      submitProof: 'Enviar prueba',
+      proofSubtitle: 'Después de la revisión por nuestro administrador, recibirás la activación por correo',
+      minFollowersCategory: 'Seguidores mínimos para esta categoría',
+      yourEmail: 'Tu dirección de correo',
+      profileLink: 'Enlace a tu perfil',
+      uploadScreenshot: 'Subir captura de pantalla',
+      dragOrClick: 'Arrastra un archivo aquí o haz clic para seleccionar',
+      submitForReview: 'Enviar para revisión',
+      proofSubmitted: '¡Prueba enviada!',
+      totalReach: 'Alcance Total',
+      followers: 'Seguidores',
+      updatedMonthly: 'Actualizado el 1 de cada mes'
     }
   },
   aboutUs: {
@@ -248,6 +296,13 @@ const formatFollowers = (num) => {
   return num?.toString() || '0';
 };
 
+const formatFollowersAnimated = (num) => {
+  if (num >= 1000000000) return (num / 1000000000).toFixed(1) + 'B';
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+  if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
+  return num.toLocaleString('de-DE');
+};
+
 const formatPrice = (price) => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(price);
 
 const getMonthNames = (t) => [t.january, t.february, t.march, t.april, t.may, t.june, t.july, t.august, t.september, t.october, t.november, t.december];
@@ -259,6 +314,21 @@ const generateGoldenClientSpots = (existingData = []) => {
     spots.push(existing ? { ...existing, spotNumber: i } : { id: `gc${i}`, spotNumber: i, name: null, logo: null, image: null, description: { de: '', en: '', es: '' }, partnerSince: null, details: { de: '', en: '', es: '' } });
   }
   return spots;
+};
+
+// Berechne Gesamtzahl der Follower
+const calculateTotalFollowers = (influencerData) => {
+  let total = 0;
+  if (influencerData) {
+    Object.values(influencerData).forEach(category => {
+      if (Array.isArray(category)) {
+        category.forEach(influencer => {
+          total += influencer.followers || 0;
+        });
+      }
+    });
+  }
+  return total;
 };
 
 // ============================================================================
@@ -279,6 +349,86 @@ const sendEmail = async (type, data) => {
     console.error('Email error:', error);
     return { success: false, error: error.message };
   }
+};
+
+// ============================================================================
+// ANIMATED COUNTER
+// ============================================================================
+
+const AnimatedCounter = ({ value, duration = 2000 }) => {
+  const [count, setCount] = useState(0);
+  
+  useEffect(() => {
+    if (value === 0) {
+      setCount(0);
+      return;
+    }
+    
+    let start = 0;
+    const end = value;
+    const incrementTime = duration / 100;
+    const increment = end / 100;
+    
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, incrementTime);
+    
+    return () => clearInterval(timer);
+  }, [value, duration]);
+  
+  return <>{formatFollowersAnimated(count)}</>;
+};
+
+// ============================================================================
+// TOTAL FOLLOWERS DISPLAY (Entwurf 4 - Goldene Box + Weltkugel)
+// ============================================================================
+
+const TotalFollowersDisplay = ({ total }) => {
+  const { t } = useLanguage();
+  
+  if (total === 0) return null;
+  
+  return (
+    <div className="mt-10 flex justify-center">
+      <div className="relative">
+        {/* Glow Effect */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-400 rounded-2xl blur opacity-30 animate-pulse" />
+        
+        {/* Main Box */}
+        <div className="relative bg-black/80 backdrop-blur-xl border border-amber-400/50 rounded-2xl px-10 py-8">
+          {/* Globe Icon */}
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-400/30">
+              <svg className="w-9 h-9 text-black" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+              </svg>
+            </div>
+          </div>
+          
+          <p className="text-amber-400/80 text-sm font-medium tracking-widest uppercase mb-3 text-center">
+            {t.totalReach}
+          </p>
+          
+          <div className="flex items-baseline justify-center gap-2">
+            <span className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent">
+              <AnimatedCounter value={total} />
+            </span>
+            <span className="text-amber-400/60 text-lg">{t.followers}</span>
+          </div>
+          
+          <p className="text-gray-500 text-xs mt-4 text-center">
+            {t.updatedMonthly}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 // ============================================================================
@@ -310,7 +460,7 @@ const Header = () => {
         </nav>
         
         <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center gap-2">
+                  <div className="hidden md:flex items-center gap-2">
             <button className="text-gray-400 hover:text-white text-sm px-2 py-1">{t.login}</button>
             <button className="px-4 py-2 bg-amber-400 hover:bg-amber-500 text-black font-semibold rounded-lg">{t.register}</button>
           </div>
@@ -328,7 +478,7 @@ const Header = () => {
           </button>
         </div>
       </div>
-      
+
       {menuOpen && (
         <nav className="md:hidden bg-black/95 border-t border-white/10 px-4 py-4">
           <div className="flex flex-col gap-3">
@@ -348,11 +498,14 @@ const Header = () => {
 };
 
 // ============================================================================
-// HERO SECTION
+// HERO SECTION (MIT TOTAL FOLLOWERS DISPLAY)
 // ============================================================================
 
 const HeroSection = () => {
+  const { config } = useConfig();
   const { t } = useLanguage();
+  const totalFollowers = calculateTotalFollowers(config.influencerData);
+  
   return (
     <section className="relative py-16 md:py-24 px-4 bg-gradient-to-b from-gray-950 to-gray-900 overflow-hidden">
       <div className="absolute inset-0 opacity-5"><div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }} /></div>
@@ -361,6 +514,9 @@ const HeroSection = () => {
           <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent">{t.heroTitle}</span>
         </h1>
         <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto">{t.heroSubtitle}</p>
+        
+        {/* Total Followers Display */}
+        <TotalFollowersDisplay total={totalFollowers} />
       </div>
     </section>
   );
@@ -403,7 +559,7 @@ const CalendarModal = ({ spot, category, onClose, onBook, onInvitationCode }) =>
   const [selectedMonths, setSelectedMonths] = useState([]);
   const [sending, setSending] = useState(false);
   const cat = config.categories[category];
-  const monthNames = getMonthNames(t);
+   const monthNames = getMonthNames(t);
   const bookedMonths = spot.bookedMonths || [];
   
   const toggleMonth = (idx) => {
@@ -439,10 +595,8 @@ const CalendarModal = ({ spot, category, onClose, onBook, onInvitationCode }) =>
         </div>
         <p className="text-gray-500 text-sm mb-4">{t.maxMonths}</p>
         
-        {/* Jahr 2026 */}
         <h3 className="text-lg font-bold mb-3">2026</h3>
         
-        {/* Monats-Grid 4x3 */}
         <div className="grid grid-cols-4 gap-2 mb-4">
           {monthNames.map((month, idx) => {
             const isBooked = bookedMonths.includes(idx);
@@ -452,18 +606,16 @@ const CalendarModal = ({ spot, category, onClose, onBook, onInvitationCode }) =>
                 className={`py-3 px-2 rounded-lg text-sm font-medium transition-all ${isBooked ? 'bg-red-500/30 text-red-400 cursor-not-allowed' : isSelected ? 'bg-green-500 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}>
                 {month}
               </button>
-            );
+                 );
           })}
         </div>
-
-        {/* Legende */}
+        
         <div className="flex gap-4 mb-4 text-xs">
           <div className="flex items-center gap-2"><div className="w-3 h-3 rounded bg-gray-700" /><span className="text-gray-400">{t.legendAvailable}</span></div>
           <div className="flex items-center gap-2"><div className="w-3 h-3 rounded bg-red-500/50" /><span className="text-gray-400">{t.legendBooked}</span></div>
           <div className="flex items-center gap-2"><div className="w-3 h-3 rounded bg-green-500" /><span className="text-gray-400">{t.legendSelected}</span></div>
         </div>
         
-        {/* Preis-Box */}
         {selectedMonths.length > 0 && (
           <div className="mb-4 p-4 bg-gray-800 rounded-xl">
             <p className="text-gray-400 text-sm">{selectedMonths.length} {t.selectedMonths}: {selectedMonths.map(m => monthNames[m]).join(', ')}</p>
@@ -471,12 +623,11 @@ const CalendarModal = ({ spot, category, onClose, onBook, onInvitationCode }) =>
           </div>
         )}
         
-        {/* Buttons */}
         <button onClick={handleBook} disabled={selectedMonths.length === 0 || sending}
           className={`w-full py-4 rounded-lg font-bold text-lg transition-colors mb-3 ${selectedMonths.length > 0 && !sending ? 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-black' : 'bg-gray-700 text-gray-500 cursor-not-allowed'}`}>
           {sending ? t.sending : t.bookNow}
         </button>
-        
+
         <p className="text-center text-gray-500 mb-3">{t.or}</p>
         
         <button onClick={onInvitationCode} className="w-full py-4 rounded-lg font-semibold border-2 border-amber-400 text-amber-400 hover:bg-amber-400/10 transition-colors">
@@ -488,10 +639,161 @@ const CalendarModal = ({ spot, category, onClose, onBook, onInvitationCode }) =>
 };
 
 // ============================================================================
+// PROOF MODAL (Nachweis einreichen)
+// ============================================================================
+
+const ProofModal = ({ category, spot, onClose }) => {
+    const { config } = useConfig();
+  const { t } = useLanguage();
+  const [email, setEmail] = useState('');
+  const [profileLink, setProfileLink] = useState('');
+  const [file, setFile] = useState(null);
+  const [sending, setSending] = useState(false);
+  const [status, setStatus] = useState(null);
+  
+  const cat = config.categories[category];
+  const categoryNames = { diamond: 'Diamond', platinum: 'Platin', gold: 'Gold', risingStar: 'Rising Star' };
+  
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) setFile(selectedFile);
+  };
+  
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) setFile(droppedFile);
+  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email || !profileLink) return;
+
+        setSending(true);
+    
+    let fileData = null;
+    if (file) {
+      const reader = new FileReader();
+      fileData = await new Promise((resolve) => {
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
+    }
+    
+    const result = await sendEmail('influencer_proof', {
+      category: categoryNames[category],
+      rank: spot.rank,
+      minFollowers: formatFollowers(cat.minFollowers),
+      email: email,
+      profileLink: profileLink,
+      fileName: file?.name || 'Kein Screenshot',
+      fileData: fileData
+    });
+    
+    setSending(false);
+    if (result.success) {
+      setStatus('success');
+      setTimeout(() => onClose(), 2000);
+    } else {
+      setStatus('error');
+    }
+  };
+  
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-gray-900 rounded-2xl p-6 max-w-md w-full border border-white/10 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-xl font-bold">{t.submitProof}</h2>
+          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        <p className="text-gray-400 text-sm mb-4">{t.proofSubtitle}</p>
+        
+        <div className="bg-amber-400/20 border border-amber-400/50 rounded-lg p-3 mb-4">
+          <p className="text-amber-400 font-medium text-center">
+            {t.minFollowersCategory}: {formatFollowers(cat.minFollowers)}
+          </p>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">{t.yourEmail}</label>
+            <input 
+              type="email" 
+              value={email} 
+              onChange={e => setEmail(e.target.value)}
+              placeholder="deine@email.com"
+              required
+              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-amber-400 focus:outline-none"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">{t.profileLink}</label>
+            <input 
+              type="url" 
+              value={profileLink} 
+              onChange={e => setProfileLink(e.target.value)}
+              placeholder="https://instagram.com/deinprofil"
+              required
+              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-amber-400 focus:outline-none"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">{t.uploadScreenshot}</label>
+            <div 
+              onDrop={handleDrop}
+              onDragOver={e => e.preventDefault()}
+              onClick={() => document.getElementById('proofFileInput').click()}
+              className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors ${file ? 'border-green-500 bg-green-500/10' : 'border-gray-600 hover:border-amber-400'}`}
+            >
+              {file ? (
+                <>
+                  <svg className="w-8 h-8 mx-auto mb-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <p className="text-green-500">{file.name}</p>
+                </>
+              ) : (
+                <>
+                  <svg className="w-8 h-8 mx-auto mb-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <p className="text-gray-500">{t.dragOrClick}</p>
+                </>
+              )}
+              <input id="proofFileInput" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={!email || !profileLink || sending}
+            className={`w-full py-4 rounded-lg font-semibold text-lg transition-colors ${
+              email && profileLink && !sending 
+                ? 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-black' 
+                : 'bg-gray-700 text-gray-500 cursor-not-allowed'
+            }`}
+          >
+            {sending ? t.sending : status === 'success' ? t.proofSubmitted : t.submitForReview}
+          </button>
+          
+          {status === 'error' && <p className="text-red-400 text-center text-sm">{t.error}</p>}
+        </form>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
 // INVITATION CODE MODAL (für Influencer UND Goldene Kunden)
 // ============================================================================
 
-const InvitationCodeModal = ({ type, data, onClose }) => {
+const InvitationCodeModal = ({ type, data, onClose, onSuccess }) => {
   const { t } = useLanguage();
   const [code, setCode] = useState('');
   const [sending, setSending] = useState(false);
@@ -511,7 +813,7 @@ const InvitationCodeModal = ({ type, data, onClose }) => {
     
     setSending(true);
     setStatus(null);
-
+    
     let result;
     if (type === 'influencer') {
       const categoryNames = { diamond: 'Diamond', platinum: 'Platin', gold: 'Gold', risingStar: 'Rising Star' };
@@ -521,7 +823,7 @@ const InvitationCodeModal = ({ type, data, onClose }) => {
         code: code
       });
     } else {
-      result = await sendEmail('golden_client_invitation', {
+           result = await sendEmail('golden_client_invitation', {
         spotNumber: data.spotNumber,
         clientName: data.name,
         code: code
@@ -531,7 +833,10 @@ const InvitationCodeModal = ({ type, data, onClose }) => {
     setSending(false);
     if (result.success) {
       setStatus('success');
-      setTimeout(() => onClose(), 1500);
+      setTimeout(() => {
+        if (onSuccess) onSuccess();
+        else onClose();
+      }, 1500);
     } else {
       setStatus('error');
     }
@@ -544,15 +849,15 @@ const InvitationCodeModal = ({ type, data, onClose }) => {
           <h2 className="text-xl font-bold text-amber-400">{t.invitationOnly}</h2>
           <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm text-gray-400 mb-2">{t.enterInvitationCode}</label>
             <input type="text" value={code} onChange={handleCodeChange} placeholder={t.codePlaceholder}
               className="w-full px-4 py-4 bg-gray-700 border border-gray-600 rounded-lg text-center text-xl tracking-widest font-mono focus:border-amber-400 focus:outline-none" maxLength={14} />
           </div>
-
-             <button type="submit" disabled={code.length < 14 || sending}
+          
+          <button type="submit" disabled={code.length < 14 || sending}
             className={`w-full py-4 rounded-lg font-semibold text-lg transition-colors ${code.length >= 14 && !sending ? 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-black' : 'bg-gray-600 text-gray-400 cursor-not-allowed'}`}>
             {sending ? t.sending : status === 'success' ? t.sent : t.registration}
           </button>
@@ -584,13 +889,13 @@ const InfluencerSpot = ({ spot, category, isMobile }) => {
           {spot.followers && <p className="text-white/80 text-xs">{formatFollowers(spot.followers)} Followers</p>}
           {!spot.booked && <p className="text-amber-400 text-xs mt-1 opacity-0 group-hover:opacity-100 transition-opacity">{t.clickToBook}</p>}
         </div>
-         {spot.booked && <div className="absolute top-2 right-2 px-2 py-0.5 bg-red-500/90 rounded text-[10px] font-medium">{t.booked}</div>}
+        {spot.booked && <div className="absolute top-2 right-2 px-2 py-0.5 bg-red-500/90 rounded text-[10px] font-medium">{t.booked}</div>}
       </div>
     </article>
   );
 };
 
-// ============================================================================
+      // ============================================================================
 // CATEGORY ROW
 // ============================================================================
 
@@ -603,7 +908,7 @@ const CategoryRow = ({ category, spots }) => {
   const [layout, setLayout] = useState({ cols: 3, isMobile: false });
   
   useEffect(() => {
-     const checkLayout = () => {
+        const checkLayout = () => {
       const w = window.innerWidth, h = window.innerHeight, isPortrait = h > w;
       if (w < 640) setLayout({ cols: 1, isMobile: true });
       else if (w < 1024 && isPortrait) setLayout({ cols: 2, isMobile: false });
@@ -622,7 +927,7 @@ const CategoryRow = ({ category, spots }) => {
     if (page === totalPages - 1 && spots.length % itemsPerPage !== 0 && spots.length >= itemsPerPage) return spots.slice(Math.max(0, spots.length - itemsPerPage), spots.length);
     return spots.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
   };
-  
+
   const handleTouchStart = e => setTouchStart(e.touches[0].clientX);
   const handleTouchEnd = e => { if (touchStart === null) return; const diff = touchStart - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) { if (diff > 0 && page < totalPages - 1) setPage(p => p + 1); else if (diff < 0 && page > 0) setPage(p => p - 1); } setTouchStart(null); };
   
@@ -683,8 +988,8 @@ const GoldenClientsSection = () => {
   const handleTouchEnd = e => { if (touchStart === null) return; const diff = touchStart - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) { if (diff > 0 && page < totalPages - 1) setPage(p => p + 1); else if (diff < 0 && page > 0) setPage(p => p - 1); } setTouchStart(null); };
   
   return (
-    <>
-       <section className="py-12 px-4 mt-8 bg-gradient-to-b from-black via-gray-950 to-black border-y border-amber-400/20">
+       <>
+      <section className="py-12 px-4 mt-8 bg-gradient-to-b from-black via-gray-950 to-black border-y border-amber-400/20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8"><h2 className="font-serif text-2xl md:text-3xl font-bold text-amber-400 flex items-center justify-center gap-3 mb-2"><span>🏅</span><span>{t.ourClients}</span></h2><p className="text-gray-500 text-sm">{t.exclusiveSpots}</p></div>
           <div className="relative px-6 md:px-10" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
@@ -695,7 +1000,6 @@ const GoldenClientsSection = () => {
         </div>
       </section>
       
-      {/* Slide Panel */}
       {selectedClient && !showInvitationModal && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm" onClick={() => setSelectedClient(null)}>
           <div className="absolute right-0 top-0 bottom-0 w-full max-w-md bg-gray-900 border-l border-amber-400/30 animate-slideIn overflow-y-auto" onClick={e => e.stopPropagation()}>
@@ -705,7 +1009,7 @@ const GoldenClientsSection = () => {
               <button onClick={() => setSelectedClient(null)} className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg bg-black/30"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
             </div>
             <div className="p-6">
-              <h3 className="text-2xl font-bold mb-2">{selectedClient.name || `${t.spotNumber} ${selectedClient.spotNumber}`}</h3>
+                            <h3 className="text-2xl font-bold mb-2">{selectedClient.name || `${t.spotNumber} ${selectedClient.spotNumber}`}</h3>
               {selectedClient.description?.[lang] && <p className="text-amber-400 mb-4">{selectedClient.description[lang]}</p>}
               <div className="h-px bg-gradient-to-r from-amber-400/50 to-transparent mb-4" />
               {selectedClient.partnerSince && <p className="text-gray-300 text-sm mb-2">{t.partnerSince}: {selectedClient.partnerSince}</p>}
@@ -715,7 +1019,7 @@ const GoldenClientsSection = () => {
           </div>
         </div>
       )}
-
+      
       {showInvitationModal && <InvitationCodeModal type="golden_client" data={selectedClient} onClose={() => { setShowInvitationModal(false); setSelectedClient(null); }} />}
     </>
   );
@@ -726,7 +1030,7 @@ const GoldenClientsSection = () => {
 // ============================================================================
 
 const Footer = () => {
-    const { config } = useConfig();
+  const { config } = useConfig();
   const { t } = useLanguage();
   const { openModal } = useModal();
 
@@ -749,7 +1053,7 @@ const Footer = () => {
 // FOOTER MODAL (MIT INTERAKTIVEN FORMULAREN)
 // ============================================================================
 
-const FooterModal = ({ type, onClose }) => {
+    const FooterModal = ({ type, onClose }) => {
   const { config } = useConfig();
   const { lang, t } = useLanguage();
   const [sending, setSending] = useState(false);
@@ -762,14 +1066,14 @@ const FooterModal = ({ type, onClose }) => {
     e.preventDefault();
     setSending(true);
     setStatus(null);
-        const result = await sendEmail('contact', { name: formData.name, email: formData.email, message: formData.message });
+    const result = await sendEmail('contact', { name: formData.name, email: formData.email, message: formData.message });
     setSending(false);
     if (result.success) { setStatus('success'); setTimeout(() => onClose(), 1500); }
     else setStatus('error');
   };
   
   const handleWorkSubmit = async (e) => {
-    e.preventDefault();
+        e.preventDefault();
     setSending(true);
     setStatus(null);
     const result = await sendEmail('application', { name: formData.name, email: formData.email, position: formData.position, motivation: formData.motivation });
@@ -779,21 +1083,21 @@ const FooterModal = ({ type, onClose }) => {
   };
   
   return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
       <div className="bg-gray-900 rounded-2xl p-6 max-w-lg w-full max-h-[85vh] overflow-y-auto border border-white/10" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-4">
           {type === 'about' ? <div className="flex items-center gap-3"><div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center font-bold text-black text-sm">AI</div><h2 className="text-lg font-bold">{titles[type]}</h2></div> : <h2 className="text-lg font-bold">{titles[type]}</h2>}
           <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
-        
-        {type === 'about' && <div>{(config.aboutUs?.[lang]?.paragraphs || []).map((p, i) => <p key={i} className="text-gray-300 mb-4">{p}</p>)}<h3 className="font-semibold text-white mt-6 mb-4">{t.ourCategories}</h3><div className="grid grid-cols-2 gap-3">{Object.entries(config.categories).map(([key, cat]) => { const names = { diamond: { de: 'Diamond', en: 'Diamond', es: 'Diamante' }, platinum: { de: 'Platin', en: 'Platinum', es: 'Platino' }, gold: { de: 'Gold', en: 'Gold', es: 'Oro' }, risingStar: { de: 'Rising Star', en: 'Rising Star', es: 'Rising Star' } }; return <div key={key} className={`p-4 rounded-xl bg-gradient-to-br ${cat.gradient}`}><span className="text-2xl">{cat.icon}</span><h4 className="font-semibold text-white mt-2">{names[key][lang]}</h4><p className="text-white/80 text-xs">{t.minFollowers}: {formatFollowers(cat.minFollowers)}</p><p className="text-white/80 text-xs">{formatPrice(cat.price)}{t.perMonth}</p></div>; })}</div></div>}
+
+             {type === 'about' && <div>{(config.aboutUs?.[lang]?.paragraphs || []).map((p, i) => <p key={i} className="text-gray-300 mb-4">{p}</p>)}<h3 className="font-semibold text-white mt-6 mb-4">{t.ourCategories}</h3><div className="grid grid-cols-2 gap-3">{Object.entries(config.categories).map(([key, cat]) => { const names = { diamond: { de: 'Diamond', en: 'Diamond', es: 'Diamante' }, platinum: { de: 'Platin', en: 'Platinum', es: 'Platino' }, gold: { de: 'Gold', en: 'Gold', es: 'Oro' }, risingStar: { de: 'Rising Star', en: 'Rising Star', es: 'Rising Star' } }; return <div key={key} className={`p-4 rounded-xl bg-gradient-to-br ${cat.gradient}`}><span className="text-2xl">{cat.icon}</span><h4 className="font-semibold text-white mt-2">{names[key][lang]}</h4><p className="text-white/80 text-xs">{t.minFollowers}: {formatFollowers(cat.minFollowers)}</p><p className="text-white/80 text-xs">{formatPrice(cat.price)}{t.perMonth}</p></div>; })}</div></div>}
         
         {type === 'imprint' && <pre className="text-gray-300 whitespace-pre-wrap font-sans">{config.legalTexts?.imprint?.[lang] || `${config.impressum.name}\n${config.impressum.street}\n${config.impressum.city}\n\nTel: ${config.impressum.mobile}\nE-Mail: ${config.impressum.email}`}</pre>}
         
         {(type === 'privacy' || type === 'terms') && <p className="text-gray-400 italic">{config.legalTexts?.[type]?.[lang] || (lang === 'de' ? 'Dieser Bereich kann vom Administrator bearbeitet werden.' : lang === 'en' ? 'This section can be edited by the administrator.' : 'Esta sección puede ser editada por el administrador.')}</p>}
         
         {type === 'contact' && (
-                  <form className="space-y-4" onSubmit={handleContactSubmit}>
+          <form className="space-y-4" onSubmit={handleContactSubmit}>
             <input type="text" placeholder={t.name} required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none" />
             <input type="email" placeholder={t.email} required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none" />
             <textarea placeholder={t.message} rows={4} required value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none resize-none" />
@@ -802,8 +1106,8 @@ const FooterModal = ({ type, onClose }) => {
             </button>
             {status === 'error' && <p className="text-red-400 text-center text-sm">{t.error}</p>}
           </form>
-        )}
-
+               )}
+        
         {type === 'work' && (
           <form className="space-y-4" onSubmit={handleWorkSubmit}>
             <input type="text" placeholder={t.name} required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none" />
@@ -816,7 +1120,7 @@ const FooterModal = ({ type, onClose }) => {
               <option value={t.sales}>{t.sales}</option>
               <option value={t.other}>{t.other}</option>
             </select>
-            <textarea placeholder={t.motivation} rows={3} required value={formData.motivation} onChange={e => setFormData({...formData, motivation: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none resize-none" />
+                      <textarea placeholder={t.motivation} rows={3} required value={formData.motivation} onChange={e => setFormData({...formData, motivation: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none resize-none" />
             <button type="submit" disabled={sending} className={`w-full py-3 rounded-lg font-semibold transition-colors ${sending ? 'bg-gray-600 text-gray-400' : status === 'success' ? 'bg-green-500 text-white' : 'bg-amber-400 hover:bg-amber-500 text-black'}`}>
               {sending ? t.sending : status === 'success' ? t.sent : t.submitApplication}
             </button>
@@ -857,6 +1161,7 @@ const ModalProvider = ({ children }) => {
   const [footerModal, setFooterModal] = useState(null);
   const [calendarModal, setCalendarModal] = useState(null);
   const [invitationModal, setInvitationModal] = useState(null);
+  const [proofModal, setProofModal] = useState(null);
   
   const openModal = useCallback(type => setFooterModal(type), []);
   const closeModal = useCallback(() => setFooterModal(null), []);
@@ -864,23 +1169,33 @@ const ModalProvider = ({ children }) => {
   const closeCalendar = useCallback(() => setCalendarModal(null), []);
   
   const handleBook = useCallback((months) => {
-    alert(t.adminApproval);
+    const currentCalendar = calendarModal;
     setCalendarModal(null);
-  }, [t]);
+    setProofModal({ category: currentCalendar.category, spot: currentCalendar.spot });
+  }, [calendarModal]);
 
     const handleInvitationCode = useCallback(() => {
     if (calendarModal) {
-      setInvitationModal({ type: 'influencer', data: { category: calendarModal.category, rank: calendarModal.spot.rank } });
+      const currentCalendar = calendarModal;
       setCalendarModal(null);
+      setInvitationModal({ 
+        type: 'influencer', 
+        data: { category: currentCalendar.category, rank: currentCalendar.spot.rank },
+        onSuccess: () => {
+          setInvitationModal(null);
+          setProofModal({ category: currentCalendar.category, spot: currentCalendar.spot });
+        }
+      });
     }
   }, [calendarModal]);
   
   return (
-    <ModalContext.Provider value={{ openModal, closeModal, openCalendar, closeCalendar }}>
+       <ModalContext.Provider value={{ openModal, closeModal, openCalendar, closeCalendar }}>
       {children}
       {footerModal && <FooterModal type={footerModal} onClose={closeModal} />}
       {calendarModal && <CalendarModal spot={calendarModal.spot} category={calendarModal.category} onClose={closeCalendar} onBook={handleBook} onInvitationCode={handleInvitationCode} />}
-      {invitationModal && <InvitationCodeModal type={invitationModal.type} data={invitationModal.data} onClose={() => setInvitationModal(null)} />}
+      {invitationModal && <InvitationCodeModal type={invitationModal.type} data={invitationModal.data} onClose={() => setInvitationModal(null)} onSuccess={invitationModal.onSuccess} />}
+      {proofModal && <ProofModal category={proofModal.category} spot={proofModal.spot} onClose={() => setProofModal(null)} />}
     </ModalContext.Provider>
   );
 };
