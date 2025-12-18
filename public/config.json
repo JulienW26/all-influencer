@@ -1,0 +1,1142 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "lastUpdated": "2025-12-17",
+    "description": "ALL INFLUENCER - Externe Konfiguration. Diese Datei kann vom Administrator bearbeitet werden, ohne den Code zu ändern."
+  },
+  "site": {
+    "name": "ALL INFLUENCER",
+    "tagline": "Die exklusivste Influencer-Plattform",
+    "contactEmail": "contact@all-influencer.com",
+    "logo": "/assets/logo.png"
+  },
+  "impressum": {
+    "name": "Don Giuliano",
+    "street": "Uetzer Str. 5",
+    "city": "38536 Meinersen",
+    "country": "Deutschland",
+    "mobile": "+49 163 260 0084",
+    "email": "contact@all-influencer.com"
+  },
+  "socialLinks": {
+    "instagram": "",
+    "youtube": "",
+    "x": "",
+    "facebook": "",
+    "tiktok": ""
+  },
+  "categories": {
+    "diamond": {
+      "spots": 3,
+      "minFollowers": 20000000,
+      "price": 10000,
+      "currency": "EUR",
+      "gradient": "from-cyan-400 via-blue-500 to-indigo-600",
+      "icon": "💎"
+    },
+    "platinum": {
+      "spots": 10,
+      "minFollowers": 10000000,
+      "price": 5000,
+      "currency": "EUR",
+      "gradient": "from-slate-300 via-slate-400 to-slate-600",
+      "icon": "🏆"
+    },
+    "gold": {
+      "spots": 20,
+      "minFollowers": 5000000,
+      "price": 1000,
+      "currency": "EUR",
+      "gradient": "from-yellow-400 via-amber-500 to-orange-600",
+      "icon": "🥇"
+    },
+    "risingStar": {
+      "spots": 300,
+      "minFollowers": 1000000,
+      "price": 250,
+      "currency": "EUR",
+      "gradient": "from-purple-400 via-pink-500 to-rose-600",
+      "icon": "⭐"
+    }
+  },
+  "goldenClients": {
+    "maxSpots": 50,
+    "itemsPerPage": 4
+  },
+  "marquee": {
+    "enabled": true,
+    "speed": 30,
+    "brands": [
+      "GUCCI",
+      "PRADA",
+      "LOUIS VUITTON",
+      "DIOR",
+      "CHANEL",
+      "VERSACE",
+      "TESLA",
+      "APPLE",
+      "PUMA",
+      "AUDI",
+      "MARRIOTT",
+      "BMW",
+      "MERCEDES",
+      "ROLEX",
+      "CARTIER"
+    ]
+  },
+  "calendar": {
+    "startYear": 2026,
+    "startMonth": 1,
+    "maxConsecutiveMonths": 3
+  },
+  "legalTexts": {
+    "privacy": {
+      "de": "",
+      "en": "",
+      "es": ""
+    },
+    "terms": {
+      "de": "",
+      "en": "",
+      "es": ""
+    },
+    "imprint": {
+      "de": "Angaben gemäß § 5 TMG\n\nJulien Weiss\nUetzer Str. 5\n38536 Meinersen\n\nKontakt:\nTelefon: +49 163 260 0084\nE-Mail: contact@all-influencer.com",
+      "en": "Information according to § 5 TMG\n\nJulien Weiss\nUetzer Str. 5\n38536 Meinersen\nGermany\n\nContact:\nPhone: +49 163 260 0084\nEmail: contact@all-influencer.com",
+      "es": "Información según § 5 TMG\n\nJulien Weiss\nUetzer Str. 5\n38536 Meinersen\nAlemania\n\nContacto:\nTeléfono: +49 163 260 0084\nCorreo: contact@all-influencer.com"
+    }
+  },
+  "aboutUs": {
+    "de": {
+      "title": "Über ALL INFLUENCER",
+      "paragraphs": [
+        "ALL INFLUENCER ist die erste und exklusivste Plattform, die Premium-Influencer mit weltweit führenden Marken verbindet.",
+        "Unsere Mission ist es, eine einzigartige Bühne für die einflussreichsten Content Creator zu schaffen und ihnen die Sichtbarkeit zu bieten, die sie verdienen.",
+        "Mit strengen Qualitätsstandards und einem kuratierten Auswahlprozess garantieren wir höchste Exklusivität für unsere Mitglieder und Partner."
+      ]
+    },
+    "en": {
+      "title": "About ALL INFLUENCER",
+      "paragraphs": [
+        "ALL INFLUENCER is the first and most exclusive platform connecting premium influencers with world-leading brands.",
+        "Our mission is to create a unique stage for the most influential content creators and provide them with the visibility they deserve.",
+        "With strict quality standards and a curated selection process, we guarantee the highest exclusivity for our members and partners."
+      ]
+    },
+    "es": {
+      "title": "Sobre ALL INFLUENCER",
+      "paragraphs": [
+        "ALL INFLUENCER es la primera y más exclusiva plataforma que conecta influencers premium con marcas líderes a nivel mundial.",
+        "Nuestra misión es crear un escenario único para los creadores de contenido más influyentes y brindarles la visibilidad que merecen.",
+        "Con estrictos estándares de calidad y un proceso de selección curado, garantizamos la máxima exclusividad para nuestros miembros y socios."
+      ]
+    }
+  },
+  "translations": {
+    "de": {
+      "clickToBook": "Klicken zum Buchen",
+      "booked": "Gebucht",
+      "available": "Verfügbar",
+      "rank": "Rang",
+      "followers": "Follower",
+      "month": "Monat",
+      "months": "Monate",
+      "perMonth": "pro Monat",
+      "total": "Gesamt",
+      "submit": "Absenden",
+      "cancel": "Abbrechen",
+      "close": "Schließen",
+      "more": "mehr",
+      "ourClients": "Unsere Goldenen Kunden", 
+      "partnerSince": "Partner seit",
+      "invitationCode": "Einladungscode anfordern",
+      "aboutUs": "Über uns",
+      "contact": "Kontakt",
+      "workWithUs": "Arbeite mit uns",
+      "privacy": "Datenschutz",
+      "terms": "AGB",
+      "imprint": "Impressum",
+      "selectMonths": "Monate auswählen",
+      "maxMonths": "Maximal 3 aufeinanderfolgende Monate",
+      "proofTitle": "Follower-Nachweis",
+      "proofEmail": "Ihre E-Mail-Adresse",
+      "proofLink": "Link zu Ihrem Profil",
+      "proofScreenshot": "Screenshot hochladen",
+      "proofSubmit": "Zur Prüfung einreichen",
+      "applicationTitle": "Bewerbung",
+      "applicationName": "Vollständiger Name",
+      "applicationEmail": "E-Mail-Adresse",
+      "applicationPhone": "Telefon (optional)",
+      "applicationPosition": "Position",
+      "applicationMotivation": "Ihre Motivation",
+      "applicationCV": "Lebenslauf (optional)",
+      "contactTitle": "Kontaktieren Sie uns",
+      "contactName": "Ihr Name",
+      "contactEmail": "Ihre E-Mail",
+      "contactMessage": "Ihre Nachricht",
+      "contactSend": "Nachricht senden",
+      "invitationTitle": "Einladungscode anfordern",
+      "invitationCompany": "Firmenname",
+      "invitationEmail": "Geschäftliche E-Mail",
+      "invitationWebsite": "Website",
+      "invitationMessage": "Warum möchten Sie Partner werden?",
+      "invitationSubmit": "Anfrage senden",
+      "calendarTitle": "Buchungszeitraum wählen",
+      "minFollowersWarning": "Mindestens {min} Follower erforderlich"
+    },
+    "en": {
+      "clickToBook": "Click to book",
+      "booked": "Booked",
+      "available": "Available",
+      "rank": "Rank",
+      "followers": "Followers",
+      "month": "Month",
+      "months": "Months",
+      "perMonth": "per month",
+      "total": "Total",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "close": "Close",
+      "more": "more",
+      "ourClients": "Our Golden Clients",
+          "partnerSince": "Partner since",
+      "invitationCode": "Request invitation code",
+      "aboutUs": "About us",
+      "contact": "Contact",
+      "workWithUs": "Work with us",
+      "privacy": "Privacy Policy",
+      "terms": "Terms & Conditions",
+      "imprint": "Imprint",
+      "selectMonths": "Select months",
+      "maxMonths": "Maximum 3 consecutive months",
+      "proofTitle": "Follower Verification",
+      "proofEmail": "Your email address",
+      "proofLink": "Link to your profile",
+      "proofScreenshot": "Upload screenshot",
+      "proofSubmit": "Submit for review",
+      "applicationTitle": "Application",
+      "applicationName": "Full name",
+      "applicationEmail": "Email address",
+      "applicationPhone": "Phone (optional)",
+      "applicationPosition": "Position",
+      "applicationMotivation": "Your motivation",
+      "applicationCV": "Resume (optional)",
+      "contactTitle": "Contact us",
+      "contactName": "Your name",
+      "contactEmail": "Your email",
+      "contactMessage": "Your message",
+      "contactSend": "Send message",
+      "invitationTitle": "Request invitation code",
+      "invitationCompany": "Company name",
+      "invitationEmail": "Business email",
+      "invitationWebsite": "Website",
+      "invitationMessage": "Why do you want to become a partner?",
+      "invitationSubmit": "Send request",
+      "calendarTitle": "Select booking period",
+      "minFollowersWarning": "Minimum {min} followers required"
+    },
+    "es": {
+      "clickToBook": "Clic para reservar",
+      "booked": "Reservado",
+      "available": "Disponible",
+      "rank": "Rango",
+      "followers": "Seguidores",
+      "month": "Mes",
+      "months": "Meses",
+            "perMonth": "por mes",
+      "total": "Total",
+      "submit": "Enviar",
+      "cancel": "Cancelar",
+      "close": "Cerrar",
+      "more": "más",
+      "ourClients": "Nuestros Clientes Dorados",
+      "partnerSince": "Socio desde",
+      "invitationCode": "Solicitar código de invitación",
+      "aboutUs": "Sobre nosotros",
+      "contact": "Contacto",
+      "workWithUs": "Trabaja con nosotros",
+      "privacy": "Privacidad",
+      "terms": "Términos",
+      "imprint": "Aviso legal",
+      "selectMonths": "Seleccionar meses",
+      "maxMonths": "Máximo 3 meses consecutivos",
+      "proofTitle": "Verificación de seguidores",
+      "proofEmail": "Su correo electrónico",
+      "proofLink": "Enlace a su perfil",
+      "proofScreenshot": "Subir captura",
+      "proofSubmit": "Enviar para revisión",
+      "applicationTitle": "Solicitud",
+      "applicationName": "Nombre completo",
+      "applicationEmail": "Correo electrónico",
+      "applicationPhone": "Teléfono (opcional)",
+      "applicationPosition": "Posición",
+      "applicationMotivation": "Su motivación",
+      "applicationCV": "Currículum (opcional)",
+      "contactTitle": "Contáctenos",
+      "contactName": "Su nombre",
+      "contactEmail": "Su correo",
+      "contactMessage": "Su mensaje",
+      "contactSend": "Enviar mensaje",
+          "invitationTitle": "Solicitar código de invitación",
+      "invitationCompany": "Nombre de empresa",
+      "invitationEmail": "Correo empresarial",
+      "invitationWebsite": "Sitio web",
+      "invitationMessage": "¿Por qué quiere ser socio?",
+      "invitationSubmit": "Enviar solicitud",
+      "calendarTitle": "Seleccionar período de reserva",
+      "minFollowersWarning": "Mínimo {min} seguidores requeridos"
+    }
+  },
+  "goldenClientsData": [
+    {
+      "id": "gc1",
+      "name": "GUCCI",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Luxus-Modehaus",
+        "en": "Luxury Fashion House",
+        "es": "Casa de moda de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+                "de": "Exklusive Partnerschaft für High-Fashion Kampagnen.",
+        "en": "Exclusive partnership for high-fashion campaigns.",
+        "es": "Asociación exclusiva para campañas de alta moda."
+      }
+    },
+    {
+      "id": "gc2",
+      "name": "LOUIS VUITTON",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Luxus-Mode & Leder",
+        "en": "Luxury Fashion & Leather",
+        "es": "Moda y cuero de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Premium-Kampagnen für neue Kollektionen.",
+        "en": "Premium campaigns for new collections.",
+        "es": "Campañas premium para nuevas colecciones."
+      }
+    },
+    {
+      "id": "gc3",
+      "name": "DIOR",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Haute Couture & Beauty",
+        "en": "Haute Couture & Beauty",
+        "es": "Alta costura y belleza"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Beauty-Kampagnen mit Top-Influencern.",
+        "en": "Beauty campaigns with top influencers.",
+        "es": "Campañas de belleza con los mejores influencers."
+      }
+    },
+    {
+      "id": "gc4",
+      "name": "CHANEL",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Französische Mode & Parfum",
+        "en": "French Fashion & Perfume",
+        "es": "Moda y perfume francés"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Ikonische Parfum- und Mode-Kampagnen.",
+        "en": "Iconic perfume and fashion campaigns.",
+        "es": "Campañas icónicas de perfume y moda."
+      }
+    },
+        {
+      "id": "gc5",
+      "name": "ROLEX",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Luxus-Uhren",
+        "en": "Luxury Timepieces",
+        "es": "Relojes de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Exklusive Uhren-Präsentationen.",
+        "en": "Exclusive watch presentations.",
+        "es": "Presentaciones exclusivas de relojes."
+      }
+    },
+    {
+      "id": "gc6",
+      "name": "MERCEDES-BENZ",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Premium-Automobile",
+        "en": "Premium Automobiles",
+        "es": "Automóviles premium"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Premium-Fahrzeug-Launches.",
+        "en": "Premium vehicle launches.",
+        "es": "Lanzamientos de vehículos premium."
+      }
+    },
+    {
+      "id": "gc7",
+      "name": "BMW",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Premium-Automobile",
+        "en": "Premium Automobiles",
+        "es": "Automóviles premium"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Exklusive Fahrberichte und Lifestyle-Content.",
+        "en": "Exclusive test drives and lifestyle content.",
+        "es": "Pruebas exclusivas y contenido de estilo de vida."
+      }
+    },
+    {
+      "id": "gc8",
+      "name": "VERSACE",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Italienische Luxus-Mode",
+        "en": "Italian Luxury Fashion",
+        "es": "Moda italiana de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Glamouröse Kampagnen und Events.",
+        "en": "Glamorous campaigns and events.",
+        "es": "Campañas y eventos glamurosos."
+      }
+    },
+        {
+      "id": "gc9",
+      "name": "PRADA",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Italienisches Modehaus",
+        "en": "Italian Fashion House",
+        "es": "Casa de moda italiana"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Mode-Events und Runway-Coverage.",
+        "en": "Fashion events and runway coverage.",
+        "es": "Eventos de moda y cobertura de pasarela."
+      }
+    },
+    {
+      "id": "gc10",
+      "name": "CARTIER",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Luxus-Schmuck",
+        "en": "Luxury Jewelry",
+        "es": "Joyería de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Exklusive Schmuck-Präsentationen.",
+        "en": "Exclusive jewelry presentations.",
+        "es": "Presentaciones exclusivas de joyería."
+      }
+    },
+    {
+      "id": "gc11",
+      "name": "TESLA",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Elektrofahrzeuge",
+        "en": "Electric Vehicles",
+        "es": "Vehículos eléctricos"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Innovative Partnerschaften.",
+        "en": "Innovative partnerships.",
+        "es": "Asociaciones innovadoras."
+      }
+    },
+    {
+      "id": "gc12",
+      "name": "APPLE",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Technologie",
+        "en": "Technology",
+        "es": "Tecnología"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Produkteinführungen.",
+        "en": "Product launches.",
+        "es": "Lanzamientos de productos."
+      }
+    },
+    {
+      "id": "gc13",
+      "name": "PORSCHE",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Sportwagen",
+        "en": "Sports Cars",
+        "es": "Coches deportivos"
+      },
+      "partnerSince": "2024",
+      "details": {
+                "de": "Exklusive Fahrberichte.",
+        "en": "Exclusive test drives.",
+        "es": "Pruebas exclusivas."
+      }
+    },
+    {
+      "id": "gc14",
+      "name": "HERMÈS",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Luxus-Accessoires",
+        "en": "Luxury Accessories",
+        "es": "Accesorios de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Premium-Kampagnen.",
+        "en": "Premium campaigns.",
+        "es": "Campañas premium."
+      }
+    },
+    {
+      "id": "gc15",
+      "name": "BURBERRY",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Britische Mode",
+        "en": "British Fashion",
+        "es": "Moda británica"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Stilvolle Kampagnen.",
+        "en": "Stylish campaigns.",
+        "es": "Campañas con estilo."
+      }
+    },
+    {
+      "id": "gc16",
+      "name": "FENDI",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Italienische Mode",
+        "en": "Italian Fashion",
+        "es": "Moda italiana"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Luxus-Partnerschaften.",
+        "en": "Luxury partnerships.",
+        "es": "Asociaciones de lujo."
+      }
+    },
+    {
+      "id": "gc17",
+      "name": "BALENCIAGA",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Avantgarde-Mode",
+        "en": "Avant-garde Fashion",
+        "es": "Moda de vanguardia"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Innovative Kampagnen.",
+        "en": "Innovative campaigns.",
+        "es": "Campañas innovadoras."
+      }
+    },
+    {
+      "id": "gc18",
+            "name": "GIVENCHY",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Haute Couture",
+        "en": "Haute Couture",
+        "es": "Alta costura"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Elegante Partnerschaften.",
+        "en": "Elegant partnerships.",
+        "es": "Asociaciones elegantes."
+      }
+    },
+    {
+      "id": "gc19",
+      "name": "VALENTINO",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Italienische Mode",
+        "en": "Italian Fashion",
+        "es": "Moda italiana"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Romantische Kampagnen.",
+        "en": "Romantic campaigns.",
+        "es": "Campañas románticas."
+      }
+    },
+    {
+      "id": "gc20",
+      "name": "ARMANI",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Elegante Mode",
+        "en": "Elegant Fashion",
+        "es": "Moda elegante"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Zeitlose Partnerschaften.",
+        "en": "Timeless partnerships.",
+        "es": "Asociaciones atemporales."
+      }
+    },
+    {
+      "id": "gc21",
+      "name": "SAINT LAURENT",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Pariser Mode",
+        "en": "Parisian Fashion",
+        "es": "Moda parisina"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Stilvolle Kampagnen.",
+        "en": "Stylish campaigns.",
+        "es": "Campañas con estilo."
+      }
+    },
+    {
+      "id": "gc22",
+      "name": "BOTTEGA VENETA",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Italienisches Leder",
+        "en": "Italian Leather",
+        "es": "Cuero italiano"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Handwerkskunst.",
+        "en": "Craftsmanship.",
+        "es": "Artesanía."
+      }
+    },
+    {
+      "id": "gc23",
+      "name": "MONCLER",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Luxus-Outerwear",
+        "en": "Luxury Outerwear",
+        "es": "Ropa exterior de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+                "de": "Winter-Kampagnen.",
+        "en": "Winter campaigns.",
+        "es": "Campañas de invierno."
+      }
+    },
+    {
+      "id": "gc24",
+      "name": "OMEGA",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Schweizer Uhren",
+        "en": "Swiss Watches",
+        "es": "Relojes suizos"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Präzisions-Kampagnen.",
+        "en": "Precision campaigns.",
+        "es": "Campañas de precisión."
+      }
+    },
+    {
+      "id": "gc25",
+      "name": "TAG HEUER",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Sport-Uhren",
+        "en": "Sports Watches",
+        "es": "Relojes deportivos"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Dynamische Partnerschaften.",
+        "en": "Dynamic partnerships.",
+        "es": "Asociaciones dinámicas."
+      }
+    },
+    {
+      "id": "gc26",
+      "name": "AUDI",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Premium-Automobile",
+        "en": "Premium Automobiles",
+        "es": "Automóviles premium"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Technologie-Kampagnen.",
+        "en": "Technology campaigns.",
+        "es": "Campañas de tecnología."
+      }
+    },
+        {
+      "id": "gc27",
+      "name": "LAMBORGHINI",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Supersportwagen",
+        "en": "Supercars",
+        "es": "Supercoches"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Exklusive Events.",
+        "en": "Exclusive events.",
+        "es": "Eventos exclusivos."
+      }
+    },
+    {
+      "id": "gc28",
+      "name": "FERRARI",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Italienische Sportwagen",
+        "en": "Italian Sports Cars",
+        "es": "Coches deportivos italianos"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Legendäre Partnerschaften.",
+        "en": "Legendary partnerships.",
+        "es": "Asociaciones legendarias."
+      }
+    },
+    {
+      "id": "gc29",
+      "name": "BENTLEY",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Britische Luxusautos",
+        "en": "British Luxury Cars",
+        "es": "Coches de lujo británicos"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Elegante Kampagnen.",
+        "en": "Elegant campaigns.",
+        "es": "Campañas elegantes."
+      }
+    },
+    {
+      "id": "gc30",
+      "name": "ROLLS-ROYCE",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Ultraluxus-Automobile",
+        "en": "Ultra-luxury Automobiles",
+        "es": "Automóviles de ultralujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Prestige-Partnerschaften.",
+        "en": "Prestige partnerships.",
+        "es": "Asociaciones de prestigio."
+      }
+          },
+    {
+      "id": "gc31",
+      "name": "TIFFANY & CO.",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Luxus-Schmuck",
+        "en": "Luxury Jewelry",
+        "es": "Joyería de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Ikonische Kampagnen.",
+        "en": "Iconic campaigns.",
+        "es": "Campañas icónicas."
+      }
+    },
+    {
+      "id": "gc32",
+      "name": "BULGARI",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Italienischer Schmuck",
+        "en": "Italian Jewelry",
+        "es": "Joyería italiana"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Glamouröse Events.",
+        "en": "Glamorous events.",
+        "es": "Eventos glamurosos."
+      }
+    },
+    {
+      "id": "gc33",
+      "name": "CHOPARD",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Schweizer Uhren & Schmuck",
+        "en": "Swiss Watches & Jewelry",
+        "es": "Relojes y joyas suizos"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Festival-Partnerschaften.",
+        "en": "Festival partnerships.",
+        "es": "Asociaciones de festivales."
+      }
+    },
+    {
+      "id": "gc34",
+      "name": "PIAGET",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Luxus-Uhren",
+        "en": "Luxury Watches",
+        "es": "Relojes de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Exquisite Kampagnen.",
+        "en": "Exquisite campaigns.",
+        "es": "Campañas exquisitas."
+      }
+    },
+    {
+      "id": "gc35",
+      "name": "BOUCHERON",
+      "logo": "",
+            "image": null,
+      "description": {
+        "de": "Pariser Schmuck",
+        "en": "Parisian Jewelry",
+        "es": "Joyería parisina"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Künstlerische Partnerschaften.",
+        "en": "Artistic partnerships.",
+        "es": "Asociaciones artísticas."
+      }
+    },
+    {
+      "id": "gc36",
+      "name": "VAN CLEEF & ARPELS",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Haute Joaillerie",
+        "en": "High Jewelry",
+        "es": "Alta joyería"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Poetische Kampagnen.",
+        "en": "Poetic campaigns.",
+        "es": "Campañas poéticas."
+      }
+    },
+    {
+      "id": "gc37",
+      "name": "MONTBLANC",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Schreibgeräte & Uhren",
+        "en": "Writing Instruments & Watches",
+        "es": "Instrumentos de escritura y relojes"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Kreative Partnerschaften.",
+        "en": "Creative partnerships.",
+        "es": "Asociaciones creativas."
+      }
+    },
+    {
+      "id": "gc38",
+      "name": "LORO PIANA",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Italienische Stoffe",
+        "en": "Italian Fabrics",
+        "es": "Tejidos italianos"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Qualitäts-Kampagnen.",
+        "en": "Quality campaigns.",
+        "es": "Campañas de calidad."
+      }
+    },
+    {
+      "id": "gc39",
+      "name": "BRUNELLO CUCINELLI",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Italienisches Kaschmir",
+        "en": "Italian Cashmere",
+        "es": "Cachemira italiano"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Humanistische Partnerschaften.",
+        "en": "Humanistic partnerships.",
+        "es": "Asociaciones humanísticas."
+      }
+    },
+    {
+      "id": "gc40",
+      "name": "ZEGNA",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Herrenmode",
+        "en": "Menswear",
+        "es": "Moda masculina"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Elegante Kampagnen.",
+        "en": "Elegant campaigns.",
+        "es": "Campañas elegantes."
+      }
+    },
+    {
+      "id": "gc41",
+      "name": "BOSS",
+      "logo": "",
+            "image": null,
+      "description": {
+        "de": "Deutsche Mode",
+        "en": "German Fashion",
+        "es": "Moda alemana"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Professionelle Partnerschaften.",
+        "en": "Professional partnerships.",
+        "es": "Asociaciones profesionales."
+      }
+    },
+    {
+      "id": "gc42",
+      "name": "RALPH LAUREN",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Amerikanische Mode",
+        "en": "American Fashion",
+        "es": "Moda americana"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Klassische Kampagnen.",
+        "en": "Classic campaigns.",
+        "es": "Campañas clásicas."
+      }
+    },
+    {
+      "id": "gc43",
+      "name": "TOM FORD",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Luxus-Mode & Beauty",
+        "en": "Luxury Fashion & Beauty",
+        "es": "Moda y belleza de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Stilvolle Partnerschaften.",
+        "en": "Stylish partnerships.",
+        "es": "Asociaciones con estilo."
+      }
+    },
+    {
+      "id": "gc44",
+      "name": "DOLCE & GABBANA",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Italienische Mode",
+        "en": "Italian Fashion",
+        "es": "Moda italiana"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Leidenschaftliche Kampagnen.",
+        "en": "Passionate campaigns.",
+        "es": "Campañas apasionadas."
+      }
+    },
+    {
+      "id": "gc45",
+      "name": "MOSCHINO",
+      "logo": "",
+      "image": null,
+      "description": {
+                "de": "Verspielte Mode",
+        "en": "Playful Fashion",
+        "es": "Moda juguetona"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Kreative Partnerschaften.",
+        "en": "Creative partnerships.",
+        "es": "Asociaciones creativas."
+      }
+    },
+    {
+      "id": "gc46",
+      "name": "JIMMY CHOO",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Luxus-Schuhe",
+        "en": "Luxury Shoes",
+        "es": "Zapatos de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Glamouröse Kampagnen.",
+        "en": "Glamorous campaigns.",
+        "es": "Campañas glamurosas."
+      }
+    },
+    {
+      "id": "gc47",
+      "name": "CHRISTIAN LOUBOUTIN",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Designer-Schuhe",
+        "en": "Designer Shoes",
+        "es": "Zapatos de diseñador"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Ikonische Partnerschaften.",
+        "en": "Iconic partnerships.",
+        "es": "Asociaciones icónicas."
+      }
+    },
+    {
+      "id": "gc48",
+      "name": "MANOLO BLAHNIK",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Luxus-Schuhe",
+        "en": "Luxury Shoes",
+        "es": "Zapatos de lujo"
+      },
+      "partnerSince": "2024",
+      "details": {
+                "de": "Elegante Kampagnen.",
+        "en": "Elegant campaigns.",
+        "es": "Campañas elegantes."
+      }
+    },
+    {
+      "id": "gc49",
+      "name": "SALVATORE FERRAGAMO",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Italienische Schuhe",
+        "en": "Italian Shoes",
+        "es": "Zapatos italianos"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Handwerks-Partnerschaften.",
+        "en": "Craftsmanship partnerships.",
+        "es": "Asociaciones de artesanía."
+      }
+    },
+    {
+      "id": "gc50",
+      "name": "BALLY",
+      "logo": "",
+      "image": null,
+      "description": {
+        "de": "Schweizer Luxus",
+        "en": "Swiss Luxury",
+        "es": "Lujo suizo"
+      },
+      "partnerSince": "2024",
+      "details": {
+        "de": "Alpine Kampagnen.",
+        "en": "Alpine campaigns.",
+        "es": "Campañas alpinas."
+      }
+    }
+  ]
+}
