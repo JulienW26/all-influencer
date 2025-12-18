@@ -1,7 +1,7 @@
 {
   "_meta": {
-    "version": "1.0",
-    "lastUpdated": "2025-12-17",
+    "version": "1.1",
+    "lastUpdated": "2025-12-18",
     "description": "ALL INFLUENCER - Externe Konfiguration. Diese Datei kann vom Administrator bearbeitet werden, ohne den Code zu ändern."
   },
   "site": {
@@ -25,6 +25,157 @@
     "facebook": "",
     "tiktok": ""
   },
+  "influencerData": {
+    "_comment": "Follower-Zahlen der eingetragenen Influencer. Wird am 1. jeden Monats aktualisiert.",
+    "diamond": [
+      {
+        "rank": 1,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 2,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 3,
+        "name": null,
+        "followers": 0
+       }
+    ],
+    "platinum": [
+      {
+        "rank": 1,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 2,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 3,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 4,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 5,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 6,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 7,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 8,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 9,
+        "name": null,
+        "followers": 0
+      },
+      {
+                "rank": 10,
+        "name": null,
+        "followers": 0
+      }
+    ],
+    "gold": [
+      {
+        "rank": 1,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 2,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 3,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 4,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 5,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 6,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 7,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 8,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 9,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 10,
+                "name": null,
+        "followers": 0
+      }
+    ],
+    "risingStar": [
+      {
+        "rank": 1,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 2,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 3,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 4,
+        "name": null,
+        "followers": 0
+      },
+      {
+        "rank": 5,
+        "name": null,
+        "followers": 0
+      }
+    ]
+  },
   "categories": {
     "diamond": {
       "spots": 3,
@@ -42,7 +193,7 @@
       "gradient": "from-slate-300 via-slate-400 to-slate-600",
       "icon": "🏆"
     },
-    "gold": {
+        "gold": {
       "spots": 20,
       "minFollowers": 5000000,
       "price": 1000,
@@ -82,7 +233,7 @@
       "MERCEDES",
       "ROLEX",
       "CARTIER"
-    ]
+       ]
   },
   "calendar": {
     "startYear": 2026,
@@ -126,7 +277,7 @@
     "es": {
       "title": "Sobre ALL INFLUENCER",
       "paragraphs": [
-        "ALL INFLUENCER es la primera y más exclusiva plataforma que conecta influencers premium con marcas líderes a nivel mundial.",
+             "ALL INFLUENCER es la primera y más exclusiva plataforma que conecta influencers premium con marcas líderes a nivel mundial.",
         "Nuestra misión es crear un escenario único para los creadores de contenido más influyentes y brindarles la visibilidad que merecen.",
         "Con estrictos estándares de calidad y un proceso de selección curado, garantizamos la máxima exclusividad para nuestros miembros y socios."
       ]
@@ -147,7 +298,7 @@
       "cancel": "Abbrechen",
       "close": "Schließen",
       "more": "mehr",
-      "ourClients": "Unsere Goldenen Kunden", 
+      "ourClients": "Unsere Goldenen Kunden",
       "partnerSince": "Partner seit",
       "invitationCode": "Einladungscode anfordern",
       "aboutUs": "Über uns",
@@ -166,7 +317,7 @@
       "applicationTitle": "Bewerbung",
       "applicationName": "Vollständiger Name",
       "applicationEmail": "E-Mail-Adresse",
-      "applicationPhone": "Telefon (optional)",
+            "applicationPhone": "Telefon (optional)",
       "applicationPosition": "Position",
       "applicationMotivation": "Ihre Motivation",
       "applicationCV": "Lebenslauf (optional)",
@@ -199,7 +350,7 @@
       "close": "Close",
       "more": "more",
       "ourClients": "Our Golden Clients",
-          "partnerSince": "Partner since",
+      "partnerSince": "Partner since",
       "invitationCode": "Request invitation code",
       "aboutUs": "About us",
       "contact": "Contact",
@@ -218,7 +369,7 @@
       "applicationName": "Full name",
       "applicationEmail": "Email address",
       "applicationPhone": "Phone (optional)",
-      "applicationPosition": "Position",
+            "applicationPosition": "Position",
       "applicationMotivation": "Your motivation",
       "applicationCV": "Resume (optional)",
       "contactTitle": "Contact us",
@@ -243,7 +394,7 @@
       "followers": "Seguidores",
       "month": "Mes",
       "months": "Meses",
-            "perMonth": "por mes",
+      "perMonth": "por mes",
       "total": "Total",
       "submit": "Enviar",
       "cancel": "Cancelar",
@@ -277,7 +428,7 @@
       "contactEmail": "Su correo",
       "contactMessage": "Su mensaje",
       "contactSend": "Enviar mensaje",
-          "invitationTitle": "Solicitar código de invitación",
+           "invitationTitle": "Solicitar código de invitación",
       "invitationCompany": "Nombre de empresa",
       "invitationEmail": "Correo empresarial",
       "invitationWebsite": "Sitio web",
@@ -300,7 +451,7 @@
       },
       "partnerSince": "2024",
       "details": {
-                "de": "Exklusive Partnerschaft für High-Fashion Kampagnen.",
+        "de": "Exklusive Partnerschaft für High-Fashion Kampagnen.",
         "en": "Exclusive partnership for high-fashion campaigns.",
         "es": "Asociación exclusiva para campañas de alta moda."
       }
@@ -336,7 +487,7 @@
       "details": {
         "de": "Beauty-Kampagnen mit Top-Influencern.",
         "en": "Beauty campaigns with top influencers.",
-        "es": "Campañas de belleza con los mejores influencers."
+              "es": "Campañas de belleza con los mejores influencers."
       }
     },
     {
@@ -356,7 +507,7 @@
         "es": "Campañas icónicas de perfume y moda."
       }
     },
-        {
+    {
       "id": "gc5",
       "name": "ROLEX",
       "logo": "",
@@ -378,7 +529,7 @@
       "name": "MERCEDES-BENZ",
       "logo": "",
       "image": null,
-      "description": {
+           "description": {
         "de": "Premium-Automobile",
         "en": "Premium Automobiles",
         "es": "Automóviles premium"
@@ -402,7 +553,7 @@
       },
       "partnerSince": "2024",
       "details": {
-        "de": "Exklusive Fahrberichte und Lifestyle-Content.",
+                "de": "Exklusive Fahrberichte und Lifestyle-Content.",
         "en": "Exclusive test drives and lifestyle content.",
         "es": "Pruebas exclusivas y contenido de estilo de vida."
       }
@@ -424,7 +575,7 @@
         "es": "Campañas y eventos glamurosos."
       }
     },
-        {
+    {
       "id": "gc9",
       "name": "PRADA",
       "logo": "",
@@ -447,7 +598,7 @@
       "logo": "",
       "image": null,
       "description": {
-        "de": "Luxus-Schmuck",
+                "de": "Luxus-Schmuck",
         "en": "Luxury Jewelry",
         "es": "Joyería de lujo"
       },
@@ -483,7 +634,7 @@
       "description": {
         "de": "Technologie",
         "en": "Technology",
-        "es": "Tecnología"
+         "es": "Tecnología"
       },
       "partnerSince": "2024",
       "details": {
@@ -504,7 +655,7 @@
       },
       "partnerSince": "2024",
       "details": {
-                "de": "Exklusive Fahrberichte.",
+        "de": "Exklusive Fahrberichte.",
         "en": "Exclusive test drives.",
         "es": "Pruebas exclusivas."
       }
@@ -521,7 +672,7 @@
       },
       "partnerSince": "2024",
       "details": {
-        "de": "Premium-Kampagnen.",
+                "de": "Premium-Kampagnen.",
         "en": "Premium campaigns.",
         "es": "Campañas premium."
       }
@@ -579,7 +730,7 @@
     },
     {
       "id": "gc18",
-            "name": "GIVENCHY",
+      "name": "GIVENCHY",
       "logo": "",
       "image": null,
       "description": {
@@ -595,7 +746,7 @@
       }
     },
     {
-      "id": "gc19",
+            "id": "gc19",
       "name": "VALENTINO",
       "logo": "",
       "image": null,
@@ -662,7 +813,7 @@
         "es": "Artesanía."
       }
     },
-    {
+        {
       "id": "gc23",
       "name": "MONCLER",
       "logo": "",
@@ -674,7 +825,7 @@
       },
       "partnerSince": "2024",
       "details": {
-                "de": "Winter-Kampagnen.",
+        "de": "Winter-Kampagnen.",
         "en": "Winter campaigns.",
         "es": "Campañas de invierno."
       }
@@ -730,7 +881,7 @@
         "es": "Campañas de tecnología."
       }
     },
-        {
+    {
       "id": "gc27",
       "name": "LAMBORGHINI",
       "logo": "",
@@ -751,7 +902,7 @@
       "id": "gc28",
       "name": "FERRARI",
       "logo": "",
-      "image": null,
+            "image": null,
       "description": {
         "de": "Italienische Sportwagen",
         "en": "Italian Sports Cars",
@@ -797,7 +948,7 @@
         "en": "Prestige partnerships.",
         "es": "Asociaciones de prestigio."
       }
-          },
+    },
     {
       "id": "gc31",
       "name": "TIFFANY & CO.",
@@ -824,7 +975,7 @@
         "de": "Italienischer Schmuck",
         "en": "Italian Jewelry",
         "es": "Joyería italiana"
-      },
+              },
       "partnerSince": "2024",
       "details": {
         "de": "Glamouröse Events.",
@@ -870,7 +1021,7 @@
       "id": "gc35",
       "name": "BOUCHERON",
       "logo": "",
-            "image": null,
+      "image": null,
       "description": {
         "de": "Pariser Schmuck",
         "en": "Parisian Jewelry",
@@ -883,7 +1034,7 @@
         "es": "Asociaciones artísticas."
       }
     },
-    {
+        {
       "id": "gc36",
       "name": "VAN CLEEF & ARPELS",
       "logo": "",
@@ -965,14 +1116,14 @@
       "details": {
         "de": "Elegante Kampagnen.",
         "en": "Elegant campaigns.",
-        "es": "Campañas elegantes."
+              "es": "Campañas elegantes."
       }
     },
     {
       "id": "gc41",
       "name": "BOSS",
       "logo": "",
-            "image": null,
+      "image": null,
       "description": {
         "de": "Deutsche Mode",
         "en": "German Fashion",
@@ -1014,7 +1165,7 @@
       },
       "partnerSince": "2024",
       "details": {
-        "de": "Stilvolle Partnerschaften.",
+                "de": "Stilvolle Partnerschaften.",
         "en": "Stylish partnerships.",
         "es": "Asociaciones con estilo."
       }
@@ -1042,7 +1193,7 @@
       "logo": "",
       "image": null,
       "description": {
-                "de": "Verspielte Mode",
+        "de": "Verspielte Mode",
         "en": "Playful Fashion",
         "es": "Moda juguetona"
       },
@@ -1056,7 +1207,7 @@
     {
       "id": "gc46",
       "name": "JIMMY CHOO",
-      "logo": "",
+           "logo": "",
       "image": null,
       "description": {
         "de": "Luxus-Schuhe",
@@ -1099,10 +1250,10 @@
       },
       "partnerSince": "2024",
       "details": {
-                "de": "Elegante Kampagnen.",
+        "de": "Elegante Kampagnen.",
         "en": "Elegant campaigns.",
         "es": "Campañas elegantes."
-      }
+            }
     },
     {
       "id": "gc49",
