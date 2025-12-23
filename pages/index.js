@@ -728,7 +728,7 @@ const ProofModal = ({ category, spot, onClose }) => {
               onChange={e => setEmail(e.target.value)}
               placeholder="deine@email.com"
               required
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-amber-400 focus:outline-none"
+              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-amber-400 focus:outline-none text-white"
             />
           </div>
           
@@ -740,7 +740,7 @@ const ProofModal = ({ category, spot, onClose }) => {
               onChange={e => setProfileLink(e.target.value)}
               placeholder="https://instagram.com/deinprofil"
               required
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-amber-400 focus:outline-none"
+              className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg focus:border-amber-400 focus:outline-none text-white"
             />
           </div>
           
@@ -855,7 +855,7 @@ const InvitationCodeModal = ({ type, data, onClose, onSuccess }) => {
           <div>
             <label className="block text-sm text-gray-400 mb-2">{t.enterInvitationCode}</label>
             <input type="text" value={code} onChange={handleCodeChange} placeholder={t.codePlaceholder}
-              className="w-full px-4 py-4 bg-gray-700 border border-gray-600 rounded-lg text-center text-xl tracking-widest font-mono focus:border-amber-400 focus:outline-none" maxLength={14} />
+              className="w-full px-4 py-4 bg-gray-700 border border-gray-600 rounded-lg text-center text-xl tracking-widest font-mono focus:border-amber-400 focus:outline-none text-white" maxLength={14} />
           </div>
           
           <button type="submit" disabled={code.length < 14 || sending}
