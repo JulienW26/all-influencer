@@ -592,7 +592,7 @@ const CalendarModal = ({ spot, category, onClose, onBook, onInvitationCode }) =>
       <div className="bg-gray-900 rounded-2xl p-6 max-w-md w-full border border-white/10 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-xl font-bold">{t.selectMonths}</h2>
-          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
+          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg text-white"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
         <p className="text-gray-500 text-sm mb-4">{t.maxMonths}</p>
         
@@ -705,7 +705,7 @@ const ProofModal = ({ category, spot, onClose }) => {
       <div className="bg-gray-900 rounded-2xl p-6 max-w-md w-full border border-white/10 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-2">
           <h2 className="text-xl font-bold">{t.submitProof}</h2>
-          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg">
+          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg text-white">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -848,7 +848,7 @@ const InvitationCodeModal = ({ type, data, onClose, onSuccess }) => {
       <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-amber-400/30" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-amber-400">{t.invitationOnly}</h2>
-          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
+          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg text-white"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -1007,7 +1007,7 @@ const GoldenClientsSection = () => {
             <div className="relative h-48 bg-gradient-to-b from-gray-800 to-gray-900 flex items-center justify-center">
               {selectedClient.image && <><img src={selectedClient.image} alt={selectedClient.name} className="absolute inset-0 w-full h-full object-cover opacity-50" /><div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900" /></>}
               {selectedClient.logo && <img src={selectedClient.logo} alt={selectedClient.name} className="relative h-16 object-contain filter brightness-0 invert" />}
-              <button onClick={() => setSelectedClient(null)} className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg bg-black/30"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
+              <button onClick={() => setSelectedClient(null)} className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg bg-black/30 text-white"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
             </div>
             <div className="p-6">
                             <h3 className="text-2xl font-bold mb-2">{selectedClient.name || `${t.spotNumber} ${selectedClient.spotNumber}`}</h3>
@@ -1088,7 +1088,7 @@ const Footer = () => {
       <div className="bg-gray-900 rounded-2xl p-6 max-w-lg w-full max-h-[85vh] overflow-y-auto border border-white/10" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-4">
           {type === 'about' ? <div className="flex items-center gap-3"><div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center font-bold text-black text-sm">AI</div><h2 className="text-lg font-bold">{titles[type]}</h2></div> : <h2 className="text-lg font-bold">{titles[type]}</h2>}
-          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
+          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg text-white"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
 
              {type === 'about' && <div>{(config.aboutUs?.[lang]?.paragraphs || []).map((p, i) => <p key={i} className="text-gray-300 mb-4">{p}</p>)}<h3 className="font-semibold text-white mt-6 mb-4">{t.ourCategories}</h3><div className="grid grid-cols-2 gap-3">{Object.entries(config.categories).map(([key, cat]) => { const names = { diamond: { de: 'Diamond', en: 'Diamond', es: 'Diamante' }, platinum: { de: 'Platin', en: 'Platinum', es: 'Platino' }, gold: { de: 'Gold', en: 'Gold', es: 'Oro' }, risingStar: { de: 'Rising Star', en: 'Rising Star', es: 'Rising Star' } }; return <div key={key} className={`p-4 rounded-xl bg-gradient-to-br ${cat.gradient}`}><span className="text-2xl">{cat.icon}</span><h4 className="font-semibold text-white mt-2">{names[key][lang]}</h4><p className="text-white/80 text-xs">{t.minFollowers}: {formatFollowers(cat.minFollowers)}</p><p className="text-white/80 text-xs">{formatPrice(cat.price)}{t.perMonth}</p></div>; })}</div></div>}
