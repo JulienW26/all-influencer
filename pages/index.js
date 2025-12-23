@@ -1101,9 +1101,9 @@ const Footer = () => {
         
         {type === 'contact' && (
           <form className="space-y-4" onSubmit={handleContactSubmit}>
-            <input type="text" placeholder={t.name} required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none" />
-            <input type="email" placeholder={t.email} required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none" />
-            <textarea placeholder={t.message} rows={4} required value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none resize-none" />
+            <input type="text" placeholder={t.name} required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none text-white " />
+            <input type="email" placeholder={t.email} required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none text-white" />
+            <textarea placeholder={t.message} rows={4} required value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none resize-none text-white" />
             <button type="submit" disabled={sending} className={`w-full py-3 rounded-lg font-semibold transition-colors ${sending ? 'bg-gray-600 text-gray-400' : status === 'success' ? 'bg-green-500 text-white' : 'bg-amber-400 hover:bg-amber-500 text-black'}`}>
               {sending ? t.sending : status === 'success' ? t.sent : t.send}
             </button>
@@ -1113,8 +1113,8 @@ const Footer = () => {
         
         {type === 'work' && (
           <form className="space-y-4" onSubmit={handleWorkSubmit}>
-            <input type="text" placeholder={t.name} required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none" />
-            <input type="email" placeholder={t.email} required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none" />
+            <input type="text" placeholder={t.name} required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none text-white" />
+            <input type="email" placeholder={t.email} required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none text-white" />
             <select required value={formData.position} onChange={e => setFormData({...formData, position: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none text-white">
               <option value="">{t.selectPosition}</option>
               <option value={t.marketing}>{t.marketing}</option>
@@ -1123,7 +1123,7 @@ const Footer = () => {
               <option value={t.sales}>{t.sales}</option>
               <option value={t.other}>{t.other}</option>
             </select>
-                      <textarea placeholder={t.motivation} rows={3} required value={formData.motivation} onChange={e => setFormData({...formData, motivation: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none resize-none" />
+                      <textarea placeholder={t.motivation} rows={3} required value={formData.motivation} onChange={e => setFormData({...formData, motivation: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none resize-none text-white" />
             <button type="submit" disabled={sending} className={`w-full py-3 rounded-lg font-semibold transition-colors ${sending ? 'bg-gray-600 text-gray-400' : status === 'success' ? 'bg-green-500 text-white' : 'bg-amber-400 hover:bg-amber-500 text-black'}`}>
               {sending ? t.sending : status === 'success' ? t.sent : t.submitApplication}
             </button>
