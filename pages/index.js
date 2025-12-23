@@ -983,7 +983,9 @@ const GoldenClientsSection = () => {
   const allSpots = generateGoldenClientSpots(config.goldenClientsData || []);
   const itemsPerPage = 4;
   const totalPages = Math.ceil(allSpots.length / itemsPerPage);
-  const visibleClients = allSpots.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
+  const visibleClients = (page === totalPages - 1 && allSpots.length % itemsPerPage !== 0) 
+  ? allSpots.slice(allSpots.length - itemsPerPage, allSpots.length) 
+  : allSpots.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
   
   const handleTouchStart = e => setTouchStart(e.touches[0].clientX);
   const handleTouchEnd = e => { if (touchStart === null) return; const diff = touchStart - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) { if (diff > 0 && page < totalPages - 1) setPage(p => p + 1); else if (diff < 0 && page > 0) setPage(p => p - 1); } setTouchStart(null); };
