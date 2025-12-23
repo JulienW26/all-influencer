@@ -27,6 +27,7 @@ const translations = {
     success: "Erfolgreich versendet!",
     openModal: "LOI Modal öffnen",
     infoBox: "Gründervorteil: Als eines der ersten 100 Mitglieder erhalten Sie 24 Monate kostenfreien Zugang sowie die exklusive Möglichkeit, Unternehmensanteile zum Gründungspreis von 50€ pro Anteil zu erwerben.",
+    brandName: "All-Influencer.com - Die 333",
     categories: {
       diamond: "Diamond (20M+ Followers) - 10.000€/Monat regulär",
       platin: "Platin (10-20M Followers) - 5.000€/Monat regulär",
@@ -69,6 +70,7 @@ const translations = {
     success: "Successfully sent!",
     openModal: "Open LOI Modal",
     infoBox: "Founder Advantage: As one of the first 100 members, you receive 24 months of free access and the exclusive opportunity to acquire company shares at the founding price of €50 per share.",
+    brandName: "All-Influencer.com - The 333",
     categories: {
       diamond: "Diamond (20M+ Followers) - €10,000/month regular",
       platin: "Platin (10-20M Followers) - €5,000/month regular",
@@ -111,6 +113,7 @@ subtitle: "Membresía Fundadora",
     success: "¡Enviado con éxito!",
     openModal: "Abrir Modal LOI",
     infoBox: "Ventaja Fundadora: Como uno de los primeros 100 miembros, recibes 24 meses de acceso gratuito y la oportunidad exclusiva de adquirir acciones de la empresa al precio fundador de 50€ por acción.",
+    brandName: "All-Influencer.com - Los 333",
     categories: {
       diamond: "Diamond (20M+ Seguidores) - 10.000€/mes regular",
       platin: "Platin (10-20M Seguidores) - 5.000€/mes regular",
@@ -324,7 +327,7 @@ email: '',
         {/* Form */}
         <div className="p-8">
           <div className="mb-8">
-            <p className="text-yellow-400 font-semibold mb-2">All-Influencer.com - Die 333</p>
+            <p className="text-yellow-400 font-semibold mb-2">{t.brandName}</p>
             <p className="text-gray-300 leading-relaxed">{t.intro}</p>
           </div>
 
