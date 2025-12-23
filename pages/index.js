@@ -591,12 +591,12 @@ const CalendarModal = ({ spot, category, onClose, onBook, onInvitationCode }) =>
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
       <div className="bg-gray-900 rounded-2xl p-6 max-w-md w-full border border-white/10 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-xl font-bold">{t.selectMonths}</h2>
+          <h2 className="text-xl font-bold text-white">{t.selectMonths}</h2>
           <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg text-white"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
         <p className="text-gray-500 text-sm mb-4">{t.maxMonths}</p>
         
-        <h3 className="text-lg font-bold mb-3">2026</h3>
+        <h3 className="text-lg font-bold mb-3 text-white">2026</h3>
         
         <div className="grid grid-cols-4 gap-2 mb-4">
           {monthNames.map((month, idx) => {
@@ -704,7 +704,7 @@ const ProofModal = ({ category, spot, onClose }) => {
     <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
       <div className="bg-gray-900 rounded-2xl p-6 max-w-md w-full border border-white/10 max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-2">
-          <h2 className="text-xl font-bold">{t.submitProof}</h2>
+          <h2 className="text-xl font-bold text-white">{t.submitProof}</h2>
           <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg text-white">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -1087,7 +1087,7 @@ const Footer = () => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
       <div className="bg-gray-900 rounded-2xl p-6 max-w-lg w-full max-h-[85vh] overflow-y-auto border border-white/10" onClick={e => e.stopPropagation()}>
         <div className="flex justify-between items-center mb-4">
-          {type === 'about' ? <div className="flex items-center gap-3"><div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center font-bold text-black text-sm">AI</div><h2 className="text-lg font-bold">{titles[type]}</h2></div> : <h2 className="text-lg font-bold">{titles[type]}</h2>}
+          {type === 'about' ? <div className="flex items-center gap-3"><div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center font-bold text-black text-sm">AI</div><h2 className="text-lg font-bold text-white">{titles[type]}</h2></div> : <h2 className="text-lg font-bold text-white">{titles[type]}</h2>}
           <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg text-white"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
         </div>
 
@@ -1113,7 +1113,7 @@ const Footer = () => {
           <form className="space-y-4" onSubmit={handleWorkSubmit}>
             <input type="text" placeholder={t.name} required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none" />
             <input type="email" placeholder={t.email} required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none" />
-            <select required value={formData.position} onChange={e => setFormData({...formData, position: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none">
+            <select required value={formData.position} onChange={e => setFormData({...formData, position: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none text-white">
               <option value="">{t.selectPosition}</option>
               <option value={t.marketing}>{t.marketing}</option>
               <option value={t.technology}>{t.technology}</option>
