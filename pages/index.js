@@ -18,6 +18,7 @@
  */
 
 import React, { useState, useEffect, useContext, createContext, useRef, useCallback } from 'react';
+import FounderLOIModal from '../components/FounderLOIModal';
 
 // ============================================================================
 // DEFAULT KONFIGURATION
@@ -1208,15 +1209,33 @@ export default function InfluencerPlatformV4() {
   const [config, setConfig] = useState(DEFAULT_CONFIG);
   const [loading, setLoading] = useState(true);
   const [lang, setLang] = useState('de');
+  const [loiModalOpen, setLoiModalOpen] = useState(false);
   
   useEffect(() => { fetch('/config.json').then(res => res.ok ? res.json() : Promise.reject()).then(ext => setConfig(deepMerge(DEFAULT_CONFIG, ext))).catch(() => console.warn('Using default config')).finally(() => setLoading(false)); }, []);
   
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('loi') === 'true') {
+      setLoiModalOpen(true);
+      const langParam = urlParams.get('lang');
+      if (langParam && ['de', 'en', 'es'].includes(langParam)) {
+        setLang(langParam);
+      }
+    }
+  }, []);
   const t = config.translations[lang] || config.translations.de;
   
-  return (
+return (
     <ConfigContext.Provider value={{ config, setConfig, loading }}>
       <LanguageContext.Provider value={{ lang, setLang, t }}>
-        <ModalProvider><App /></ModalProvider>
+        <ModalProvider>
+          <App />
+          <FounderLOIModal 
+            isOpen={loiModalOpen}
+            onClose={() => setLoiModalOpen(false)}
+            language={lang}
+          />
+        </ModalProvider>
       </LanguageContext.Provider>
     </ConfigContext.Provider>
   );
