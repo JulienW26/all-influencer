@@ -1233,7 +1233,7 @@ return (
           <FounderLOIModal 
             isOpen={loiModalOpen}
             onClose={() => setLoiModalOpen(false)}
-            language={lang}
+            initialLanguage={lang}
           />
         </ModalProvider>
       </LanguageContext.Provider>
