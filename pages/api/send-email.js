@@ -170,7 +170,37 @@ export default async function handler(req, res) {
           </div>
         `;
                 break;
-
+// ============================================
+      // INFLUENCER NACHWEIS (PROOF)
+      // ============================================
+      case 'influencer_proof':
+        subject = `[ALL INFLUENCER] Neuer Follower-Nachweis - ${data.category}`;
+        htmlContent = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: linear-gradient(135deg, #f59e0b, #d97706); padding: 20px; text-align: center;">
+              <h1 style="color: white; margin: 0;">ALL INFLUENCER</h1>
+              <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0 0;">Neuer Follower-Nachweis</p>
+            </div>
+            <div style="padding: 30px; background: #1f2937; color: white;">
+              <h2 style="color: #f59e0b; margin-top: 0;">Follower-Nachweis zur Prüfung</h2>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr><td style="padding: 10px 0; border-bottom: 1px solid #374151; color: #9ca3af;">Kategorie:</td><td style="padding: 10px 0; border-bottom: 1px solid #374151;">${data.category}</td></tr>
+                <tr><td style="padding: 10px 0; border-bottom: 1px solid #374151; color: #9ca3af;">Rang:</td><td style="padding: 10px 0; border-bottom: 1px solid #374151;">${data.rank}</td></tr>
+                <tr><td style="padding: 10px 0; border-bottom: 1px solid #374151; color: #9ca3af;">Mind. Follower:</td><td style="padding: 10px 0; border-bottom: 1px solid #374151;">${data.minFollowers}</td></tr>
+                <tr><td style="padding: 10px 0; border-bottom: 1px solid #374151; color: #9ca3af;">E-Mail:</td><td style="padding: 10px 0; border-bottom: 1px solid #374151;"><a href="mailto:${data.email}" style="color: #f59e0b;">${data.email}</a></td></tr>
+                <tr><td style="padding: 10px 0; border-bottom: 1px solid #374151; color: #9ca3af;">Profil-Link:</td><td style="padding: 10px 0; border-bottom: 1px solid #374151;"><a href="${data.profileLink}" style="color: #f59e0b;">${data.profileLink}</a></td></tr>
+                <tr><td style="padding: 10px 0; border-bottom: 1px solid #374151; color: #9ca3af;">Screenshot:</td><td style="padding: 10px 0; border-bottom: 1px solid #374151;">${data.fileName}</td></tr>
+                <tr><td style="padding: 10px 0; color: #9ca3af;">Zeitstempel:</td><td style="padding: 10px 0;">${data.timestamp}</td></tr>
+              </table>
+              ${data.fileData ? `<div style="margin-top: 20px;"><img src="${data.fileData}" style="max-width: 100%; border-radius: 8px;" alt="Screenshot"/></div>` : ''}
+              <p style="margin-top: 20px; padding: 15px; background: #374151; border-radius: 8px; color: #9ca3af;">
+                <strong style="color: white;">Aktion erforderlich:</strong> Bitte prüfe den Nachweis und gib den Influencer frei.
+              </p>
+            </div>
+          </div>
+        `;
+        break;
+        
       default:
         return res.status(400).json({ error: 'Unbekannter Typ: ' + type });
     }
