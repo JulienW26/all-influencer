@@ -17,10 +17,9 @@ const navItems = [
     icon: '📧',
   },
   {
-    href: '#',
+    href: '/admin/recipients',
     label: 'Empfänger',
     icon: '👥',
-    disabled: true,
   },
   {
     href: '#',
@@ -152,4 +151,4 @@ export default function Sidebar({ onLogout }) {
       </div>
     </aside>
   );
-      }
+}
