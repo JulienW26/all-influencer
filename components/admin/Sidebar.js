@@ -12,10 +12,31 @@ const navItems = [
     icon: '📊',
   },
   {
+    href: '/admin/content',
+    label: 'Content CMS',
+    icon: '📝',
+  },
+  {
     href: '/admin/emails',
     label: 'E-Mail Templates',
     icon: '📧',
   },
+  {
+    href: '/admin/recipients',
+    label: 'Empfänger',
+    icon: '👥',
+  },
+  {
+    href: '/admin/send',
+    label: 'Versand',
+    icon: '🚀',
+  },
+  {
+    href: '/admin/tracking',
+    label: 'Tracking',
+    icon: '📈',
+  },
+];
   {
     href: '/admin/recipients',
     label: 'Empfänger',
