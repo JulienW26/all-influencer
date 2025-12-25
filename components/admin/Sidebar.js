@@ -37,22 +37,6 @@ const navItems = [
     icon: '📈',
   },
 ];
-  {
-    href: '/admin/recipients',
-    label: 'Empfänger',
-    icon: '👥',
-  },
-  {
-    href: '/admin/send',
-    label: 'Versand',
-    icon: '🚀',
-  },
-  {
-    href: '/admin/tracking',
-    label: 'Tracking',
-    icon: '📈',
-  },
-];
 
 export default function Sidebar({ onLogout }) {
   const router = useRouter();
