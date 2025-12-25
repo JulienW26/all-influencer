@@ -22,10 +22,9 @@ const navItems = [
     icon: '👥',
   },
   {
-    href: '#',
+    href: '/admin/send',
     label: 'Versand',
     icon: '🚀',
-    disabled: true,
   },
   {
     href: '#',
