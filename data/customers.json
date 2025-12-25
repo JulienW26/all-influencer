@@ -1,0 +1,35 @@
+{
+  "title": {
+    "de": "Goldene Kunden",
+    "en": "Golden Customers",
+    "es": "Clientes Dorados"
+  },
+  "description": {
+    "de": "Unsere Premium-Partner und Marken",
+    "en": "Our premium partners and brands",
+    "es": "Nuestros socios y marcas premium"
+  },
+  "customers": [
+    {
+      "id": "c1",
+      "name": "Brand Example 1",
+      "logo": "/uploads/logos/brand1.png",
+      "link": "https://example.com",
+      "order": 1
+    },
+    {
+      "id": "c2",
+      "name": "Brand Example 2",
+      "logo": "/uploads/logos/brand2.png",
+      "link": "https://example.com",
+      "order": 2
+    },
+    {
+      "id": "c3",
+      "name": "Brand Example 3",
+      "logo": "/uploads/logos/brand3.png",
+      "link": "https://example.com",
+      "order": 3
+    }
+  ]
+}
