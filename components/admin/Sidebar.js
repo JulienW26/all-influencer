@@ -27,10 +27,9 @@ const navItems = [
     icon: '🚀',
   },
   {
-    href: '#',
+    href: '/admin/tracking',
     label: 'Tracking',
     icon: '📈',
-    disabled: true,
   },
 ];
 
@@ -77,49 +76,24 @@ export default function Sidebar({ onLogout }) {
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
           {navItems.map((item) => {
             const isActive = router.pathname === item.href;
-            const isDisabled = item.disabled;
             
             return (
-              <li key={item.href + item.label} style={{ marginBottom: '8px' }}>
-                {isDisabled ? (
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    padding: '12px 16px',
-                    borderRadius: '8px',
-                    color: '#4b5563',
-                    cursor: 'not-allowed'
-                  }}>
-                    <span>{item.icon}</span>
-                    <span style={{ fontSize: '14px' }}>{item.label}</span>
-                    <span style={{
-                      marginLeft: 'auto',
-                      fontSize: '10px',
-                      backgroundColor: '#1f2937',
-                      padding: '2px 8px',
-                      borderRadius: '4px',
-                      color: '#6b7280'
-                    }}>Soon</span>
-                  </div>
-                ) : (
-                  <Link href={item.href} style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    padding: '12px 16px',
-                    borderRadius: '8px',
-                    textDecoration: 'none',
-                    backgroundColor: isActive ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'transparent',
-                    background: isActive ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'transparent',
-                    color: isActive ? '#000' : '#9ca3af',
-                    fontWeight: isActive ? '500' : 'normal',
-                    transition: 'all 0.2s'
-                  }}>
-                    <span>{item.icon}</span>
-                    <span style={{ fontSize: '14px' }}>{item.label}</span>
-                  </Link>
-                )}
+              <li key={item.href} style={{ marginBottom: '8px' }}>
+                <Link href={item.href} style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  padding: '12px 16px',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                  background: isActive ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'transparent',
+                  color: isActive ? '#000' : '#9ca3af',
+                  fontWeight: isActive ? '500' : 'normal',
+                  transition: 'all 0.2s'
+                }}>
+                  <span>{item.icon}</span>
+                  <span style={{ fontSize: '14px' }}>{item.label}</span>
+                </Link>
               </li>
             );
           })}
