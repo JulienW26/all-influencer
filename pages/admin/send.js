@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { getRecipients, getLists } from '../../lib/recipients';
 import { emailTemplates, generateEmailHTML } from '../../lib/email-templates';
+import { trackSentEmail } from '../../lib/tracking';
 
 const templateList = [
   { id: 'de-diamond', name: '🇩🇪 Diamond & Platin - Deutsch', lang: 'de', cat: 'diamond' },
@@ -49,6 +50,12 @@ export default function SendPage() {
     return emailTemplates[tpl.lang]?.[tpl.cat] || null;
   };
 
+  // Template-Name holen
+  const getTemplateName = (templateId) => {
+    const tpl = templateList.find(t => t.id === templateId);
+    return tpl ? tpl.name : templateId;
+  };
+
   // Alle auswählen/abwählen
   const toggleSelectAll = () => {
     if (selectedRecipients.length === filteredRecipients.length) {
@@ -89,6 +96,18 @@ export default function SendPage() {
       });
 
       const data = await res.json();
+      
+      // Tracking
+      trackSentEmail({
+        email: testEmail,
+        recipientName: 'Test',
+        templateId: selectedTemplate,
+        templateName: getTemplateName(selectedTemplate),
+        subject,
+        success: res.ok,
+        error: res.ok ? null : data.error
+      });
+
       if (res.ok) {
         alert('✅ Test-E-Mail erfolgreich gesendet!');
       } else {
@@ -145,6 +164,18 @@ export default function SendPage() {
         });
 
         const data = await res.json();
+        
+        // Tracking
+        trackSentEmail({
+          email: recipient.email,
+          recipientName: recipient.firstName || '',
+          templateId: selectedTemplate,
+          templateName: getTemplateName(selectedTemplate),
+          subject,
+          success: res.ok,
+          error: res.ok ? null : data.error
+        });
+
         newResults.push({
           email: recipient.email,
           success: res.ok,
@@ -152,6 +183,17 @@ export default function SendPage() {
         });
 
       } catch (error) {
+        // Tracking bei Fehler
+        trackSentEmail({
+          email: recipient.email,
+          recipientName: recipient.firstName || '',
+          templateId: selectedTemplate,
+          templateName: getTemplateName(selectedTemplate),
+          subject: '',
+          success: false,
+          error: error.message
+        });
+
         newResults.push({
           email: recipient.email,
           success: false,
