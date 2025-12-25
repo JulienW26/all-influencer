@@ -1,0 +1,268 @@
+{
+  "hero": {
+    "headline": {
+      "de": "Die 333",
+      "en": "The 333",
+      "es": "Los 333"
+    },
+    "subheadline": {
+      "de": "Premium Influencer Network — Nur für die Top 1%",
+      "en": "Premium Influencer Network — Only for the Top 1%",
+      "es": "Red de Influencers Premium — Solo para el Top 1%"
+    },
+    "ctaText": {
+      "de": "Jetzt bewerben",
+      "en": "Apply Now",
+      "es": "Aplicar Ahora"
+    },
+    "ctaLink": "/loi",
+    "backgroundImage": "/images/hero-bg.jpg"
+  },
+  "about": {
+    "title": {
+      "de": "Das Modell",
+      "en": "The Model",
+      "es": "El Modelo"
+    },
+    "description": {
+      "de": "Wir machen Creator zu Miteigentümern. Bei jedem Deal erhältst du 80% Cash und 20% Equity.",
+      "en": "We make creators co-owners. With every deal, you receive 80% cash and 20% equity.",
+      "es": "Convertimos a los creadores en copropietarios. Con cada trato, recibes 80% en efectivo y 20% en participación."
+    },
+    "bulletPoints": {
+      "de": [
+        "333 exklusive Spots weltweit",
+        "Ab 1M Followers",
+        "80% Cash + 20% Equity",
+        "Premium Partner & Marken"
+      ],
+      "en": [
+        "333 exclusive spots worldwide",
+        "From 1M followers",
+        "80% cash + 20% equity",
+        "Premium partners & brands"
+      ],
+      "es": [
+        "333 lugares exclusivos en todo el mundo",
+        "Desde 1M de seguidores",
+        "80% efectivo + 20% participación",
+        "Socios y marcas premium"
+      ]
+    },
+    "image": "/images/about.jpg"
+  },
+  "spots": {
+    "title": {
+      "de": "Influencer-Spots",
+      "en": "Influencer Spots",
+      "es": "Lugares de Influencers"
+    },
+    "description": {
+      "de": "333 exklusive Plätze für die besten Creator der Welt",
+      "en": "333 exclusive spots for the best creators in the world",
+      "es": "333 lugares exclusivos para los mejores creadores del mundo"
+    },
+    "categories": {
+      "diamond": {
+        "title": {
+          "de": "💎 Diamond",
+          "en": "💎 Diamond",
+          "es": "💎 Diamante"
+        },
+        "description": {
+          "de": "50M+ Followers — Die absoluten Mega-Stars",
+          "en": "50M+ Followers — The absolute mega-stars",
+          "es": "50M+ Seguidores — Las mega-estrellas absolutas"
+        },
+        "priceRange": "$100K+"
+      },
+      "platinum": {
+        "title": {
+          "de": "💠 Platin",
+          "en": "💠 Platinum",
+          "es": "💠 Platino"
+        },
+        "description": {
+          "de": "10M-50M Followers — Top-Tier Influencer",
+          "en": "10M-50M Followers — Top-tier influencers",
+          "es": "10M-50M Seguidores — Influencers de primer nivel"
+        },
+        "priceRange": "$50K-100K"
+      },
+      "gold": {
+        "title": {
+          "de": "🥇 Gold",
+          "en": "🥇 Gold",
+          "es": "🥇 Oro"
+        },
+        "description": {
+          "de": "5M-10M Followers — Etablierte Creator",
+          "en": "5M-10M Followers — Established creators",
+          "es": "5M-10M Seguidores — Creadores establecidos"
+        },
+        "priceRange": "$25K-50K"
+      },
+      "risingStar": {
+        "title": {
+          "de": "⭐ Rising Star",
+          "en": "⭐ Rising Star",
+          "es": "⭐ Estrella en Ascenso"
+        },
+        "description": {
+          "de": "1M-5M Followers — Die Stars von morgen",
+          "en": "1M-5M Followers — Tomorrow's stars",
+          "es": "1M-5M Seguidores — Las estrellas del mañana"
+        },
+        "priceRange": "$10K-25K"
+      }
+    }
+  },
+  "contact": {
+    "title": {
+      "de": "Kontakt",
+      "en": "Contact",
+      "es": "Contacto"
+    },
+    "description": {
+      "de": "Hast du Fragen? Wir sind für dich da.",
+      "en": "Have questions? We're here for you.",
+      "es": "¿Tienes preguntas? Estamos aquí para ti."
+    },
+    "formLabels": {
+      "name": {
+        "de": "Name",
+        "en": "Name",
+        "es": "Nombre"
+      },
+      "email": {
+        "de": "E-Mail",
+        "en": "Email",
+        "es": "Correo electrónico"
+      },
+      "message": {
+        "de": "Nachricht",
+        "en": "Message",
+        "es": "Mensaje"
+      },
+      "submit": {
+        "de": "Absenden",
+        "en": "Send",
+        "es": "Enviar"
+      }
+    }
+  },
+  "workWithUs": {
+    "title": {
+      "de": "Arbeite mit uns",
+      "en": "Work With Us",
+      "es": "Trabaja con Nosotros"
+    },
+    "description": {
+      "de": "Du bist ein Influencer mit über 1M Followers? Werde Teil der 333.",
+      "en": "Are you an influencer with over 1M followers? Become part of The 333.",
+      "es": "¿Eres un influencer con más de 1M de seguidores? Forma parte de Los 333."
+    },
+    "ctaText": {
+      "de": "Letter of Intent ausfüllen",
+      "en": "Fill out Letter of Intent",
+      "es": "Completar Carta de Intención"
+    },
+    "ctaLink": "/loi"
+  },
+  "legal": {
+    "privacy": {
+      "title": {
+        "de": "Datenschutzerklärung",
+        "en": "Privacy Policy",
+        "es": "Política de Privacidad"
+      },
+      "content": {
+        "de": "Hier kommt der vollständige Datenschutz-Text...",
+        "en": "Full privacy policy text goes here...",
+        "es": "Aquí va el texto completo de la política de privacidad..."
+      }
+    },
+    "terms": {
+      "title": {
+        "de": "Allgemeine Geschäftsbedingungen",
+        "en": "Terms & Conditions",
+        "es": "Términos y Condiciones"
+      },
+      "content": {
+        "de": "Hier kommen die vollständigen AGB...",
+        "en": "Full terms and conditions go here...",
+        "es": "Aquí van los términos y condiciones completos..."
+      }
+    },
+    "imprint": {
+      "title": {
+        "de": "Impressum",
+        "en": "Imprint",
+        "es": "Aviso Legal"
+      },
+      "companyName": "All-Influencer.com",
+      "ownerName": "Julien Weiss",
+      "address": {
+        "street": "Musterstraße 1",
+        "city": "10115 Berlin",
+        "country": {
+          "de": "Deutschland",
+          "en": "Germany",
+          "es": "Alemania"
+        }
+      },
+      "email": "contact@all-influencer.com",
+      "phone": "+49 163 260 0084"
+    }
+  },
+  "footer": {
+    "copyright": {
+      "de": "© 2024 All-Influencer.com. Alle Rechte vorbehalten.",
+      "en": "© 2024 All-Influencer.com. All rights reserved.",
+      "es": "© 2024 All-Influencer.com. Todos los derechos reservados."
+    },
+    "socialLinks": [
+      {
+        "name": "Instagram",
+        "url": "https://instagram.com/allinfluencer",
+        "icon": "instagram"
+      },
+      {
+        "name": "LinkedIn",
+        "url": "https://linkedin.com/company/allinfluencer",
+        "icon": "linkedin"
+      },
+      {
+        "name": "Twitter",
+        "url": "https://twitter.com/allinfluencer",
+        "icon": "twitter"
+      }
+    ],
+    "menuLinks": [
+      {
+        "text": {
+          "de": "Datenschutz",
+          "en": "Privacy",
+          "es": "Privacidad"
+        },
+        "url": "/privacy"
+      },
+      {
+        "text": {
+          "de": "AGB",
+          "en": "Terms",
+          "es": "Términos"
+        },
+        "url": "/terms"
+      },
+      {
+        "text": {
+          "de": "Impressum",
+          "en": "Imprint",
+          "es": "Aviso Legal"
+        },
+        "url": "/imprint"
+      }
+    ]
+  }
+}
