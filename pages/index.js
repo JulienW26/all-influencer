@@ -19,6 +19,7 @@
 
 import React, { useState, useEffect, useContext, createContext, useRef, useCallback } from 'react';
 import FounderLOIModal from '../components/FounderLOIModal';
+import { marked } from 'marked';
 
 // ============================================================================
 // DEFAULT KONFIGURATION
