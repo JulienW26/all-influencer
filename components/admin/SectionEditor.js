@@ -12,6 +12,7 @@ import ContactEditor from './editors/ContactEditor';
 import WorkWithUsEditor from './editors/WorkWithUsEditor';
 import LegalEditor from './editors/LegalEditor';
 import FooterEditor from './editors/FooterEditor';
+import FAQEditor from './editors/FAQEditor';
 
 const editors = {
   global: GlobalEditor,
@@ -23,6 +24,7 @@ const editors = {
   workWithUs: WorkWithUsEditor,
   legal: LegalEditor,
   footer: FooterEditor,
+  faq: FAQEditor,
 };
 
 export default function SectionEditor({ 
