@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import MarkdownInfo from '../MarkdownInfo';
 
 const legalPages = [
   { id: 'privacy', label: 'Datenschutz', icon: '🔒' },
@@ -214,7 +215,10 @@ export default function LegalEditor({ language, data, onSave }) {
           </div>
 
           <div>
-            <label style={labelStyle}>Volltext-Inhalt</label>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <label style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(255, 255, 255, 0.7)' }}>Volltext-Inhalt</label>
+              <MarkdownInfo />
+            </div>
             <textarea
               value={formData[activePage]?.content?.[language] || ''}
               onChange={(e) => handleChange(activePage, 'content', e.target.value, true)}
