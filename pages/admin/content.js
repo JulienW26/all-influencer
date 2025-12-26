@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import LanguageTabs from '../../components/admin/LanguageTabs';
 import SectionEditor from '../../components/admin/SectionEditor';
+import FAQEditor from '../../components/admin/editors/FAQEditor';
 
 const sections = [
   { id: 'global', label: 'Globale Texte', icon: '🌐', description: 'Firmenname, Slogan, Kontakt' },
@@ -17,6 +18,7 @@ const sections = [
   { id: 'contact', label: 'Kontakt', icon: '📞', description: 'Kontaktformular' },
   { id: 'workWithUs', label: 'Arbeite mit uns', icon: '💼', description: 'CTA-Sektion' },
   { id: 'legal', label: 'Rechtliches', icon: '📜', description: 'Datenschutz, AGB, Impressum' },
+  { id: 'faq', label: 'FAQ', icon: '❓', description: 'Häufig gestellte Fragen' },
   { id: 'footer', label: 'Footer', icon: '🦶', description: 'Copyright, Links' },
 ];
 
