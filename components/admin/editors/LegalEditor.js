@@ -1,6 +1,6 @@
 /**
  * Legal Editor Component
- * Bearbeitet: Datenschutz, AGB, Impressum
+ * Bearbeitet: Datenschutz, AGB, Impressum - alle mit Volltext-Feldern
  */
 
 import { useState, useEffect } from 'react';
@@ -11,6 +11,12 @@ const legalPages = [
   { id: 'terms', label: 'AGB', icon: '📋' },
   { id: 'imprint', label: 'Impressum', icon: '📄' },
 ];
+
+const defaultTitles = {
+  privacy: { de: 'Datenschutzerklärung', en: 'Privacy Policy', es: 'Política de Privacidad' },
+  terms: { de: 'Allgemeine Geschäftsbedingungen', en: 'Terms and Conditions', es: 'Términos y Condiciones' },
+  imprint: { de: 'Impressum', en: 'Legal Notice', es: 'Aviso Legal' }
+};
 
 export default function LegalEditor({ language, data, onSave }) {
   const [formData, setFormData] = useState(data);
@@ -45,35 +51,6 @@ export default function LegalEditor({ language, data, onSave }) {
     }
   };
 
-  const handleAddressChange = (field, value, isMultilingual = false) => {
-    if (isMultilingual) {
-      setFormData(prev => ({
-        ...prev,
-        imprint: {
-          ...prev.imprint,
-          address: {
-            ...prev.imprint?.address,
-            [field]: {
-              ...prev.imprint?.address?.[field],
-              [language]: value
-            }
-          }
-        }
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        imprint: {
-          ...prev.imprint,
-          address: {
-            ...prev.imprint?.address,
-            [field]: value
-          }
-        }
-      }));
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSaving(true);
@@ -103,7 +80,7 @@ export default function LegalEditor({ language, data, onSave }) {
 
   const textareaStyle = {
     ...inputStyle,
-    minHeight: '300px',
+    minHeight: '400px',
     resize: 'vertical',
     fontFamily: 'monospace',
     fontSize: '13px'
@@ -196,146 +173,70 @@ export default function LegalEditor({ language, data, onSave }) {
         ))}
       </div>
 
-      {/* Privacy & Terms (Fulltext) */}
-      {(activePage === 'privacy' || activePage === 'terms') && (
-        <div style={cardStyle}>
-          <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#f59e0b', marginTop: 0, marginBottom: '24px' }}>
-            {currentPage.icon} {currentPage.label} ({language.toUpperCase()})
-          </h3>
-          
-          <div style={{ marginBottom: '20px' }}>
-            <label style={labelStyle}>Seiten-Titel</label>
-            <input
-              type="text"
-              value={formData[activePage]?.title?.[language] || ''}
-              onChange={(e) => handleChange(activePage, 'title', e.target.value, true)}
-              style={inputStyle}
-              placeholder={currentPage.label}
-            />
-          </div>
+      {/* All Pages - Fulltext Editor */}
+      <div style={cardStyle}>
+        <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#f59e0b', marginTop: 0, marginBottom: '24px' }}>
+          {currentPage.icon} {currentPage.label} ({language.toUpperCase()})
+        </h3>
+        
+        <div style={{ marginBottom: '20px' }}>
+          <label style={labelStyle}>Seiten-Titel</label>
+          <input
+            type="text"
+            value={formData[activePage]?.title?.[language] || defaultTitles[activePage]?.[language] || ''}
+            onChange={(e) => handleChange(activePage, 'title', e.target.value, true)}
+            style={inputStyle}
+            placeholder={defaultTitles[activePage]?.[language] || currentPage.label}
+          />
+        </div>
 
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-              <label style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(255, 255, 255, 0.7)' }}>Volltext-Inhalt</label>
-              <MarkdownInfo />
-            </div>
-            <textarea
-              value={formData[activePage]?.content?.[language] || ''}
-              onChange={(e) => handleChange(activePage, 'content', e.target.value, true)}
-              style={textareaStyle}
-              placeholder="Vollständiger Text hier eingeben..."
-            />
-            <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.4)', marginTop: '4px' }}>
-              Tipp: Du kannst Markdown verwenden für Formatierung (z.B. **fett**, *kursiv*, ## Überschrift)
-            </p>
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+            <label style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(255, 255, 255, 0.7)' }}>Volltext-Inhalt</label>
+            <MarkdownInfo />
+          </div>
+          <textarea
+            value={formData[activePage]?.content?.[language] || ''}
+            onChange={(e) => handleChange(activePage, 'content', e.target.value, true)}
+            style={textareaStyle}
+            placeholder={`Vollständigen ${currentPage.label}-Text hier eingeben...`}
+          />
+          <p style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.4)', marginTop: '4px' }}>
+            Tipp: Du kannst Markdown verwenden für Formatierung (z.B. **fett**, *kursiv*, ## Überschrift)
+          </p>
+        </div>
+      </div>
+
+      {/* Preview */}
+      <div style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.02)',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: '12px',
+        padding: '24px'
+      }}>
+        <h4 style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(255, 255, 255, 0.5)', marginTop: 0, marginBottom: '16px' }}>
+          👁️ Vorschau
+        </h4>
+        <div style={{
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          borderRadius: '8px',
+          padding: '20px',
+          maxHeight: '300px',
+          overflowY: 'auto'
+        }}>
+          <h5 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: 0, marginBottom: '16px' }}>
+            {formData[activePage]?.title?.[language] || defaultTitles[activePage]?.[language] || currentPage.label}
+          </h5>
+          <div style={{
+            color: 'rgba(255, 255, 255, 0.7)',
+            fontSize: '14px',
+            whiteSpace: 'pre-wrap',
+            lineHeight: '1.6'
+          }}>
+            {formData[activePage]?.content?.[language] || '(Noch kein Inhalt)'}
           </div>
         </div>
-      )}
-
-      {/* Imprint (Structured) */}
-      {activePage === 'imprint' && (
-        <div style={cardStyle}>
-          <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#f59e0b', marginTop: 0, marginBottom: '24px' }}>
-            📄 Impressum ({language.toUpperCase()})
-          </h3>
-          
-          <div style={{ marginBottom: '20px' }}>
-            <label style={labelStyle}>Seiten-Titel</label>
-            <input
-              type="text"
-              value={formData.imprint?.title?.[language] || ''}
-              onChange={(e) => handleChange('imprint', 'title', e.target.value, true)}
-              style={inputStyle}
-              placeholder="Impressum"
-            />
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
-            <div>
-              <label style={labelStyle}>Firmenname</label>
-              <input
-                type="text"
-                value={formData.imprint?.companyName || ''}
-                onChange={(e) => handleChange('imprint', 'companyName', e.target.value)}
-                style={inputStyle}
-                placeholder="All-Influencer.com"
-              />
-            </div>
-            <div>
-              <label style={labelStyle}>Inhaber/Geschäftsführer</label>
-              <input
-                type="text"
-                value={formData.imprint?.ownerName || ''}
-                onChange={(e) => handleChange('imprint', 'ownerName', e.target.value)}
-                style={inputStyle}
-                placeholder="Julien Weiss"
-              />
-            </div>
-          </div>
-
-          <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '20px', marginTop: '20px' }}>
-            <h4 style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(255, 255, 255, 0.7)', marginBottom: '16px', marginTop: 0 }}>Adresse</h4>
-            <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginBottom: '4px' }}>Straße</label>
-              <input
-                type="text"
-                value={formData.imprint?.address?.street || ''}
-                onChange={(e) => handleAddressChange('street', e.target.value)}
-                style={inputStyle}
-                placeholder="Musterstraße 1"
-              />
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginBottom: '4px' }}>PLZ & Stadt</label>
-                <input
-                  type="text"
-                  value={formData.imprint?.address?.city || ''}
-                  onChange={(e) => handleAddressChange('city', e.target.value)}
-                  style={inputStyle}
-                  placeholder="10115 Berlin"
-                />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginBottom: '4px' }}>Land ({language.toUpperCase()})</label>
-                <input
-                  type="text"
-                  value={formData.imprint?.address?.country?.[language] || ''}
-                  onChange={(e) => handleAddressChange('country', e.target.value, true)}
-                  style={inputStyle}
-                  placeholder="Deutschland"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.1)', paddingTop: '20px', marginTop: '20px' }}>
-            <h4 style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(255, 255, 255, 0.7)', marginBottom: '16px', marginTop: 0 }}>Kontakt</h4>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginBottom: '4px' }}>E-Mail</label>
-                <input
-                  type="email"
-                  value={formData.imprint?.email || ''}
-                  onChange={(e) => handleChange('imprint', 'email', e.target.value)}
-                  style={inputStyle}
-                  placeholder="contact@example.com"
-                />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '12px', color: 'rgba(255, 255, 255, 0.5)', marginBottom: '4px' }}>Telefon</label>
-                <input
-                  type="tel"
-                  value={formData.imprint?.phone || ''}
-                  onChange={(e) => handleChange('imprint', 'phone', e.target.value)}
-                  style={inputStyle}
-                  placeholder="+49 123 456789"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
     </form>
   );
-}
+  }
