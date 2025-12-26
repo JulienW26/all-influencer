@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import MarkdownInfo from '../MarkdownInfo';
 
 const categoryIcons = {
   diamond: '💎',
@@ -182,7 +183,10 @@ export default function SpotsEditor({ language, data, onSave }) {
         </div>
 
         <div>
-          <label style={labelStyle}>Beschreibung</label>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+            <label style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(255, 255, 255, 0.7)' }}>Beschreibung</label>
+            <MarkdownInfo />
+          </div>
           <textarea
             value={formData.description?.[language] || ''}
             onChange={(e) => handleChange('description', e.target.value, true)}
@@ -239,7 +243,10 @@ export default function SpotsEditor({ language, data, onSave }) {
         </div>
 
         <div style={{ marginBottom: '20px' }}>
-          <label style={labelStyle}>Beschreibung</label>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+            <label style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(255, 255, 255, 0.7)' }}>Beschreibung</label>
+            <MarkdownInfo />
+          </div>
           <textarea
             value={formData.categories?.[activeCategory]?.description?.[language] || ''}
             onChange={(e) => handleCategoryChange(activeCategory, 'description', e.target.value, true)}
