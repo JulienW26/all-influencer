@@ -979,6 +979,73 @@ const GoldenClientSpot = ({ client, onClick }) => {
 };
 
 // ============================================================================
+// FAQ SECTION
+// ============================================================================
+
+const FAQSection = () => {
+  const { config } = useConfig();
+  const { lang } = useLanguage();
+  const [openIndex, setOpenIndex] = useState(null);
+  
+  const faqData = config.faq || {};
+  const items = faqData.items || [];
+  
+  if (items.length === 0) return null;
+  
+  const title = faqData.title?.[lang] || (lang === 'de' ? 'Häufig gestellte Fragen' : lang === 'en' ? 'Frequently Asked Questions' : 'Preguntas Frecuentes');
+  const description = faqData.description?.[lang] || '';
+  
+  return (
+    <section className="py-16 px-4 bg-gradient-to-b from-gray-900 to-black">
+      <div className="max-w-4xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">
+            <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent">
+              {title}
+            </span>
+          </h2>
+          {description && (
+            <p className="text-gray-400 text-lg">{description}</p>
+          )}
+        </div>
+        
+        <div className="space-y-4">
+          {items.map((item, index) => {
+            const question = item.question?.[lang] || '';
+            const answer = item.answer?.[lang] || '';
+            if (!question) return null;
+            
+            const isOpen = openIndex === index;
+            
+            return (
+              <div
+                key={index}
+                className="border border-amber-400/20 rounded-xl overflow-hidden bg-black/50 backdrop-blur-sm"
+              >
+                <button
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
+                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-amber-400/5 transition-colors"
+                >
+                  <span className="font-medium text-white pr-4">{question}</span>
+                  <span className={`text-amber-400 text-2xl transition-transform ${isOpen ? 'rotate-45' : ''}`}>
+                    +
+                  </span>
+                </button>
+                
+                {isOpen && (
+                  <div className="px-6 pb-5 text-gray-400 leading-relaxed whitespace-pre-wrap">
+                    {answer}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+// ============================================================================
 // GOLDEN CLIENTS SECTION
 // ============================================================================
 
@@ -1165,7 +1232,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white">
       <Header /><HeroSection /><MarqueeBanner />
-      <main><CategoryRow category="diamond" spots={generateSpots('diamond')} /><CategoryRow category="platinum" spots={generateSpots('platinum')} /><CategoryRow category="gold" spots={generateSpots('gold')} /><CategoryRow category="risingStar" spots={generateSpots('risingStar')} /><GoldenClientsSection /></main>
+      <main><CategoryRow category="diamond" spots={generateSpots('diamond')} /><CategoryRow category="platinum" spots={generateSpots('platinum')} /><CategoryRow category="gold" spots={generateSpots('gold')} /><CategoryRow category="risingStar" spots={generateSpots('risingStar')} /><GoldenClientsSection /><FAQSection /></main>
       <Footer />
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');.font-serif{font-family:'Playfair Display',serif;}body{font-family:'Inter',sans-serif;}@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}.animate-marquee{animation:marquee linear infinite;}@keyframes slideIn{from{transform:translateX(100%);}to{transform:translateX(0);}}.animate-slideIn{animation:slideIn 0.3s ease-out;}`}</style>
     </div>
@@ -1291,6 +1358,10 @@ useEffect(() => {
           merged.goldenClientsData = cmsRes.customers.customers;
         }
 
+        // FAQ Daten
+        if (cmsRes.sections?.faq) {
+          merged.faq = cmsRes.sections.faq;
+        }
         // Legal Texte (Datenschutz, AGB, Impressum)
         if (cmsRes.sections?.legal) {
           const legal = cmsRes.sections.legal;
