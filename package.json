@@ -16,7 +16,8 @@
     "react-dom": "^18.2.0",
     "resend": "^3.0.0",
     "html2pdf.js": "^0.10.1",
-    "lucide-react": "^0.263.1"
+"lucide-react": "^0.263.1",
+    "marked": "^12.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.17",
