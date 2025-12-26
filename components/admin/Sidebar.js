@@ -22,6 +22,11 @@ const navItems = [
     icon: '🖼️',
   },
   {
+    href: '/admin/influencers',
+    label: 'Influencer',
+    icon: '👥',
+  },
+  {
     href: '/admin/emails',
     label: 'E-Mail Templates',
     icon: '📧',
