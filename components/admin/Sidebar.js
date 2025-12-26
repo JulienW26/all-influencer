@@ -17,6 +17,11 @@ const navItems = [
     icon: '📝',
   },
   {
+    href: '/admin/media',
+    label: 'Medien-Bibliothek',
+    icon: '🖼️',
+  },
+  {
     href: '/admin/emails',
     label: 'E-Mail Templates',
     icon: '📧',
