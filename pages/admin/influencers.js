@@ -716,7 +716,7 @@ export default function InfluencerManager() {
                     Follower-Anzahl * (min. 1000000)
                   </label>
                   <input
-                    type="number!
+                    type="number"
                     value={formData.followers}
                     onChange={(e) => setFormData(prev => ({ ...prev, followers: e.target.value }))}
                     placeholder="5000000"
