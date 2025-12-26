@@ -1213,7 +1213,76 @@ export default function InfluencerPlatformV4() {
   const [lang, setLang] = useState('de');
   const [loiModalOpen, setLoiModalOpen] = useState(false);
   
-  useEffect(() => { fetch('/config.json').then(res => res.ok ? res.json() : Promise.reject()).then(ext => setConfig(deepMerge(DEFAULT_CONFIG, ext))).catch(() => console.warn('Using default config')).finally(() => setLoading(false)); }, []);
+useEffect(() => {
+    const loadData = async () => {
+      try {
+        // Config und CMS-Daten parallel laden
+        const [configRes, cmsRes] = await Promise.all([
+          fetch('/config.json').then(r => r.ok ? r.json() : {}),
+          fetch('/api/content').then(r => r.ok ? r.json() : {})
+        ]);
+        
+        // Config mergen
+        let merged = deepMerge(DEFAULT_CONFIG, configRes);
+        
+        // CMS-Daten integrieren
+        if (cmsRes.global) {
+          merged.site.name = cmsRes.global.companyName || merged.site.name;
+          merged.impressum.email = cmsRes.global.contact?.email || merged.impressum.email;
+          merged.impressum.mobile = cmsRes.global.contact?.phone || merged.impressum.mobile;
+          merged.impressum.name = cmsRes.global.contact?.founder || merged.impressum.name;
+          // Slogan in Translations
+          if (cmsRes.global.slogan) {
+            merged.translations.de.heroTitle = cmsRes.global.slogan.de || merged.translations.de.heroTitle;
+            merged.translations.en.heroTitle = cmsRes.global.slogan.en || merged.translations.en.heroTitle;
+            merged.translations.es.heroTitle = cmsRes.global.slogan.es || merged.translations.es.heroTitle;
+          }
+        }
+        
+        // CMS Sections integrieren
+        if (cmsRes.sections?.hero) {
+          const hero = cmsRes.sections.hero;
+          if (hero.headline) {
+            merged.translations.de.heroTitle = hero.headline.de || merged.translations.de.heroTitle;
+            merged.translations.en.heroTitle = hero.headline.en || merged.translations.en.heroTitle;
+            merged.translations.es.heroTitle = hero.headline.es || merged.translations.es.heroTitle;
+          }
+          if (hero.subheadline) {
+            merged.translations.de.heroSubtitle = hero.subheadline.de || merged.translations.de.heroSubtitle;
+            merged.translations.en.heroSubtitle = hero.subheadline.en || merged.translations.en.heroSubtitle;
+            merged.translations.es.heroSubtitle = hero.subheadline.es || merged.translations.es.heroSubtitle;
+          }
+        }
+        
+        // About Section
+        if (cmsRes.sections?.about) {
+          const about = cmsRes.sections.about;
+          if (about.title) {
+            merged.aboutUs.de.title = about.title.de || merged.aboutUs.de.title;
+            merged.aboutUs.en.title = about.title.en || merged.aboutUs.en.title;
+            merged.aboutUs.es.title = about.title.es || merged.aboutUs.es.title;
+          }
+          if (about.description) {
+            merged.aboutUs.de.paragraphs = [about.description.de, ...(merged.aboutUs.de.paragraphs?.slice(1) || [])];
+            merged.aboutUs.en.paragraphs = [about.description.en, ...(merged.aboutUs.en.paragraphs?.slice(1) || [])];
+            merged.aboutUs.es.paragraphs = [about.description.es, ...(merged.aboutUs.es.paragraphs?.slice(1) || [])];
+          }
+        }
+        
+        // Golden Clients
+        if (cmsRes.customers?.customers) {
+          merged.goldenClientsData = cmsRes.customers.customers;
+        }
+        
+        setConfig(merged);
+      } catch (error) {
+        console.warn('Using default config:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
   
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
