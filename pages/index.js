@@ -1294,7 +1294,13 @@ const ModalProvider = ({ children }) => {
 export default function InfluencerPlatformV4() {
   const [config, setConfig] = useState(DEFAULT_CONFIG);
   const [loading, setLoading] = useState(true);
-  const [lang, setLang] = useState('de');
+const [lang, setLang] = useState(() => {
+  if (typeof window !== 'undefined') {
+    const browserLang = navigator.language?.slice(0, 2);
+    if (['de', 'en', 'es'].includes(browserLang)) return browserLang;
+  }
+  return 'de';
+});
   const [loiModalOpen, setLoiModalOpen] = useState(false);
   
 useEffect(() => {
