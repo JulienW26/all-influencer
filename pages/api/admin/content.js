@@ -1,30 +1,52 @@
 /**
  * Content CMS API
- * Lädt und speichert Website-Inhalte
+ * Lädt und speichert Website-Inhalte mit Upstash Redis
  */
 
-import fs from 'fs';
-import path from 'path';
+import { Redis } from '@upstash/redis';
 
-const dataDir = path.join(process.cwd(), 'data');
+// Redis Client initialisieren
+const redis = Redis.fromEnv();
 
-// JSON-Datei lesen
-function readJsonFile(filename) {
-  const filePath = path.join(dataDir, filename);
-  if (!fs.existsSync(filePath)) {
-    return null;
+// Standard-Daten falls noch nichts in der Datenbank ist
+const defaultGlobal = {
+  companyName: "All-Influencer.com",
+  slogan: {
+    de: "Die 333 — Premium Network",
+    en: "The 333 — Premium Network",
+    es: "Los 333 — Premium Network"
+  },
+  contact: {
+    email: "contact@all-influencer.com",
+    phone: "+49 163 260 0084",
+    founder: "Julien Weiss"
   }
-  const content = fs.readFileSync(filePath, 'utf-8');
-  return JSON.parse(content);
-}
+};
 
-// JSON-Datei schreiben
-function writeJsonFile(filename, data) {
-  const filePath = path.join(dataDir, filename);
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
-}
+const defaultSections = {
+  hero: {
+    headline: { de: "Die 333", en: "The 333", es: "Los 333" },
+    subheadline: {
+      de: "Premium Influencer Network — Nur für die Top 1%",
+      en: "Premium Influencer Network — Only for the Top 1%",
+      es: "Red de Influencers Premium — Solo para el Top 1%"
+    },
+    ctaText: { de: "Jetzt bewerben", en: "Apply Now", es: "Aplicar Ahora" },
+    ctaLink: "/loi"
+  }
+};
 
-export default function handler(req, res) {
+const defaultCustomers = {
+  title: { de: "Goldene Kunden", en: "Golden Customers", es: "Clientes Dorados" },
+  description: {
+    de: "Unsere Premium-Partner und Marken",
+    en: "Our premium partners and brands",
+    es: "Nuestros socios y marcas premium"
+  },
+  customers: []
+};
+
+export default async function handler(req, res) {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -37,17 +59,28 @@ export default function handler(req, res) {
   try {
     // GET - Alle Inhalte laden
     if (req.method === 'GET') {
-      const global = readJsonFile('global.json') || {};
-      const sections = readJsonFile('sections.json') || {};
-      const customers = readJsonFile('customers.json') || {};
+      // Daten aus Redis laden (oder Defaults verwenden)
+      let global = await redis.get('cms:global');
+      let sections = await redis.get('cms:sections');
+      let customers = await redis.get('cms:customers');
+
+      // Falls keine Daten vorhanden, Defaults verwenden und speichern
+      if (!global) {
+        global = defaultGlobal;
+        await redis.set('cms:global', defaultGlobal);
+      }
+      if (!sections) {
+        sections = defaultSections;
+        await redis.set('cms:sections', defaultSections);
+      }
+      if (!customers) {
+        customers = defaultCustomers;
+        await redis.set('cms:customers', defaultCustomers);
+      }
 
       return res.status(200).json({
         success: true,
-        data: {
-          global,
-          sections,
-          customers
-        }
+        data: { global, sections, customers }
       });
     }
 
@@ -64,19 +97,19 @@ export default function handler(req, res) {
 
       switch (type) {
         case 'global':
-          writeJsonFile('global.json', data);
+          await redis.set('cms:global', data);
           break;
         case 'sections':
-          writeJsonFile('sections.json', data);
+          await redis.set('cms:sections', data);
           break;
         case 'section':
           const { sectionId, sectionData } = data;
-          const currentSections = readJsonFile('sections.json') || {};
+          let currentSections = await redis.get('cms:sections') || {};
           currentSections[sectionId] = sectionData;
-          writeJsonFile('sections.json', currentSections);
+          await redis.set('cms:sections', currentSections);
           break;
         case 'customers':
-          writeJsonFile('customers.json', data);
+          await redis.set('cms:customers', data);
           break;
         default:
           return res.status(400).json({
