@@ -719,7 +719,7 @@ export default function InfluencerManager() {
                     type="number
                     value={formData.followers}
                     onChange={(e) => setFormData(prev => ({ ...prev, followers: e.target.value }))}
-                    placeholder="z.B. 5000000"
+                    placeholder="5000000"
                     min="1000000"
                     style={{
                       width: '100%',
