@@ -188,7 +188,7 @@ export default function AboutEditor({ language, data, onSave }) {
             placeholder="Erkläre hier das Geschäftsmodell..."
           />
         </div>
-
+      </div>
 
       {/* Bullet Points */}
       <div style={cardStyle}>
