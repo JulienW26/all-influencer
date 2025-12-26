@@ -713,14 +713,14 @@ export default function InfluencerManager() {
                 {/* Follower */}
                 <div style={{ marginBottom: '1.5rem' }}>
                   <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)' }}>
-                    Follower-Anzahl * (min. 1.000.000)
+                    Follower-Anzahl * (min. 1000000)
                   </label>
                   <input
                     type="number
                     value={formData.followers}
                     onChange={(e) => setFormData(prev => ({ ...prev, followers: e.target.value }))}
                     placeholder="5000000"
-                    min="1000000"
+                    min={1000000}
                     style={{
                       width: '100%',
                       padding: '0.75rem',
