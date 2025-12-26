@@ -1273,7 +1273,32 @@ useEffect(() => {
         if (cmsRes.customers?.customers) {
           merged.goldenClientsData = cmsRes.customers.customers;
         }
-        
+
+        // Legal Texte (Datenschutz, AGB, Impressum)
+        if (cmsRes.sections?.legal) {
+          const legal = cmsRes.sections.legal;
+          if (legal.privacy) {
+            merged.legalTexts.privacy = {
+              de: legal.privacy.content?.de || '',
+              en: legal.privacy.content?.en || '',
+              es: legal.privacy.content?.es || ''
+            };
+          }
+          if (legal.terms) {
+            merged.legalTexts.terms = {
+              de: legal.terms.content?.de || '',
+              en: legal.terms.content?.en || '',
+              es: legal.terms.content?.es || ''
+            };
+          }
+          if (legal.imprint) {
+            merged.legalTexts.imprint = {
+              de: legal.imprint.content?.de || '',
+              en: legal.imprint.content?.en || '',
+              es: legal.imprint.content?.es || ''
+            };
+          }
+        }
         setConfig(merged);
       } catch (error) {
         console.warn('Using default config:', error);
