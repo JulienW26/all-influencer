@@ -1097,7 +1097,11 @@ const Footer = () => {
         
         {type === 'imprint' && <pre className="text-gray-300 whitespace-pre-wrap font-sans">{config.legalTexts?.imprint?.[lang] || `${config.impressum.name}\n${config.impressum.street}\n${config.impressum.city}\n\nTel: ${config.impressum.mobile}\nE-Mail: ${config.impressum.email}`}</pre>}
         
-        {(type === 'privacy' || type === 'terms') && <p className="text-gray-400 italic">{config.legalTexts?.[type]?.[lang] || (lang === 'de' ? 'Dieser Bereich kann vom Administrator bearbeitet werden.' : lang === 'en' ? 'This section can be edited by the administrator.' : 'Esta sección puede ser editada por el administrador.')}</p>}
+{(type === 'privacy' || type === 'terms') && (
+  <div className="text-gray-300 whitespace-pre-line leading-relaxed">
+    {config.legalTexts?.[type]?.[lang] || (lang === 'de' ? 'Dieser Bereich kann vom Administrator bearbeitet werden.' : lang === 'en' ? 'This section can be edited by the administrator.' : 'Esta sección puede ser editada por el administrador.')}
+  </div>
+)}
         
         {type === 'contact' && (
           <form className="space-y-4" onSubmit={handleContactSubmit}>
