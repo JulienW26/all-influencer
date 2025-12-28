@@ -695,3 +695,18 @@ export default function MediaManager() {
           </div>
         )}
 
+        {/* CSS Animationen */}
+        <style jsx global>{`
+          @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+          }
+          @keyframes progress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+          }
+        `}</style>
+      </div>
+    </>
+  );
+}
