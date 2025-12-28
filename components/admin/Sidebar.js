@@ -4,52 +4,55 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-const navItems = [
-  {
-    href: '/admin',
-    label: 'Dashboard',
-    icon: '📊',
-  },
-  {
-    href: '/admin/content',
-    label: 'Content CMS',
-    icon: '📝',
-  },
-  {
-    href: '/admin/media',
-    label: 'Medien-Bibliothek',
-    icon: '🖼️',
-  },
-  {
-    href: '/admin/influencers',
-    label: 'Influencer',
-    icon: '👥',
-  },
-  {
-    href: '/admin/emails',
-    label: 'E-Mail Templates',
-    icon: '📧',
-  },
-  {
-    href: '/admin/recipients',
-    label: 'Empfänger',
-    icon: '👥',
-  },
-  {
-    href: '/admin/send',
-    label: 'Versand',
-    icon: '🚀',
-  },
-  {
-    href: '/admin/tracking',
-    label: 'Tracking',
-    icon: '📈',
-  },
-];
+import { useAdminLanguage } from '../../lib/useAdminLanguage';
 
 export default function Sidebar({ onLogout }) {
   const router = useRouter();
+  const { t } = useAdminLanguage();
+  const txt = t('sidebar');
+
+  const navItems = [
+    {
+      href: '/admin',
+      label: txt.dashboard || 'Dashboard',
+      icon: '📊',
+    },
+    {
+      href: '/admin/content',
+      label: txt.contentCms || 'Content CMS',
+      icon: '📝',
+    },
+    {
+      href: '/admin/media',
+      label: txt.mediaLibrary || 'Medien-Bibliothek',
+      icon: '🖼️',
+    },
+    {
+      href: '/admin/influencers',
+      label: txt.influencer || 'Influencer',
+      icon: '👥',
+    },
+    {
+      href: '/admin/emails',
+      label: txt.emailTemplates || 'E-Mail Templates',
+      icon: '📧',
+    },
+    {
+      href: '/admin/recipients',
+      label: txt.recipients || 'Empfänger',
+      icon: '👥',
+    },
+    {
+      href: '/admin/send',
+      label: txt.send || 'Versand',
+      icon: '🚀',
+    },
+    {
+      href: '/admin/tracking',
+      label: txt.tracking || 'Tracking',
+      icon: '📈',
+    },
+  ];
   
   return (
     <aside style={{
@@ -159,7 +162,7 @@ export default function Sidebar({ onLogout }) {
             <polyline points="16,17 21,12 16,7" />
             <line x1="21" y1="12" x2="9" y2="12" />
           </svg>
-          <span>Abmelden</span>
+          <span>{txt.logout || 'Abmelden'}</span>
         </button>
       </div>
     </aside>
