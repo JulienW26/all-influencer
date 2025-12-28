@@ -896,8 +896,9 @@ const InfluencerSpot = ({ spot, category, isMobile }) => {
       <div className={`relative ${isMobile ? 'aspect-video' : 'aspect-square'} rounded-2xl overflow-hidden bg-gradient-to-br ${cat.gradient} border border-white/20 transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-xl group-hover:border-white/40`}>
         {spot.image ? <><img src={spot.image} alt={spot.name} className="absolute inset-0 w-full h-full object-cover" loading="lazy" /><div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" /></> : <div className="absolute inset-0 flex items-center justify-center"><span className="text-5xl md:text-6xl opacity-60">{cat.icon}</span></div>}
         <div className="absolute bottom-0 left-0 right-0 p-3">
-          {spot.name && <h3 className="font-semibold text-white text-sm truncate">{spot.name}</h3>}
-          {spot.followers && <p className="text-white/80 text-xs">{formatFollowers(spot.followers)} Followers</p>}
+{spot.name && <h3 className="font-semibold text-white text-sm truncate">{spot.name}</h3>}
+{spot.username && <p className="text-amber-400 text-xs">{spot.username}</p>}
+{spot.followers && <p className="text-white/80 text-xs">{formatFollowers(spot.followers)} Followers</p>}
           {!spot.booked && <p className="text-amber-400 text-xs mt-1 opacity-0 group-hover:opacity-100 transition-opacity">{t.clickToBook}</p>}
         </div>
         {spot.booked && <div className="absolute top-2 right-2 px-2 py-0.5 bg-red-500/90 rounded text-[10px] font-medium">{t.booked}</div>}
