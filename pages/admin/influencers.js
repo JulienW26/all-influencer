@@ -259,16 +259,16 @@ export default function InfluencerManager() {
         flexWrap: 'wrap',
         gap: '1rem'
       }}>
-        <div>
-          <h2 style={{ 
-            margin: 0, 
-            fontSize: '1.5rem', 
-            fontWeight: 'bold',
-            color: '#fff'
-          }}>
-            👥 Influencer Manager
-          </h2>
-        </div>
+        <h2 style={{ 
+          margin: 0, 
+          fontSize: '1.5rem', 
+          fontWeight: 'bold',
+          background: 'linear-gradient(to right, #f59e0b, #fbbf24)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
+        }}>
+          👥 Influencer Manager
+        </h2>
         
         <button
           onClick={openNewModal}
@@ -524,33 +524,35 @@ export default function InfluencerManager() {
 
       {/* Modal: Influencer hinzufügen/bearbeiten */}
       {showModal && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundColor: 'rgba(0,0,0,0.9)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '1rem'
-        }}
-        onClick={() => setShowModal(false)}
-        >
-          <div style={{
-            backgroundColor: '#111827',
-            borderRadius: '1rem',
-            width: '100%',
-            maxWidth: '500px',
-            maxHeight: '90vh',
-            overflow: 'auto'
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0,0,0,0.9)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '1rem'
           }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={() => setShowModal(false)}
+        >
+          <div 
+            style={{
+              backgroundColor: '#111827',
+              borderRadius: '1rem',
+              width: '100%',
+              maxWidth: '500px',
+              maxHeight: '90vh',
+              overflow: 'auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
           >
             <div style={{
               padding: '1.5rem',
               borderBottom: '1px solid rgba(255,255,255,0.1)'
             }}>
-              <h2 style={{ margin: 0, fontSize: '1.25rem' }}>
+              <h2 style={{ margin: 0, fontSize: '1.25rem', color: 'white' }}>
                 {editingInfluencer ? '✏️ Influencer bearbeiten' : '➕ Neuer Influencer'}
               </h2>
             </div>
@@ -614,7 +616,7 @@ export default function InfluencerManager() {
                     border: '1px solid rgba(255,255,255,0.1)',
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     color: 'white',
-                     fontSize: '1rem',
+                    fontSize: '1rem',
                     boxSizing: 'border-box'
                   }}
                 />
@@ -669,7 +671,7 @@ export default function InfluencerManager() {
                 </select>
               </div>
               
-              {/* Plattform-Link */}      
+              {/* Plattform-Link */}        
               <div style={{ marginBottom: '1rem' }}>
                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', color: 'rgba(255,255,255,0.7)' }}>
                   Profil-Link (optional)
@@ -702,9 +704,9 @@ export default function InfluencerManager() {
                   value={formData.followers}
                   onChange={(e) => setFormData(prev => ({ ...prev, followers: e.target.value }))}
                   placeholder="5000000"
-                  min={1000000}
+                  min="1000000"
                   style={{
-                    width: '100%',
+                        width: '100%',
                     padding: '0.75rem',
                     borderRadius: '0.5rem',
                     border: '1px solid rgba(255,255,255,0.1)',
@@ -735,6 +737,7 @@ export default function InfluencerManager() {
               {/* Buttons */}
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <button
+                  type="button"
                   onClick={() => setShowModal(false)}
                   style={{
                     flex: 1,
@@ -743,12 +746,14 @@ export default function InfluencerManager() {
                     border: '1px solid rgba(255,255,255,0.2)',
                     backgroundColor: 'transparent',
                     color: 'white',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    fontSize: '1rem'
                   }}
                 >
                   Abbrechen
                 </button>
                 <button
+                  type="button"
                   onClick={handleSave}
                   disabled={saving}
                   style={{
@@ -756,23 +761,25 @@ export default function InfluencerManager() {
                     padding: '0.75rem',
                     borderRadius: '0.5rem',
                     border: 'none',
-                    background: 'linear-gradient(to right, #f59e0b, #d97706)',
+                    background: saving ? '#6b7280' : 'linear-gradient(to right, #f59e0b, #d97706)',
                     color: 'black',
                     fontWeight: 'bold',
                     cursor: saving ? 'not-allowed' : 'pointer',
-                    opacity: saving ? 0.7 : 1
+                    opacity: saving ? 0.7 : 1,
+                    fontSize: '1rem'
                   }}
                 >
                   {saving ? '⏳ Speichern...' : '💾 Speichern'}
                 </button>
               </div>
-
+              
               {/* Löschen-Button (nur beim Bearbeiten) */}
               {editingInfluencer && (
                 <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
                   {deleteConfirm === editingInfluencer.id ? (
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <button
+                        type="button"                
                         onClick={() => handleDelete(editingInfluencer)}
                         style={{
                           flex: 1,
@@ -782,12 +789,14 @@ export default function InfluencerManager() {
                           backgroundColor: '#dc2626',
                           color: 'white',
                           cursor: 'pointer',
-                          fontWeight: 'bold'
+                          fontWeight: 'bold',
+                          fontSize: '1rem'
                         }}
                       >
                         Ja, löschen!
                       </button>
                       <button
+                        type="button"
                         onClick={() => setDeleteConfirm(null)}
                         style={{
                           flex: 1,
@@ -796,7 +805,8 @@ export default function InfluencerManager() {
                           border: '1px solid rgba(255,255,255,0.2)',
                           backgroundColor: 'transparent',
                           color: 'white',
-                          cursor: 'pointer'
+                          cursor: 'pointer',
+                          fontSize: '1rem'
                         }}
                       >
                         Abbrechen
@@ -804,21 +814,23 @@ export default function InfluencerManager() {
                     </div>
                   ) : (
                     <button
+                      type="button"
                       onClick={() => setDeleteConfirm(editingInfluencer.id)}
                       style={{
                         width: '100%',
-                             padding: '0.75rem',
+                        padding: '0.75rem',
                         borderRadius: '0.5rem',
                         border: 'none',
                         backgroundColor: 'rgba(220, 38, 38, 0.2)',
                         color: '#fca5a5',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        fontSize: '1rem'
                       }}
                     >
                       🗑️ Influencer entfernen
                     </button>
                   )}
-                </div>
+                </div
               )}
             </div>
           </div>
@@ -827,27 +839,29 @@ export default function InfluencerManager() {
 
       {/* Modal: Medien-Auswahl */}
       {showMediaPicker && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          backgroundColor: 'rgba(0,0,0,0.95)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1100,
-          padding: '1rem'
-        }}
-        onClick={() => setShowMediaPicker(false)}
-        >
-          <div style={{
-            backgroundColor: '#111827',
-            borderRadius: '1rem',
-            width: '100%',
-            maxWidth: '600px',
-            maxHeight: '80vh',
-            overflow: 'auto'
+        <div 
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0,0,0,0.95)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1100,
+            padding: '1rem'
           }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={() => setShowMediaPicker(false)}
+        >
+          <div 
+            style={{
+              backgroundColor: '#111827',
+              borderRadius: '1rem',
+              width: '100%',
+              maxWidth: '600px',
+              maxHeight: '80vh',
+              overflow: 'auto'
+            }}
+            onClick={(e) => e.stopPropagation()}
           >
             <div style={{
               padding: '1.5rem',
@@ -856,7 +870,7 @@ export default function InfluencerManager() {
               justifyContent: 'space-between',
               alignItems: 'center'
             }}>
-              <h3 style={{ margin: 0 }}>🖼️ Bild auswählen</h3>
+              <h3 style={{ margin: 0, color: 'white' }}>🖼️ Bild auswählen</h3>
               <Link href="/admin/media" target="_blank" style={{
                 color: '#f59e0b',
                 fontSize: '0.875rem'
@@ -867,7 +881,7 @@ export default function InfluencerManager() {
             
             <div style={{ padding: '1rem' }}>      
               {loadingMedia ? (
-                <div style={{ textAlign: 'center', padding: '2rem' }}>
+                <div style={{ textAlign: 'center', padding: '2rem', color: 'white' }}>
                   ⏳ Lade Bilder...
                 </div>
               ) : mediaList.length === 0 ? (
@@ -877,7 +891,7 @@ export default function InfluencerManager() {
                     Bilder hochladen →
                   </Link>
                 </div>
-                ) : (
+              ) : (
                 <div style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
@@ -917,6 +931,7 @@ export default function InfluencerManager() {
             
             <div style={{ padding: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
               <button
+                type="button"
                 onClick={() => setShowMediaPicker(false)}
                 style={{
                   width: '100%',
@@ -925,7 +940,8 @@ export default function InfluencerManager() {
                   border: '1px solid rgba(255,255,255,0.2)',
                   backgroundColor: 'transparent',
                   color: 'white',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  fontSize: '1rem'
                 }}
               >
                 Schließen
@@ -937,4 +953,3 @@ export default function InfluencerManager() {
     </AdminLayout>
   );
 }
-                
