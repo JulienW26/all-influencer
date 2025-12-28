@@ -5,22 +5,10 @@
 
 import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
+import { useAdminLanguage } from '../../lib/useAdminLanguage';
 import LanguageTabs from '../../components/admin/LanguageTabs';
 import SectionEditor from '../../components/admin/SectionEditor';
 import FAQEditor from '../../components/admin/editors/FAQEditor';
-
-const sections = [
-  { id: 'global', label: 'Globale Texte', icon: '🌐', description: 'Firmenname, Slogan, Kontakt' },
-  { id: 'hero', label: 'Hero', icon: '🏠', description: 'Hauptbanner' },
-  { id: 'about', label: 'Über uns / Modell', icon: '📊', description: 'Das Modell erklären' },
-  { id: 'spots', label: 'Influencer-Spots', icon: '👤', description: '4 Kategorien' },
-  { id: 'customers', label: 'Goldene Kunden', icon: '⭐', description: 'Drag & Drop' },
-  { id: 'contact', label: 'Kontakt', icon: '📞', description: 'Kontaktformular' },
-  { id: 'workWithUs', label: 'Arbeite mit uns', icon: '💼', description: 'CTA-Sektion' },
-  { id: 'legal', label: 'Rechtliches', icon: '📜', description: 'Datenschutz, AGB, Impressum' },
-  { id: 'faq', label: 'FAQ', icon: '❓', description: 'Häufig gestellte Fragen' },
-  { id: 'footer', label: 'Footer', icon: '🦶', description: 'Copyright, Links' },
-];
 
 export default function ContentCMS() {
   const [activeSection, setActiveSection] = useState('global');
@@ -30,6 +18,21 @@ export default function ContentCMS() {
   const [sectionsData, setSectionsData] = useState({});
   const [customersData, setCustomersData] = useState({});
   const [error, setError] = useState(null);
+  const { t } = useAdminLanguage();
+  const txt = t('content');
+
+  const sections = [
+    { id: 'global', label: txt.globalTexts || 'Globale Texte', icon: '🌐', description: txt.globalDesc || 'Firmenname, Slogan, Kontakt' },
+    { id: 'hero', label: txt.hero || 'Hero', icon: '🏠', description: txt.heroDesc || 'Hauptbanner' },
+    { id: 'about', label: txt.about || 'Über uns / Modell', icon: '📊', description: txt.aboutDesc || 'Das Modell erklären' },
+    { id: 'spots', label: txt.spots || 'Influencer-Spots', icon: '👤', description: txt.spotsDesc || '4 Kategorien' },
+    { id: 'customers', label: txt.customers || 'Goldene Kunden', icon: '⭐', description: txt.customersDesc || 'Drag & Drop' },
+    { id: 'contact', label: txt.contact || 'Kontakt', icon: '📞', description: txt.contactDesc || 'Kontaktformular' },
+    { id: 'workWithUs', label: txt.workWithUs || 'Arbeite mit uns', icon: '💼', description: txt.workWithUsDesc || 'CTA-Sektion' },
+    { id: 'legal', label: txt.legal || 'Rechtliches', icon: '📜', description: txt.legalDesc || 'Datenschutz, AGB, Impressum' },
+    { id: 'faq', label: txt.faq || 'FAQ', icon: '❓', description: txt.faqDesc || 'Häufig gestellte Fragen' },
+    { id: 'footer', label: txt.footer || 'Footer', icon: '🦶', description: txt.footerDesc || 'Copyright, Links' },
+  ];
 
   useEffect(() => {
     loadContent();
@@ -121,7 +124,7 @@ export default function ContentCMS() {
               marginBottom: '16px',
               paddingLeft: '12px'
             }}>
-              Sektionen
+              {txt.sections || 'Sektionen'}
             </h3>
             
             <div>
@@ -191,7 +194,7 @@ export default function ContentCMS() {
                 {sections.find(s => s.id === activeSection)?.icon} {sections.find(s => s.id === activeSection)?.label}
               </h2>
               <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>
-                Wähle eine Sprache und bearbeite die Inhalte
+                {txt.selectLanguage || 'Wähle eine Sprache und bearbeite die Inhalte'}
               </p>
             </div>
             <LanguageTabs 
@@ -210,7 +213,7 @@ export default function ContentCMS() {
             }}>
               <div style={{ textAlign: 'center' }}>
                 <div style={{ fontSize: '32px', marginBottom: '16px', animation: 'spin 1s linear infinite' }}>⏳</div>
-                <p style={{ color: 'rgba(255, 255, 255, 0.5)' }}>Lade Inhalte...</p>
+                <p style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{txt.loadingContent || 'Lade Inhalte...'}</p>
               </div>
             </div>
           ) : error ? (
@@ -234,7 +237,7 @@ export default function ContentCMS() {
                   cursor: 'pointer'
                 }}
               >
-                Erneut versuchen
+                {txt.retry || 'Erneut versuchen'}
               </button>
             </div>
           ) : (
