@@ -830,7 +830,7 @@ export default function InfluencerManager() {
                       🗑️ Influencer entfernen
                     </button>
                   )}
-                </div
+                </div>
               )}
             </div>
           </div>
