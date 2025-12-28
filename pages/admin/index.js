@@ -14,10 +14,28 @@ export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [stats, setStats] = useState({ templates: 0, recipients: 0, sent: 0 });
 
   useEffect(() => {
     checkAuth();
   }, []);
+useEffect(() => {
+    if (isAuthenticated) {
+      loadStats();
+    }
+  }, [isAuthenticated]);
+
+  const loadStats = async () => {
+    try {
+      const res = await fetch('/api/admin/stats');
+      const data = await res.json();
+      if (data.success) {
+        setStats(data.stats);
+      }
+    } catch (error) {
+      console.error('Stats load failed:', error);
+    }
+  };  
 
   const checkAuth = async () => {
     try {
@@ -114,7 +132,7 @@ export default function AdminPage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
             <div>
               <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 4px 0' }}>E-Mail Templates</p>
-              <p style={{ color: '#fff', fontSize: '32px', fontWeight: 'bold', margin: 0 }}>6</p>
+              <p style={{ color: '#fff', fontSize: '32px', fontWeight: 'bold', margin: 0 }}>{stats.templates}</p>
             </div>
             <span style={{ fontSize: '32px' }}>📧</span>
           </div>
@@ -133,7 +151,7 @@ export default function AdminPage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
             <div>
               <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 4px 0' }}>Empfänger</p>
-              <p style={{ color: '#fff', fontSize: '32px', fontWeight: 'bold', margin: 0 }}>0</p>
+              <p style={{ color: '#fff', fontSize: '32px', fontWeight: 'bold', margin: 0 }}>{stats.recipients}</p>
             </div>
             <span style={{ fontSize: '32px' }}>👥</span>
           </div>
@@ -149,7 +167,7 @@ export default function AdminPage() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
             <div>
               <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 4px 0' }}>Gesendet</p>
-              <p style={{ color: '#fff', fontSize: '32px', fontWeight: 'bold', margin: 0 }}>0</p>
+              <p style={{ color: '#fff', fontSize: '32px', fontWeight: 'bold', margin: 0 }}>{stats.sent}</p>
             </div>
             <span style={{ fontSize: '32px' }}>✉️</span>
           </div>
