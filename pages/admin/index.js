@@ -8,6 +8,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import LoginForm from '../../components/admin/LoginForm';
 import AdminLayout from '../../components/admin/AdminLayout';
+import { useAdminLanguage } from '../../lib/useAdminLanguage';
 
 export default function AdminPage() {
   const router = useRouter();
@@ -15,11 +16,14 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState({ templates: 0, recipients: 0, sent: 0 });
+  const { t } = useAdminLanguage();
+  const txt = t('dashboard');
 
   useEffect(() => {
     checkAuth();
   }, []);
-useEffect(() => {
+
+  useEffect(() => {
     if (isAuthenticated) {
       loadStats();
     }
@@ -86,7 +90,7 @@ useEffect(() => {
           }}>
             <span style={{ color: '#f59e0b', fontWeight: 'bold' }}>AI</span>
           </div>
-          <p style={{ color: '#6b7280', fontSize: '14px' }}>Laden...</p>
+          <p style={{ color: '#6b7280', fontSize: '14px' }}>Loading...</p>
         </div>
       </div>
     );
@@ -109,10 +113,10 @@ useEffect(() => {
       {/* Welcome */}
       <div style={{ marginBottom: '32px' }}>
         <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#fff', margin: '0 0 8px 0' }}>
-          Willkommen zurück, <span style={{ color: '#f59e0b' }}>{user?.username}</span>!
+          {txt.welcome}, <span style={{ color: '#f59e0b' }}>{user?.username}</span>!
         </h2>
         <p style={{ color: '#9ca3af', margin: 0 }}>
-          Hier ist eine Übersicht deines Admin-Bereichs.
+          {txt.subtitle}
         </p>
       </div>
 
@@ -131,13 +135,13 @@ useEffect(() => {
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
             <div>
-              <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 4px 0' }}>E-Mail Templates</p>
+              <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 4px 0' }}>{txt.emailTemplates}</p>
               <p style={{ color: '#fff', fontSize: '32px', fontWeight: 'bold', margin: 0 }}>{stats.templates}</p>
             </div>
             <span style={{ fontSize: '32px' }}>📧</span>
           </div>
           <Link href="/admin/emails" style={{ color: '#f59e0b', fontSize: '14px', textDecoration: 'none', display: 'inline-block', marginTop: '16px' }}>
-            Anzeigen →
+            {txt.view}
           </Link>
         </div>
 
@@ -150,7 +154,7 @@ useEffect(() => {
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
             <div>
-              <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 4px 0' }}>Empfänger</p>
+              <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 4px 0' }}>{txt.recipients}</p>
               <p style={{ color: '#fff', fontSize: '32px', fontWeight: 'bold', margin: 0 }}>{stats.recipients}</p>
             </div>
             <span style={{ fontSize: '32px' }}>👥</span>
@@ -166,7 +170,7 @@ useEffect(() => {
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
             <div>
-              <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 4px 0' }}>Gesendet</p>
+              <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 4px 0' }}>{txt.sent}</p>
               <p style={{ color: '#fff', fontSize: '32px', fontWeight: 'bold', margin: 0 }}>{stats.sent}</p>
             </div>
             <span style={{ fontSize: '32px' }}>✉️</span>
@@ -175,7 +179,7 @@ useEffect(() => {
       </div>
 
       {/* Quick Actions */}
-      <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#fff', margin: '0 0 16px 0' }}>Schnellzugriff</h3>
+      <h3 style={{ fontSize: '18px', fontWeight: '600', color: '#fff', margin: '0 0 16px 0' }}>{txt.quickAccess}</h3>
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
@@ -193,8 +197,8 @@ useEffect(() => {
           <div style={{ display: 'flex', alignItems: 'start', gap: '16px' }}>
             <span style={{ fontSize: '32px' }}>📧</span>
             <div>
-              <h4 style={{ color: '#fff', fontSize: '16px', fontWeight: '500', margin: '0 0 4px 0' }}>Templates bearbeiten</h4>
-              <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>Cold Email Templates anzeigen und bearbeiten</p>
+              <h4 style={{ color: '#fff', fontSize: '16px', fontWeight: '500', margin: '0 0 4px 0' }}>{txt.editTemplates}</h4>
+              <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>{txt.editTemplatesDesc}</p>
             </div>
           </div>
         </Link>
@@ -210,10 +214,10 @@ useEffect(() => {
             <span style={{ fontSize: '32px' }}>👥</span>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <h4 style={{ color: '#fff', fontSize: '16px', fontWeight: '500', margin: 0 }}>Empfänger verwalten</h4>
-                <span style={{ fontSize: '10px', backgroundColor: '#1f2937', padding: '2px 8px', borderRadius: '4px', color: '#6b7280' }}>Soon</span>
+                <h4 style={{ color: '#fff', fontSize: '16px', fontWeight: '500', margin: 0 }}>{txt.manageRecipients}</h4>
+                <span style={{ fontSize: '10px', backgroundColor: '#1f2937', padding: '2px 8px', borderRadius: '4px', color: '#6b7280' }}>{txt.soon}</span>
               </div>
-              <p style={{ color: '#6b7280', fontSize: '14px', margin: '4px 0 0 0' }}>CSV importieren, Listen erstellen</p>
+              <p style={{ color: '#6b7280', fontSize: '14px', margin: '4px 0 0 0' }}>{txt.manageRecipientsDesc}</p>
             </div>
           </div>
         </div>
@@ -230,10 +234,9 @@ useEffect(() => {
         <div style={{ display: 'flex', alignItems: 'start', gap: '16px' }}>
           <span style={{ fontSize: '24px' }}>💡</span>
           <div>
-            <h4 style={{ color: '#fff', fontSize: '16px', fontWeight: '500', margin: '0 0 4px 0' }}>Phase 1 aktiv</h4>
+            <h4 style={{ color: '#fff', fontSize: '16px', fontWeight: '500', margin: '0 0 4px 0' }}>{txt.phase1Active}</h4>
             <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>
-              Du kannst jetzt E-Mail Templates anzeigen, bearbeiten und den HTML-Code kopieren. 
-              Weitere Module (Empfänger, Versand, Tracking) folgen in den nächsten Phasen.
+              {txt.phase1Desc}
             </p>
           </div>
         </div>
