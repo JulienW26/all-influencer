@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
+import { useAdminLanguage } from '../../lib/useAdminLanguage';
 import { 
   getRecipients, 
   getLists,
@@ -31,6 +32,9 @@ export default function RecipientsPage() {
   const [showListModal, setShowListModal] = useState(false);
   const [editingRecipient, setEditingRecipient] = useState(null);
   const [importResult, setImportResult] = useState(null);
+  const { t } = useAdminLanguage();
+  const txt = t('recipients');
+  const common = t('common');
 
   // Daten laden
   useEffect(() => {
@@ -70,7 +74,7 @@ export default function RecipientsPage() {
 
   // Löschen
   const handleDelete = (id) => {
-    if (confirm('Empfänger wirklich löschen?')) {
+    if (confirm(txt.confirmDeleteRecipient || 'Empfänger wirklich löschen?')) {
       deleteRecipient(id);
       loadData();
     }
@@ -79,7 +83,7 @@ export default function RecipientsPage() {
   // Mehrere löschen
   const handleDeleteSelected = () => {
     if (selected.length === 0) return;
-    if (confirm(`${selected.length} Empfänger wirklich löschen?`)) {
+    if (confirm(`${selected.length} ${txt.confirmDeleteMultiple || 'Empfänger wirklich löschen?'}`)) {
       deleteRecipients(selected);
       setSelected([]);
       loadData();
@@ -98,7 +102,7 @@ export default function RecipientsPage() {
   };
 
   return (
-    <AdminLayout title="Empfänger">
+    <AdminLayout title={txt.title || 'Empfänger'}>
       {/* Stats */}
       <div style={{
         display: 'grid',
@@ -107,19 +111,19 @@ export default function RecipientsPage() {
         marginBottom: '24px'
       }}>
         <div style={{ backgroundColor: '#111827', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '12px', padding: '20px' }}>
-          <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>Gesamt</p>
+          <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>{txt.total || 'Gesamt'}</p>
           <p style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold', margin: '4px 0 0 0' }}>{recipients.length}</p>
         </div>
         <div style={{ backgroundColor: '#111827', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '12px', padding: '20px' }}>
-          <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>Diamond</p>
+          <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>{txt.diamond || 'Diamond'}</p>
           <p style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold', margin: '4px 0 0 0' }}>{recipients.filter(r => r.category === 'diamond').length}</p>
         </div>
         <div style={{ backgroundColor: '#111827', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '12px', padding: '20px' }}>
-          <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>Gold</p>
+          <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>{txt.gold || 'Gold'}</p>
           <p style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold', margin: '4px 0 0 0' }}>{recipients.filter(r => r.category === 'gold').length}</p>
         </div>
         <div style={{ backgroundColor: '#111827', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '12px', padding: '20px' }}>
-          <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>Listen</p>
+          <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>{txt.lists || 'Listen'}</p>
           <p style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold', margin: '4px 0 0 0' }}>{lists.length}</p>
         </div>
       </div>
@@ -139,7 +143,7 @@ export default function RecipientsPage() {
           color: '#000',
           fontWeight: 'bold',
           cursor: 'pointer'
-        }}>+ Hinzufügen</button>
+        }}>{txt.addNew || '+ Hinzufügen'}</button>
         <button onClick={() => setShowImportModal(true)} style={{
           padding: '10px 20px',
           backgroundColor: '#1f2937',
@@ -147,7 +151,7 @@ export default function RecipientsPage() {
           borderRadius: '8px',
           color: '#fff',
           cursor: 'pointer'
-        }}>📥 CSV Import</button>
+        }}>{txt.csvImport || '📥 CSV Import'}</button>
         <button onClick={handleExport} style={{
           padding: '10px 20px',
           backgroundColor: '#1f2937',
@@ -155,7 +159,7 @@ export default function RecipientsPage() {
           borderRadius: '8px',
           color: '#fff',
           cursor: 'pointer'
-        }}>📤 Export</button>
+        }}>{txt.export || '📤 Export'}</button>
         <button onClick={() => setShowListModal(true)} style={{
           padding: '10px 20px',
           backgroundColor: '#1f2937',
@@ -163,7 +167,7 @@ export default function RecipientsPage() {
           borderRadius: '8px',
           color: '#fff',
           cursor: 'pointer'
-        }}>📋 Listen</button>
+        }}>{txt.manageLists || '📋 Listen'}</button>
         {selected.length > 0 && (
           <button onClick={handleDeleteSelected} style={{
             padding: '10px 20px',
@@ -172,7 +176,7 @@ export default function RecipientsPage() {
             borderRadius: '8px',
             color: '#f87171',
             cursor: 'pointer'
-          }}>🗑️ {selected.length} löschen</button>
+          }}>🗑️ {selected.length} {txt.deleteSelected || 'löschen'}</button>
         )}
       </div>
 
@@ -185,7 +189,7 @@ export default function RecipientsPage() {
       }}>
         <input
           type="text"
-          placeholder="Suchen..."
+          placeholder={common.search || 'Suchen...'}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           style={{
@@ -204,7 +208,7 @@ export default function RecipientsPage() {
           borderRadius: '8px',
           color: '#fff'
         }}>
-          <option value="all">Alle Kategorien</option>
+          <option value="all">{txt.allCategories || 'Alle Kategorien'}</option>
           <option value="diamond">💎 Diamond</option>
           <option value="gold">🥇 Gold</option>
         </select>
@@ -215,7 +219,7 @@ export default function RecipientsPage() {
           borderRadius: '8px',
           color: '#fff'
         }}>
-          <option value="all">Alle Sprachen</option>
+          <option value="all">{txt.allLanguages || 'Alle Sprachen'}</option>
           <option value="de">🇩🇪 Deutsch</option>
           <option value="en">🇬🇧 English</option>
           <option value="es">🇪🇸 Español</option>
@@ -235,19 +239,19 @@ export default function RecipientsPage() {
               <th style={{ padding: '12px 16px', textAlign: 'left' }}>
                 <input type="checkbox" checked={selected.length === filteredRecipients.length && filteredRecipients.length > 0} onChange={toggleSelectAll} />
               </th>
-              <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>E-MAIL</th>
-              <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>NAME</th>
-              <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>SPOT</th>
-              <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>KATEGORIE</th>
-              <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>SPRACHE</th>
-              <th style={{ padding: '12px 16px', textAlign: 'right', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>AKTIONEN</th>
+              <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>{txt.email || 'E-MAIL'}</th>
+              <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>{txt.name || 'NAME'}</th>
+              <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>{txt.spot || 'SPOT'}</th>
+              <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>{txt.category || 'KATEGORIE'}</th>
+              <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>{txt.language || 'SPRACHE'}</th>
+              <th style={{ padding: '12px 16px', textAlign: 'right', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>{common.actions || 'AKTIONEN'}</th>
             </tr>
           </thead>
           <tbody>
             {filteredRecipients.length === 0 ? (
               <tr>
                 <td colSpan="7" style={{ padding: '48px', textAlign: 'center', color: '#6b7280' }}>
-                  {recipients.length === 0 ? 'Noch keine Empfänger. Klicke auf "Hinzufügen" oder "CSV Import".' : 'Keine Empfänger gefunden.'}
+                  {recipients.length === 0 ? (txt.noRecipients || 'Noch keine Empfänger. Klicke auf "Hinzufügen" oder "CSV Import".') : (txt.noResults || 'Keine Empfänger gefunden.')}
                 </td>
               </tr>
             ) : (
@@ -286,6 +290,8 @@ export default function RecipientsPage() {
       {(showAddModal || editingRecipient) && (
         <RecipientModal
           recipient={editingRecipient}
+          txt={txt}
+          common={common}
           onClose={() => { setShowAddModal(false); setEditingRecipient(null); }}
           onSave={(data) => {
             if (editingRecipient) {
@@ -303,6 +309,8 @@ export default function RecipientsPage() {
       {/* Import Modal */}
       {showImportModal && (
         <ImportModal
+          txt={txt}
+          common={common}
           onClose={() => { setShowImportModal(false); setImportResult(null); }}
           onImport={(csv, listId) => {
             const result = importFromCSV(csv, listId);
@@ -318,6 +326,8 @@ export default function RecipientsPage() {
       {showListModal && (
         <ListsModal
           lists={lists}
+          txt={txt}
+          common={common}
           onClose={() => setShowListModal(false)}
           onAdd={(name) => { addList({ name }); loadData(); }}
           onDelete={(id) => { deleteList(id); loadData(); }}
@@ -328,7 +338,7 @@ export default function RecipientsPage() {
 }
 
 // Modal: Empfänger hinzufügen/bearbeiten
-function RecipientModal({ recipient, onClose, onSave }) {
+function RecipientModal({ recipient, txt, common, onClose, onSave }) {
   const [form, setForm] = useState({
     email: recipient?.email || '',
     firstName: recipient?.firstName || '',
@@ -340,33 +350,33 @@ function RecipientModal({ recipient, onClose, onSave }) {
   return (
     <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
       <div style={{ backgroundColor: '#111827', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '450px' }}>
-        <h3 style={{ color: '#fff', margin: '0 0 24px 0' }}>{recipient ? 'Empfänger bearbeiten' : 'Neuer Empfänger'}</h3>
+        <h3 style={{ color: '#fff', margin: '0 0 24px 0' }}>{recipient ? (txt.editRecipient || 'Empfänger bearbeiten') : (txt.newRecipient || 'Neuer Empfänger')}</h3>
         
         <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>E-Mail *</label>
+          <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>{txt.emailRequired || 'E-Mail *'}</label>
           <input type="email" value={form.email} onChange={(e) => setForm({...form, email: e.target.value})} style={{ width: '100%', padding: '10px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff', boxSizing: 'border-box' }} />
         </div>
         
         <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>Vorname</label>
+          <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>{txt.firstName || 'Vorname'}</label>
           <input type="text" value={form.firstName} onChange={(e) => setForm({...form, firstName: e.target.value})} style={{ width: '100%', padding: '10px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff', boxSizing: 'border-box' }} />
         </div>
         
         <div style={{ marginBottom: '16px' }}>
-          <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>Spot-Nummer</label>
+          <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>{txt.spotNumber || 'Spot-Nummer'}</label>
           <input type="text" value={form.spotNumber} onChange={(e) => setForm({...form, spotNumber: e.target.value})} style={{ width: '100%', padding: '10px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff', boxSizing: 'border-box' }} />
         </div>
         
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
           <div>
-            <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>Kategorie</label>
+            <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>{txt.category || 'Kategorie'}</label>
             <select value={form.category} onChange={(e) => setForm({...form, category: e.target.value})} style={{ width: '100%', padding: '10px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff' }}>
               <option value="diamond">💎 Diamond</option>
               <option value="gold">🥇 Gold</option>
             </select>
           </div>
           <div>
-            <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>Sprache</label>
+            <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>{txt.language || 'Sprache'}</label>
             <select value={form.language} onChange={(e) => setForm({...form, language: e.target.value})} style={{ width: '100%', padding: '10px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff' }}>
               <option value="de">🇩🇪 Deutsch</option>
               <option value="en">🇬🇧 English</option>
@@ -376,8 +386,8 @@ function RecipientModal({ recipient, onClose, onSave }) {
         </div>
         
         <div style={{ display: 'flex', gap: '12px' }}>
-          <button onClick={onClose} style={{ flex: 1, padding: '12px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff', cursor: 'pointer' }}>Abbrechen</button>
-          <button onClick={() => form.email && onSave(form)} style={{ flex: 1, padding: '12px', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', border: 'none', borderRadius: '8px', color: '#000', fontWeight: 'bold', cursor: 'pointer' }}>Speichern</button>
+          <button onClick={onClose} style={{ flex: 1, padding: '12px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff', cursor: 'pointer' }}>{common.cancel || 'Abbrechen'}</button>
+          <button onClick={() => form.email && onSave(form)} style={{ flex: 1, padding: '12px', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', border: 'none', borderRadius: '8px', color: '#000', fontWeight: 'bold', cursor: 'pointer' }}>{common.save || 'Speichern'}</button>
         </div>
       </div>
     </div>
@@ -385,41 +395,41 @@ function RecipientModal({ recipient, onClose, onSave }) {
 }
 
 // Modal: CSV Import
-function ImportModal({ onClose, onImport, result, lists }) {
+function ImportModal({ txt, common, onClose, onImport, result, lists }) {
   const [csv, setCsv] = useState('');
   const [listId, setListId] = useState('');
 
   return (
     <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
       <div style={{ backgroundColor: '#111827', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '550px' }}>
-        <h3 style={{ color: '#fff', margin: '0 0 24px 0' }}>📥 CSV Import</h3>
+        <h3 style={{ color: '#fff', margin: '0 0 24px 0' }}>{txt.importTitle || '📥 CSV Import'}</h3>
         
         {result ? (
           <div style={{ textAlign: 'center', padding: '24px 0' }}>
             <div style={{ fontSize: '48px', marginBottom: '16px' }}>✅</div>
-            <p style={{ color: '#22c55e', fontSize: '18px', margin: '0 0 8px 0' }}>{result.imported} Empfänger importiert</p>
-            {result.duplicates > 0 && <p style={{ color: '#f59e0b', fontSize: '14px', margin: 0 }}>{result.duplicates} Duplikate übersprungen</p>}
-            <button onClick={onClose} style={{ marginTop: '24px', padding: '12px 32px', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', border: 'none', borderRadius: '8px', color: '#000', fontWeight: 'bold', cursor: 'pointer' }}>Fertig</button>
+            <p style={{ color: '#22c55e', fontSize: '18px', margin: '0 0 8px 0' }}>{result.imported} {txt.imported || 'Empfänger importiert'}</p>
+            {result.duplicates > 0 && <p style={{ color: '#f59e0b', fontSize: '14px', margin: 0 }}>{result.duplicates} {txt.duplicatesSkipped || 'Duplikate übersprungen'}</p>}
+            <button onClick={onClose} style={{ marginTop: '24px', padding: '12px 32px', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', border: 'none', borderRadius: '8px', color: '#000', fontWeight: 'bold', cursor: 'pointer' }}>{txt.done || 'Fertig'}</button>
           </div>
         ) : (
           <>
             <div style={{ marginBottom: '16px', padding: '16px', backgroundColor: '#1f2937', borderRadius: '8px' }}>
               <p style={{ color: '#9ca3af', fontSize: '13px', margin: 0 }}>
-                <strong style={{ color: '#fff' }}>Format:</strong> CSV mit Spalten: email, firstName, spotNumber, category, language<br/>
-                <strong style={{ color: '#fff' }}>Trennzeichen:</strong> Komma (,) oder Semikolon (;)
+                <strong style={{ color: '#fff' }}>{txt.importFormat || 'Format:'}</strong> {txt.importFormatDesc || 'CSV mit Spalten: email, firstName, spotNumber, category, language'}<br/>
+                <strong style={{ color: '#fff' }}>{txt.importSeparator || 'Trennzeichen:'}</strong> {txt.importSeparatorDesc || 'Komma (,) oder Semikolon (;)'}
               </p>
             </div>
             
             <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>Zu Liste hinzufügen (optional)</label>
+              <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>{txt.addToList || 'Zu Liste hinzufügen (optional)'}</label>
               <select value={listId} onChange={(e) => setListId(e.target.value)} style={{ width: '100%', padding: '10px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff' }}>
-                <option value="">Keine Liste</option>
+                <option value="">{txt.noList || 'Keine Liste'}</option>
                 {lists.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
               </select>
             </div>
             
             <div style={{ marginBottom: '24px' }}>
-              <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>CSV-Daten einfügen</label>
+              <label style={{ display: 'block', color: '#9ca3af', fontSize: '14px', marginBottom: '4px' }}>{txt.pasteCSV || 'CSV-Daten einfügen'}</label>
               <textarea
                 value={csv}
                 onChange={(e) => setCsv(e.target.value)}
@@ -429,8 +439,8 @@ function ImportModal({ onClose, onImport, result, lists }) {
             </div>
             
             <div style={{ display: 'flex', gap: '12px' }}>
-              <button onClick={onClose} style={{ flex: 1, padding: '12px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff', cursor: 'pointer' }}>Abbrechen</button>
-              <button onClick={() => csv && onImport(csv, listId)} style={{ flex: 1, padding: '12px', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', border: 'none', borderRadius: '8px', color: '#000', fontWeight: 'bold', cursor: 'pointer' }}>Importieren</button>
+              <button onClick={onClose} style={{ flex: 1, padding: '12px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff', cursor: 'pointer' }}>{common.cancel || 'Abbrechen'}</button>
+              <button onClick={() => csv && onImport(csv, listId)} style={{ flex: 1, padding: '12px', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', border: 'none', borderRadius: '8px', color: '#000', fontWeight: 'bold', cursor: 'pointer' }}>{common.import || 'Importieren'}</button>
             </div>
           </>
         )}
@@ -439,21 +449,21 @@ function ImportModal({ onClose, onImport, result, lists }) {
   );
 }
 
-// Modal: Listen verwalten
-function ListsModal({ lists, onClose, onAdd, onDelete }) {
+// Modal: Listen verwalten 
+function ListsModal({ lists, txt, common, onClose, onAdd, onDelete }) {
   const [newName, setNewName] = useState('');
 
   return (
     <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}>
       <div style={{ backgroundColor: '#111827', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '450px' }}>
-        <h3 style={{ color: '#fff', margin: '0 0 24px 0' }}>📋 Listen verwalten</h3>
+        <h3 style={{ color: '#fff', margin: '0 0 24px 0' }}>{txt.managingLists || '📋 Listen verwalten'}</h3>
         
         <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
           <input
             type="text"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            placeholder="Neue Liste..."
+            placeholder={txt.newList || 'Neue Liste...'}
             style={{ flex: 1, padding: '10px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff' }}
           />
           <button onClick={() => { if(newName) { onAdd(newName); setNewName(''); }}} style={{ padding: '10px 20px', background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', border: 'none', borderRadius: '8px', color: '#000', fontWeight: 'bold', cursor: 'pointer' }}>+</button>
@@ -461,7 +471,7 @@ function ListsModal({ lists, onClose, onAdd, onDelete }) {
         
         <div style={{ maxHeight: '250px', overflowY: 'auto' }}>
           {lists.length === 0 ? (
-            <p style={{ color: '#6b7280', textAlign: 'center', padding: '24px 0' }}>Noch keine Listen erstellt.</p>
+            <p style={{ color: '#6b7280', textAlign: 'center', padding: '24px 0' }}>{txt.noLists || 'Noch keine Listen erstellt.'}</p>
           ) : (
             lists.map(l => (
               <div key={l.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', backgroundColor: '#1f2937', borderRadius: '8px', marginBottom: '8px' }}>
@@ -472,7 +482,7 @@ function ListsModal({ lists, onClose, onAdd, onDelete }) {
           )}
         </div>
         
-        <button onClick={onClose} style={{ width: '100%', marginTop: '24px', padding: '12px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff', cursor: 'pointer' }}>Schließen</button>
+        <button onClick={onClose} style={{ width: '100%', marginTop: '24px', padding: '12px', backgroundColor: '#1f2937', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '8px', color: '#fff', cursor: 'pointer' }}>{common.close || 'Schließen'}</button>
       </div>
     </div>
   );
