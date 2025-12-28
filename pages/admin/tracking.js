@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
+import { useAdminLanguage } from '../../lib/useAdminLanguage';
 import { getTrackingData, getStats, getCampaigns, exportTrackingCSV, clearTrackingData } from '../../lib/tracking';
 
 export default function TrackingPage() {
@@ -12,6 +13,8 @@ export default function TrackingPage() {
   const [campaigns, setCampaigns] = useState([]);
   const [filter, setFilter] = useState('all');
   const [searchEmail, setSearchEmail] = useState('');
+  const { t } = useAdminLanguage();
+  const txt = t('tracking');
 
   useEffect(() => {
     loadData();
@@ -37,7 +40,7 @@ export default function TrackingPage() {
   const handleExport = () => {
     const csv = exportTrackingCSV();
     if (!csv) {
-      alert('Keine Daten zum Exportieren');
+      alert(txt.noExportData || 'Keine Daten zum Exportieren');
       return;
     }
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -50,14 +53,14 @@ export default function TrackingPage() {
 
   // Daten löschen
   const handleClear = () => {
-    if (confirm('Wirklich ALLE Tracking-Daten löschen? Dies kann nicht rückgängig gemacht werden!')) {
+    if (confirm(txt.confirmDeleteAll || 'Wirklich ALLE Tracking-Daten löschen? Dies kann nicht rückgängig gemacht werden!')) {
       clearTrackingData();
       loadData();
     }
   };
 
   return (
-    <AdminLayout title="Tracking & Statistiken">
+    <AdminLayout title={txt.title || 'Tracking & Statistiken'}>
       {/* Stats Übersicht */}
       {stats && (
         <div style={{
@@ -67,19 +70,19 @@ export default function TrackingPage() {
           marginBottom: '24px'
         }}>
           <div style={{ backgroundColor: '#111827', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '12px', padding: '20px' }}>
-            <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>Gesamt gesendet</p>
+            <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>{txt.totalSent || 'Gesamt gesendet'}</p>
             <p style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold', margin: '4px 0 0 0' }}>{stats.total}</p>
           </div>
           <div style={{ backgroundColor: '#111827', border: '1px solid rgba(34, 197, 94, 0.3)', borderRadius: '12px', padding: '20px' }}>
-            <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>Erfolgreich</p>
+            <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>{txt.successful || 'Erfolgreich'}</p>
             <p style={{ color: '#22c55e', fontSize: '28px', fontWeight: 'bold', margin: '4px 0 0 0' }}>{stats.successful}</p>
           </div>
           <div style={{ backgroundColor: '#111827', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '12px', padding: '20px' }}>
-            <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>Fehlgeschlagen</p>
+            <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>{txt.failed || 'Fehlgeschlagen'}</p>
             <p style={{ color: '#f87171', fontSize: '28px', fontWeight: 'bold', margin: '4px 0 0 0' }}>{stats.failed}</p>
           </div>
           <div style={{ backgroundColor: '#111827', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '12px', padding: '20px' }}>
-            <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>Erfolgsrate</p>
+            <p style={{ color: '#9ca3af', fontSize: '14px', margin: 0 }}>{txt.successRate || 'Erfolgsrate'}</p>
             <p style={{ color: '#f59e0b', fontSize: '28px', fontWeight: 'bold', margin: '4px 0 0 0' }}>{stats.successRate}%</p>
           </div>
         </div>
@@ -94,7 +97,7 @@ export default function TrackingPage() {
           padding: '24px',
           marginBottom: '24px'
         }}>
-          <h3 style={{ color: '#fff', margin: '0 0 20px 0', fontSize: '16px' }}>📊 Letzte 7 Tage</h3>
+          <h3 style={{ color: '#fff', margin: '0 0 20px 0', fontSize: '16px' }}>{txt.last7Days || '📊 Letzte 7 Tage'}</h3>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', height: '120px' }}>
             {stats.last7Days.map((day, i) => {
               const maxVal = Math.max(...stats.last7Days.map(d => d.total), 1);
@@ -130,7 +133,7 @@ export default function TrackingPage() {
           borderRadius: '8px',
           color: '#fff',
           cursor: 'pointer'
-        }}>📤 CSV Export</button>
+        }}>{txt.csvExport || '📤 CSV Export'}</button>
         <button onClick={handleClear} style={{
           padding: '10px 20px',
           backgroundColor: 'rgba(239, 68, 68, 0.1)',
@@ -138,7 +141,7 @@ export default function TrackingPage() {
           borderRadius: '8px',
           color: '#f87171',
           cursor: 'pointer'
-        }}>🗑️ Alle löschen</button>
+        }}>{txt.deleteAll || '🗑️ Alle löschen'}</button>
       </div>
 
       {/* Filter */}
@@ -150,7 +153,7 @@ export default function TrackingPage() {
       }}>
         <input
           type="text"
-          placeholder="E-Mail suchen..."
+          placeholder={txt.searchEmail || 'E-Mail suchen...'}
           value={searchEmail}
           onChange={(e) => setSearchEmail(e.target.value)}
           style={{
@@ -169,12 +172,12 @@ export default function TrackingPage() {
           borderRadius: '8px',
           color: '#fff'
         }}>
-          <option value="all">Alle Status</option>
-          <option value="success">✅ Erfolgreich</option>
-          <option value="failed">❌ Fehlgeschlagen</option>
+          <option value="all">{txt.allStatus || 'Alle Status'}</option>
+          <option value="success">{txt.statusSuccess || '✅ Erfolgreich'}</option>
+          <option value="failed">{txt.statusFailed || '❌ Fehlgeschlagen'}</option>
         </select>
         <span style={{ color: '#9ca3af', padding: '10px 0' }}>
-          {filteredData.length} Einträge
+          {filteredData.length} {txt.entries || 'Einträge'}
         </span>
       </div>
 
@@ -189,10 +192,10 @@ export default function TrackingPage() {
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr style={{ backgroundColor: '#1f2937', position: 'sticky', top: 0 }}>
-                <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>DATUM</th>
-                <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>E-MAIL</th>
-                <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>TEMPLATE</th>
-                <th style={{ padding: '12px 16px', textAlign: 'center', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>STATUS</th>
+                <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>{txt.date || 'DATUM'}</th>
+                <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>{txt.email || 'E-MAIL'}</th>
+                <th style={{ padding: '12px 16px', textAlign: 'left', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>{txt.template || 'TEMPLATE'}</th>
+                <th style={{ padding: '12px 16px', textAlign: 'center', color: '#f59e0b', fontSize: '12px', fontWeight: '600' }}>{txt.status || 'STATUS'}</th>
               </tr>
             </thead>
             <tbody>
@@ -200,8 +203,8 @@ export default function TrackingPage() {
                 <tr>
                   <td colSpan="4" style={{ padding: '48px', textAlign: 'center', color: '#6b7280' }}>
                     {trackingData.length === 0 
-                      ? 'Noch keine E-Mails gesendet. Gehe zu "Versand" um E-Mails zu senden.'
-                      : 'Keine Einträge gefunden.'}
+                      ? (txt.noEmails || 'Noch keine E-Mails gesendet. Gehe zu "Versand" um E-Mails zu senden.')
+                      : (txt.noResults || 'Keine Einträge gefunden.')}
                   </td>
                 </tr>
               ) : (
@@ -232,7 +235,7 @@ export default function TrackingPage() {
                           color: '#22c55e',
                           borderRadius: '20px',
                           fontSize: '12px'
-                        }}>✅ Erfolgreich</span>
+                        }}>{txt.statusSuccess || '✅ Erfolgreich'}</span>
                       ) : (
                         <span style={{
                           padding: '4px 12px',
@@ -240,7 +243,7 @@ export default function TrackingPage() {
                           color: '#f87171',
                           borderRadius: '20px',
                           fontSize: '12px'
-                        }} title={entry.error || ''}>❌ Fehler</span>
+                        }} title={entry.error || ''}>{txt.statusFailed || '❌ Fehler'}</span>
                       )}
                     </td>
                   </tr>
@@ -260,7 +263,7 @@ export default function TrackingPage() {
           padding: '24px',
           marginTop: '24px'
         }}>
-          <h3 style={{ color: '#fff', margin: '0 0 16px 0', fontSize: '16px' }}>📧 Nach Template</h3>
+          <h3 style={{ color: '#fff', margin: '0 0 16px 0', fontSize: '16px' }}>{txt.byTemplate || '📧 Nach Template'}</h3>
           <div style={{ display: 'grid', gap: '12px' }}>
             {Object.entries(stats.byTemplate).map(([id, tpl]) => (
               <div key={id} style={{
@@ -273,8 +276,8 @@ export default function TrackingPage() {
               }}>
                 <span style={{ color: '#d1d5db' }}>{tpl.name}</span>
                 <div style={{ display: 'flex', gap: '16px' }}>
-                  <span style={{ color: '#9ca3af' }}>{tpl.total} gesendet</span>
-                  <span style={{ color: '#22c55e' }}>{tpl.success} erfolgreich</span>
+                  <span style={{ color: '#9ca3af' }}>{tpl.total} {txt.sent || 'gesendet'}</span>
+                  <span style={{ color: '#22c55e' }}>{tpl.success} {txt.successful || 'erfolgreich'}</span>
                 </div>
               </div>
             ))}
