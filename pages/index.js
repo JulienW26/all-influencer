@@ -1225,7 +1225,19 @@ const Footer = () => {
 
 const App = () => {
   const { config, loading } = useConfig();
-  const generateSpots = (category) => { const count = config.categories[category]?.spots || 3; return Array.from({ length: count }, (_, i) => ({ id: `${category}-${i + 1}`, rank: i + 1, name: null, followers: null, image: null, booked: false, bookedMonths: [] })); };
+const generateSpots = (category) => {
+    const realInfluencers = config.influencerData?.[category] || [];
+    const count = config.categories[category]?.spots || 3;
+    const spots = [];
+    for (let i = 0; i < count; i++) {
+      if (realInfluencers[i]) {
+        spots.push({ ...realInfluencers[i], rank: i + 1 });
+      } else {
+        spots.push({ id: `${category}-${i + 1}`, rank: i + 1, name: null, followers: null, image: null, booked: false, bookedMonths: [] });
+      }
+    }
+    return spots;
+  };
   
   if (loading) return <div className="min-h-screen bg-black flex items-center justify-center"><div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" /></div>;
   
@@ -1307,9 +1319,10 @@ useEffect(() => {
     const loadData = async () => {
       try {
         // Config und CMS-Daten parallel laden
-        const [configRes, cmsRes] = await Promise.all([
+const [configRes, cmsRes, influencerRes] = await Promise.all([
           fetch('/config.json').then(r => r.ok ? r.json() : {}),
-          fetch('/api/content').then(r => r.ok ? r.json() : {})
+fetch('/api/content').then(r => r.ok ? r.json() : {}),
+          fetch('/api/admin/influencers').then(r => r.ok ? r.json() : { influencers: [] })
         ]);
         
         // Config mergen
@@ -1393,6 +1406,23 @@ useEffect(() => {
             };
           }
         }
+// Influencer aus Datenbank in Config integrieren
+        if (influencerRes.influencers && influencerRes.influencers.length > 0) {
+          merged.influencerData = {
+            diamond: influencerRes.influencers.filter(i => i.category === 'diamond').map((inf, idx) => ({
+              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username
+            })),
+            platinum: influencerRes.influencers.filter(i => i.category === 'platin').map((inf, idx) => ({
+              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username
+            })),
+            gold: influencerRes.influencers.filter(i => i.category === 'gold').map((inf, idx) => ({
+              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username
+            })),
+            risingStar: influencerRes.influencers.filter(i => i.category === 'rising').map((inf, idx) => ({
+              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username
+            }))
+          };
+        } 
         setConfig(merged);
       } catch (error) {
         console.warn('Using default config:', error);
