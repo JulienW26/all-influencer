@@ -297,6 +297,16 @@ const deepMerge = (target, source) => {
   return output;
 };
 
+// PLATFORM INFO
+const PLATFORM_INFO = {
+  instagram: { icon: '📸', label: 'Instagram', color: '#E4405F' },
+  tiktok: { icon: '🎵', label: 'TikTok', color: '#000000' },
+  youtube: { icon: '▶️', label: 'YouTube', color: '#FF0000' },
+  facebook: { icon: '📘', label: 'Facebook', color: '#1877F2' },
+  x: { icon: '✖️', label: 'X', color: '#000000' },
+  twitch: { icon: '🎮', label: 'Twitch', color: '#9146FF' },
+  linkedin: { icon: '💼', label: 'LinkedIn', color: '#0A66C2' },
+};
 // ============================================================================
 // HELPERS
 // ============================================================================
