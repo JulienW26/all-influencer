@@ -6,11 +6,13 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Sidebar from './Sidebar';
+import { useAdminLanguage } from '../../lib/useAdminLanguage';
 
 export default function AdminLayout({ children, title = 'Admin' }) {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { lang, setLang } = useAdminLanguage();
 
   useEffect(() => {
     checkAuth();
@@ -108,23 +110,79 @@ export default function AdminLayout({ children, title = 'Admin' }) {
             }}>
               <h1 style={{ fontSize: '20px', fontWeight: '600', color: '#fff', margin: 0 }}>{title}</h1>
               
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                <div style={{ textAlign: 'right' }}>
-                  <p style={{ fontSize: '12px', color: '#9ca3af', margin: 0 }}>Eingeloggt als</p>
-                  <p style={{ fontSize: '14px', fontWeight: '500', color: '#f59e0b', margin: 0 }}>{user.username}</p>
-                </div>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
+              <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+                {/* Sprachumschalter */}
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '4px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  padding: '4px',
+                  borderRadius: '8px'
                 }}>
-                  <span style={{ color: '#000', fontWeight: 'bold', fontSize: '14px' }}>
-                    {user.username.charAt(0).toUpperCase()}
-                  </span>
+                  <button
+                    onClick={() => setLang('en')}
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      backgroundColor: lang === 'en' ? '#f59e0b' : 'transparent',
+                      color: lang === 'en' ? '#000' : '#9ca3af',
+                      fontSize: '12px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <span>🇬🇧</span>
+                    <span>EN</span>
+                  </button>
+                  <button
+                    onClick={() => setLang('de')}
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: '6px',
+                      border: 'none',
+                      backgroundColor: lang === 'de' ? '#f59e0b' : 'transparent',
+                      color: lang === 'de' ? '#000' : '#9ca3af',
+                      fontSize: '12px',
+                      fontWeight: '500',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <span>🇩🇪</span>
+                    <span>DE</span>
+                  </button>
+                </div>
+
+                {/* User Info */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ textAlign: 'right' }}>
+                    <p style={{ fontSize: '12px', color: '#9ca3af', margin: 0 }}>
+                      {lang === 'en' ? 'Logged in as' : 'Eingeloggt als'}
+                    </p>
+                    <p style={{ fontSize: '14px', fontWeight: '500', color: '#f59e0b', margin: 0 }}>{user.username}</p>
+                  </div>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <span style={{ color: '#000', fontWeight: 'bold', fontSize: '14px' }}>
+                      {user.username.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -137,4 +195,7 @@ export default function AdminLayout({ children, title = 'Admin' }) {
       </div>
     </>
   );
-    }
+}
+
+// Export hook für Nutzung in anderen Komponenten
+export { useAdminLanguage } from '../../lib/useAdminLanguage';
