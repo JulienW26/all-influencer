@@ -115,7 +115,7 @@ export default function Sidebar({ onLogout }) {
         </ul>
       </nav>
       
-      {/* Logout Button */}
+      {/* Logout Button - Neu gestaltet */}
       <div style={{ padding: '16px', borderTop: '1px solid rgba(251, 191, 36, 0.3)' }}>
         <button
           onClick={onLogout}
@@ -123,17 +123,42 @@ export default function Sidebar({ onLogout }) {
             width: '100%',
             display: 'flex',
             alignItems: 'center',
-            gap: '12px',
-            padding: '12px 16px',
-            borderRadius: '8px',
-            border: 'none',
-            backgroundColor: 'transparent',
-            color: '#9ca3af',
+            justifyContent: 'center',
+            gap: '10px',
+            padding: '14px 16px',
+            borderRadius: '10px',
+            border: '1px solid rgba(239, 68, 68, 0.4)',
+            backgroundColor: 'rgba(239, 68, 68, 0.1)',
+            color: '#f87171',
             cursor: 'pointer',
-            fontSize: '14px'
+            fontSize: '14px',
+            fontWeight: '600',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+            e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.6)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
+            e.currentTarget.style.borderColor = 'rgba(239, 68, 68, 0.4)';
           }}
         >
-          <span>🚪</span>
+          {/* Logout Icon */}
+          <svg 
+            width="18" 
+            height="18" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16,17 21,12 16,7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
           <span>Abmelden</span>
         </button>
       </div>
