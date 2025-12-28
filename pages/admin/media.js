@@ -13,14 +13,15 @@
 import { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useAdminLanguage } from '../../lib/useAdminLanguage';
 
 // Kategorien mit Icons
 const CATEGORIES = [
-  { id: 'all', label: 'Alle', icon: '📁' },
-  { id: 'influencer', label: 'Influencer', icon: '👤' },
-  { id: 'logos', label: 'Logos', icon: '🏢' },
-  { id: 'videos', label: 'Videos', icon: '🎬' },
-  { id: 'general', label: 'Allgemein', icon: '📎' },
+  { id: 'all', labelKey: 'all', labelFallback: 'Alle', icon: '📁' },
+  { id: 'influencer', labelKey: 'influencer', labelFallback: 'Influencer', icon: '👤' },
+  { id: 'logos', labelKey: 'logos', labelFallback: 'Logos', icon: '🏢' },
+  { id: 'videos', labelKey: 'videos', labelFallback: 'Videos', icon: '🎬' },
+  { id: 'general', labelKey: 'general', labelFallback: 'Allgemein', icon: '📎' },
 ];
 
 // Hilfsfunktion für Dateigröße
@@ -54,6 +55,12 @@ export default function MediaManager() {
   const [notification, setNotification] = useState(null);
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const { t } = useAdminLanguage();
+  const txt = t('media');
+  const common = t('common');
+
+  // Helper um Kategorie-Label zu holen
+  const getCategoryLabel = (cat) => txt[cat.labelKey] || cat.labelFallback;
 
   // Medien laden
   const loadMedia = useCallback(async () => {
@@ -65,7 +72,7 @@ export default function MediaManager() {
         setMedia(data.media);
       }
     } catch (error) {
-      showNotification('Fehler beim Laden der Medien', 'error');
+      showNotification(txt.loadingError || 'Fehler beim Laden der Medien', 'error');
     } finally {
       setLoading(false);
     }
@@ -99,13 +106,13 @@ export default function MediaManager() {
       const data = await response.json();
 
       if (data.success) {
-        showNotification(`"${file.name}" erfolgreich hochgeladen!`, 'success');
+        showNotification(`"${file.name}" ${txt.uploadSuccess || 'erfolgreich hochgeladen!'}`, 'success');
         loadMedia();
       } else {
-        showNotification(data.error || 'Upload fehlgeschlagen', 'error');
+        showNotification(data.error || txt.uploadFailed || 'Upload fehlgeschlagen', 'error');
       }
     } catch (error) {
-      showNotification('Fehler beim Hochladen', 'error');
+      showNotification(txt.uploadFailed || 'Fehler beim Hochladen', 'error');
     } finally {
       setUploading(false);
       setUploadProgress(0);
@@ -122,22 +129,22 @@ export default function MediaManager() {
       const data = await response.json();
 
       if (data.success) {
-        showNotification('Datei gelöscht', 'success');
+        showNotification(txt.deleteSuccess || 'Datei gelöscht', 'success');
         setDeleteConfirm(null);
         setSelectedMedia(null);
         loadMedia();
       } else {
-        showNotification(data.error || 'Löschen fehlgeschlagen', 'error');
+        showNotification(data.error || txt.deleteFailed || 'Löschen fehlgeschlagen', 'error');
       }
     } catch (error) {
-      showNotification('Fehler beim Löschen', 'error');
+      showNotification(txt.deleteFailed || 'Fehler beim Löschen', 'error');
     }
   };
 
   // URL kopieren
   const copyUrl = (url) => {
     navigator.clipboard.writeText(url);
-    showNotification('URL kopiert!', 'success');
+    showNotification(txt.urlCopied || 'URL kopiert!', 'success');
   };
 
   // Drag & Drop Handler
@@ -168,7 +175,7 @@ export default function MediaManager() {
   return (
     <>
       <Head>
-        <title>Medien-Bibliothek | All-Influencer Admin</title>
+        <title>{txt.title || 'Medien-Bibliothek'} | All-Influencer Admin</title>
       </Head>
 
       <div style={{
@@ -201,11 +208,11 @@ export default function MediaManager() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent'
             }}>
-              🖼️ Medien-Bibliothek
+              🖼️ {txt.title || 'Medien-Bibliothek'}
             </h1>
           </div>
           <div style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)' }}>
-            {media.length} Dateien
+            {media.length} {txt.files || 'Dateien'}
           </div>
         </header>
 
@@ -254,7 +261,7 @@ export default function MediaManager() {
               {uploading ? (
                 <div>
                   <p style={{ marginBottom: '1rem', color: '#f59e0b' }}>
-                    Wird hochgeladen...
+                    {txt.uploading || 'Wird hochgeladen...'}
                   </p>
                   <div style={{
                     width: '200px',
@@ -279,8 +286,8 @@ export default function MediaManager() {
                     color: isDragging ? '#f59e0b' : 'rgba(255,255,255,0.7)'
                   }}>
                     {isDragging 
-                      ? 'Hier ablegen zum Hochladen...' 
-                      : 'Dateien hierher ziehen oder klicken zum Auswählen'}
+                      ? (txt.dropHere || 'Hier ablegen zum Hochladen...') 
+                      : (txt.uploadArea || 'Dateien hierher ziehen oder klicken zum Auswählen')}
                   </p>
                   
                   <div style={{ 
@@ -304,10 +311,10 @@ export default function MediaManager() {
                         cursor: 'pointer'
                       }}
                     >
-                      <option value="influencer">👤 Influencer</option>
-                      <option value="logos">🏢 Logos</option>
-                      <option value="videos">🎬 Videos</option>
-                      <option value="general">📎 Allgemein</option>
+                      <option value="influencer">👤 {txt.influencer || 'Influencer'}</option>
+                      <option value="logos">🏢 {txt.logos || 'Logos'}</option>
+                      <option value="videos">🎬 {txt.videos || 'Videos'}</option>
+                      <option value="general">📎 {txt.general || 'Allgemein'}</option>
                     </select>
 
                     <label style={{
@@ -319,7 +326,7 @@ export default function MediaManager() {
                       cursor: 'pointer',
                       transition: 'transform 0.2s'
                     }}>
-                      📎 Dateien auswählen
+                      📎 {txt.selectFiles || 'Dateien auswählen'}
                       <input
                         type="file"
                         multiple
@@ -335,7 +342,7 @@ export default function MediaManager() {
                     fontSize: '0.75rem', 
                     color: 'rgba(255,255,255,0.4)' 
                   }}>
-                    Erlaubt: JPG, PNG, WebP, SVG, GIF, MP4, WebM | Max: 10 MB (Bilder), 100 MB (Videos)
+                    {txt.allowed || 'Erlaubt: JPG, PNG, WebP, SVG, GIF, MP4, WebM | Max: 10 MB (Bilder), 100 MB (Videos)'}
                   </p>
                 </>
               )}
@@ -366,7 +373,7 @@ export default function MediaManager() {
                   fontWeight: selectedCategory === cat.id ? 'bold' : 'normal'
                 }}
               >
-                {cat.icon} {cat.label}
+                {cat.icon} {getCategoryLabel(cat)}
               </button>
             ))}
           </div>
@@ -379,7 +386,7 @@ export default function MediaManager() {
               color: 'rgba(255,255,255,0.5)'
             }}>
               <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>⏳</div>
-              Lade Medien...
+              {txt.loadingMedia || 'Lade Medien...'}
             </div>
           ) : media.length === 0 ? (
             <div style={{ 
@@ -388,9 +395,9 @@ export default function MediaManager() {
               color: 'rgba(255,255,255,0.5)'
             }}>
               <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📭</div>
-              <p>Noch keine Medien vorhanden.</p>
+              <p>{txt.noMedia || 'Noch keine Medien vorhanden.'}</p>
               <p style={{ fontSize: '0.875rem' }}>
-                Lade deine ersten Bilder oder Videos hoch!
+                {txt.uploadFirst || 'Lade deine ersten Bilder oder Videos hoch!'}
               </p>
             </div>
           ) : (
@@ -547,25 +554,25 @@ export default function MediaManager() {
                   fontSize: '0.875rem'
                 }}>
                   <div>
-                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>Kategorie:</span>
+                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>{txt.category || 'Kategorie'}:</span>
                     <span style={{ marginLeft: '0.5rem' }}>
-                      {CATEGORIES.find(c => c.id === selectedMedia.category)?.label}
+                      {getCategoryLabel(CATEGORIES.find(c => c.id === selectedMedia.category) || CATEGORIES[4])}
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>Größe:</span>
+                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>{txt.size || 'Größe'}:</span>
                     <span style={{ marginLeft: '0.5rem' }}>
                       {formatFileSize(selectedMedia.size)}
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>Typ:</span>
+                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>{txt.type || 'Typ'}:</span>
                     <span style={{ marginLeft: '0.5rem' }}>
-                      {selectedMedia.type === 'video' ? 'Video' : 'Bild'}
+                      {selectedMedia.type === 'video' ? (txt.video || 'Video') : (txt.image || 'Bild')}
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>Hochgeladen:</span>
+                    <span style={{ color: 'rgba(255,255,255,0.5)' }}>{txt.uploaded || 'Hochgeladen'}:</span>
                     <span style={{ marginLeft: '0.5rem' }}>
                       {selectedMedia.uploadedAt ? formatDate(selectedMedia.uploadedAt) : '-'}
                     </span>
@@ -580,7 +587,7 @@ export default function MediaManager() {
                     color: 'rgba(255,255,255,0.5)',
                     fontSize: '0.875rem'
                   }}>
-                    URL:
+                    {txt.url || 'URL'}:
                   </label>
                   <div style={{ 
                     display: 'flex', 
@@ -612,7 +619,7 @@ export default function MediaManager() {
                         fontWeight: 'bold'
                       }}
                     >
-                      📋 Kopieren
+                      📋 {txt.copy || 'Kopieren'}
                     </button>
                   </div>
                 </div>
@@ -634,7 +641,7 @@ export default function MediaManager() {
                       cursor: 'pointer'
                     }}
                   >
-                    Schließen
+                    {common.close || 'Schließen'}
                   </button>
                   
                   {deleteConfirm === selectedMedia.url ? (
@@ -651,7 +658,7 @@ export default function MediaManager() {
                           fontWeight: 'bold'
                         }}
                       >
-                        Ja, löschen!
+                        {txt.confirmDelete || 'Ja, löschen!'}
                       </button>
                       <button
                         onClick={() => setDeleteConfirm(null)}
@@ -664,7 +671,7 @@ export default function MediaManager() {
                           cursor: 'pointer'
                         }}
                       >
-                        Abbrechen
+                        {common.cancel || 'Abbrechen'}
                       </button>
                     </div>
                   ) : (
@@ -679,7 +686,7 @@ export default function MediaManager() {
                         cursor: 'pointer'
                       }}
                     >
-                      🗑️ Löschen
+                      🗑️ {common.delete || 'Löschen'}
                     </button>
                   )}
                 </div>
@@ -688,18 +695,3 @@ export default function MediaManager() {
           </div>
         )}
 
-        {/* CSS Animationen */}
-        <style jsx global>{`
-          @keyframes slideIn {
-            from { transform: translateX(100px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-          }
-          @keyframes progress {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(200%); }
-          }
-        `}</style>
-      </div>
-    </>
-  );
-}
