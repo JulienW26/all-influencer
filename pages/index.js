@@ -1416,16 +1416,16 @@ fetch('/api/content').then(r => r.ok ? r.json() : {}),
         if (influencerRes.influencers && influencerRes.influencers.length > 0) {
           merged.influencerData = {
             diamond: influencerRes.influencers.filter(i => i.category === 'diamond').map((inf, idx) => ({
-              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username
+id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username, platform: inf.platform
             })),
             platinum: influencerRes.influencers.filter(i => i.category === 'platin').map((inf, idx) => ({
-              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username
+id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username, platform: inf.platform
             })),
             gold: influencerRes.influencers.filter(i => i.category === 'gold').map((inf, idx) => ({
-              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username
+          id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username, platform: inf.platform
             })),
             risingStar: influencerRes.influencers.filter(i => i.category === 'rising').map((inf, idx) => ({
-              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username
+id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username, platform: inf.platform
             }))
           };
         } 
