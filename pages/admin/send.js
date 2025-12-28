@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
+import { useAdminLanguage } from '../../lib/useAdminLanguage';
 import { getRecipients, getLists } from '../../lib/recipients';
 import { emailTemplates, generateEmailHTML } from '../../lib/email-templates';
 import { trackSentEmail } from '../../lib/tracking';
@@ -30,6 +31,8 @@ export default function SendPage() {
   const [progress, setProgress] = useState({ current: 0, total: 0 });
   const [results, setResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
+  const { t } = useAdminLanguage();
+  const txt = t('send');
 
   useEffect(() => {
     setRecipients(getRecipients());
@@ -77,7 +80,7 @@ export default function SendPage() {
   // Test-E-Mail senden
   const sendTestEmail = async () => {
     if (!selectedTemplate || !testEmail) {
-      alert('Bitte Template und Test-E-Mail-Adresse auswählen');
+      alert(txt.selectTemplateAndRecipients || 'Bitte Template und Test-E-Mail-Adresse auswählen');
       return;
     }
 
@@ -109,7 +112,7 @@ export default function SendPage() {
       });
 
       if (res.ok) {
-        alert('✅ Test-E-Mail erfolgreich gesendet!');
+        alert(txt.testSuccess || '✅ Test-E-Mail erfolgreich gesendet!');
       } else {
         alert('❌ Fehler: ' + (data.error || 'Unbekannter Fehler'));
       }
@@ -123,11 +126,11 @@ export default function SendPage() {
   // Bulk-Versand
   const sendBulkEmails = async () => {
     if (!selectedTemplate || selectedRecipients.length === 0) {
-      alert('Bitte Template und mindestens einen Empfänger auswählen');
+      alert(txt.selectTemplateAndRecipients || 'Bitte Template und mindestens einen Empfänger auswählen');
       return;
     }
 
-    if (!confirm(`Wirklich ${selectedRecipients.length} E-Mails senden?`)) {
+    if (!confirm(`${txt.confirmSend || 'Wirklich E-Mails senden?'} (${selectedRecipients.length})`)) {
       return;
     }
 
@@ -217,7 +220,7 @@ export default function SendPage() {
   const errorCount = results.filter(r => !r.success).length;
 
   return (
-    <AdminLayout title="E-Mail Versand">
+    <AdminLayout title={txt.title || 'E-Mail Versand'}>
       {/* Template Auswahl */}
       <div style={{
         backgroundColor: '#111827',
@@ -226,7 +229,7 @@ export default function SendPage() {
         padding: '24px',
         marginBottom: '24px'
       }}>
-        <h3 style={{ color: '#fff', margin: '0 0 16px 0', fontSize: '16px' }}>1. Template auswählen</h3>
+        <h3 style={{ color: '#fff', margin: '0 0 16px 0', fontSize: '16px' }}>{txt.step1 || '1. Template auswählen'}</h3>
         <select
           value={selectedTemplate}
           onChange={(e) => setSelectedTemplate(e.target.value)}
@@ -240,7 +243,7 @@ export default function SendPage() {
             fontSize: '16px'
           }}
         >
-          <option value="">-- Template wählen --</option>
+          <option value="">{txt.selectTemplate || '-- Template wählen --'}</option>
           {templateList.map(t => (
             <option key={t.id} value={t.id}>{t.name}</option>
           ))}
@@ -255,11 +258,11 @@ export default function SendPage() {
         padding: '24px',
         marginBottom: '24px'
       }}>
-        <h3 style={{ color: '#fff', margin: '0 0 16px 0', fontSize: '16px' }}>2. Test-E-Mail senden (optional)</h3>
+        <h3 style={{ color: '#fff', margin: '0 0 16px 0', fontSize: '16px' }}>{txt.step2 || '2. Test-E-Mail senden (optional)'}</h3>
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           <input
             type="email"
-            placeholder="deine@email.com"
+            placeholder={txt.testEmail || 'deine@email.com'}
             value={testEmail}
             onChange={(e) => setTestEmail(e.target.value)}
             style={{
@@ -285,7 +288,7 @@ export default function SendPage() {
               cursor: sending ? 'not-allowed' : 'pointer'
             }}
           >
-            {sending ? 'Sende...' : '📧 Test senden'}
+            {sending ? (txt.sending || 'Sende...') : (txt.sendTest || '📧 Test senden')}
           </button>
         </div>
       </div>
@@ -298,7 +301,7 @@ export default function SendPage() {
         padding: '24px',
         marginBottom: '24px'
       }}>
-        <h3 style={{ color: '#fff', margin: '0 0 16px 0', fontSize: '16px' }}>3. Empfänger auswählen</h3>
+        <h3 style={{ color: '#fff', margin: '0 0 16px 0', fontSize: '16px' }}>{txt.step3 || '3. Empfänger auswählen'}</h3>
         
         {/* Filter */}
         <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', flexWrap: 'wrap' }}>
@@ -309,7 +312,7 @@ export default function SendPage() {
             borderRadius: '8px',
             color: '#fff'
           }}>
-            <option value="all">Alle Kategorien</option>
+            <option value="all">{txt.allCategories || 'Alle Kategorien'}</option>
             <option value="diamond">💎 Diamond</option>
             <option value="gold">🥇 Gold</option>
           </select>
@@ -320,13 +323,13 @@ export default function SendPage() {
             borderRadius: '8px',
             color: '#fff'
           }}>
-            <option value="all">Alle Sprachen</option>
+            <option value="all">{txt.allLanguages || 'Alle Sprachen'}</option>
             <option value="de">🇩🇪 Deutsch</option>
             <option value="en">🇬🇧 English</option>
             <option value="es">🇪🇸 Español</option>
           </select>
           <span style={{ color: '#9ca3af', padding: '10px 0' }}>
-            {selectedRecipients.length} von {filteredRecipients.length} ausgewählt
+            {selectedRecipients.length} {txt.of || 'von'} {filteredRecipients.length} {txt.selected || 'ausgewählt'}
           </span>
         </div>
 
@@ -347,7 +350,7 @@ export default function SendPage() {
               {filteredRecipients.length === 0 ? (
                 <tr>
                   <td colSpan="4" style={{ padding: '32px', textAlign: 'center', color: '#6b7280' }}>
-                    Keine Empfänger gefunden. Füge zuerst Empfänger hinzu.
+                    {txt.noRecipients || 'Keine Empfänger gefunden. Füge zuerst Empfänger hinzu.'}
                   </td>
                 </tr>
               ) : (
@@ -374,13 +377,13 @@ export default function SendPage() {
         borderRadius: '12px',
         padding: '24px'
       }}>
-        <h3 style={{ color: '#fff', margin: '0 0 16px 0', fontSize: '16px' }}>4. E-Mails senden</h3>
+        <h3 style={{ color: '#fff', margin: '0 0 16px 0', fontSize: '16px' }}>{txt.step4 || '4. E-Mails senden'}</h3>
         
         {sendingBulk ? (
           <div>
             <div style={{ marginBottom: '16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ color: '#fff' }}>Sende E-Mails...</span>
+                <span style={{ color: '#fff' }}>{txt.sendingEmails || 'Sende E-Mails...'}</span>
                 <span style={{ color: '#f59e0b' }}>{progress.current} / {progress.total}</span>
               </div>
               <div style={{ height: '8px', backgroundColor: '#1f2937', borderRadius: '4px', overflow: 'hidden' }}>
@@ -409,7 +412,7 @@ export default function SendPage() {
               cursor: (!selectedTemplate || selectedRecipients.length === 0) ? 'not-allowed' : 'pointer'
             }}
           >
-            🚀 {selectedRecipients.length} E-Mail{selectedRecipients.length !== 1 ? 's' : ''} senden
+            🚀 {selectedRecipients.length} {selectedRecipients.length !== 1 ? (txt.emails || 'E-Mails') : (txt.email || 'E-Mail')} {txt.sendEmails || 'senden'}
           </button>
         )}
 
@@ -417,8 +420,8 @@ export default function SendPage() {
         {showResults && results.length > 0 && (
           <div style={{ marginTop: '24px' }}>
             <div style={{ display: 'flex', gap: '16px', marginBottom: '16px' }}>
-              <span style={{ color: '#22c55e' }}>✅ Erfolgreich: {successCount}</span>
-              {errorCount > 0 && <span style={{ color: '#f87171' }}>❌ Fehler: {errorCount}</span>}
+              <span style={{ color: '#22c55e' }}>✅ {txt.successful || 'Erfolgreich'}: {successCount}</span>
+              {errorCount > 0 && <span style={{ color: '#f87171' }}>❌ {txt.failed || 'Fehler'}: {errorCount}</span>}
             </div>
             <div style={{ maxHeight: '200px', overflowY: 'auto', backgroundColor: '#1f2937', borderRadius: '8px', padding: '12px' }}>
               {results.map((r, i) => (
