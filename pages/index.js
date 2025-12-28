@@ -907,7 +907,8 @@ const InfluencerSpot = ({ spot, category, isMobile }) => {
   </div>
 )}
       </div>
-    </article>
+    </div>
+  </article>
   );
 };
 
