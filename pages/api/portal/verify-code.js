@@ -36,20 +36,33 @@ export default async function handler(req, res) {
     }
 
     // Prüfen ob Code noch gültig ist
-    if (!invitation.isValid()) {
-      let errorMsg = 'Dieser Code ist nicht mehr gültig';
-      
-      if (invitation.status === 'used') {
-        errorMsg = 'Dieser Code wurde bereits verwendet';
-      } else if (invitation.status === 'expired') {
-        errorMsg = 'Dieser Code ist abgelaufen';
-      } else if (invitation.status === 'deactivated') {
-        errorMsg = 'Dieser Code wurde deaktiviert';
-      }
-      
+    if (invitation.status === 'used') {
       return res.status(400).json({ 
         valid: false, 
-        error: errorMsg 
+        error: 'Dieser Code wurde bereits verwendet' 
+      });
+    }
+    
+    if (invitation.status === 'deactivated') {
+      return res.status(400).json({ 
+        valid: false, 
+        error: 'Dieser Code wurde deaktiviert' 
+      });
+    }
+
+    // Prüfen ob Code abgelaufen ist
+    if (invitation.validUntil && new Date(invitation.validUntil) < new Date()) {
+      return res.status(400).json({ 
+        valid: false, 
+        error: 'Dieser Code ist abgelaufen' 
+      });
+    }
+
+    // Prüfen ob maximale Nutzungen erreicht
+    if (invitation.maxUses && invitation.usedCount >= invitation.maxUses) {
+      return res.status(400).json({ 
+        valid: false, 
+        error: 'Dieser Code wurde bereits zu oft verwendet' 
       });
     }
 
