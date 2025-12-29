@@ -4,7 +4,6 @@
  */
 
 import mongoose from 'mongoose';
-import crypto from 'crypto';
 
 const InvitationCodeSchema = new mongoose.Schema({
   code: { 
@@ -58,9 +57,15 @@ const InvitationCodeSchema = new mongoose.Schema({
 });
 
 // Funktion um einen zufälligen Code zu generieren
-InvitationCodeSchema.statics.generateCode = function(prefix = 'INV') {
-  const random = crypto.randomBytes(4).toString('hex').toUpperCase();
-  return `${prefix}-${random}`;
+// Format: IN-XXXX-XXXX-XXXX oder BR-XXXX-XXXX-XXXX
+InvitationCodeSchema.statics.generateCode = function(type) {
+  const prefix = type === 'influencer' ? 'IN' : 'BR';
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let random = '';
+  for (let i = 0; i < 12; i++) {
+    random += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `${prefix}-${random.slice(0,4)}-${random.slice(4,8)}-${random.slice(8,12)}`;
 };
 
 export default mongoose.models.InvitationCode || mongoose.model('InvitationCode', InvitationCodeSchema);
