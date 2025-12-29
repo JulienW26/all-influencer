@@ -53,7 +53,7 @@ export default async function handler(req, res) {
         }
       } else {
         const prefix = type === 'influencer' ? 'INF' : 'BRD';
-        code = InvitationCode.generateCode(prefix);
+        code = InvitationCode.generateCode(type);
       }
 
       const newCode = await InvitationCode.create({
