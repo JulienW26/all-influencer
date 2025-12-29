@@ -1,5 +1,6 @@
 /**
  * Admin Sidebar Navigation
+ * Mit Portal-Verwaltung (Einladungscodes & Benutzer)
  */
 
 import Link from 'next/link';
@@ -31,6 +32,26 @@ export default function Sidebar({ onLogout }) {
       href: '/admin/influencers',
       label: txt.influencer || 'Influencer',
       icon: '👥',
+    },
+    // === NEU: Portal-Verwaltung ===
+    {
+      type: 'divider',
+      label: txt.portalManagement || 'Portal',
+    },
+    {
+      href: '/admin/invitation-codes',
+      label: txt.invitationCodes || 'Einladungscodes',
+      icon: '🎟️',
+    },
+    {
+      href: '/admin/portal-users',
+      label: txt.portalUsers || 'Portal-Benutzer',
+      icon: '👤',
+    },
+    // === Ende NEU ===
+    {
+      type: 'divider',
+      label: txt.emailMarketing || 'E-Mail',
     },
     {
       href: '/admin/emails',
@@ -90,13 +111,34 @@ export default function Sidebar({ onLogout }) {
       </div>
       
       {/* Navigation */}
-      <nav style={{ flex: 1, padding: '24px 16px', overflowY: 'auto' }}>
+      <nav style={{ flex: 1, padding: '16px', overflowY: 'auto' }}>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-          {navItems.map((item) => {
+          {navItems.map((item, index) => {
+            // Divider/Section Header
+            if (item.type === 'divider') {
+              return (
+                <li key={index} style={{ 
+                  marginTop: '16px', 
+                  marginBottom: '8px',
+                  padding: '8px 16px',
+                }}>
+                  <span style={{ 
+                    color: '#6b7280', 
+                    fontSize: '10px', 
+                    fontWeight: '600',
+                    letterSpacing: '1px',
+                    textTransform: 'uppercase',
+                  }}>
+                    {item.label}
+                  </span>
+                </li>
+              );
+            }
+
             const isActive = router.pathname === item.href;
             
             return (
-              <li key={item.href} style={{ marginBottom: '8px' }}>
+              <li key={item.href} style={{ marginBottom: '4px' }}>
                 <Link href={item.href} style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -118,7 +160,7 @@ export default function Sidebar({ onLogout }) {
         </ul>
       </nav>
       
-      {/* Logout Button - Neu gestaltet */}
+      {/* Logout Button */}
       <div style={{ padding: '16px', borderTop: '1px solid rgba(251, 191, 36, 0.3)' }}>
         <button
           onClick={onLogout}
