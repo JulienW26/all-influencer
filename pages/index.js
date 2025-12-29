@@ -510,8 +510,8 @@ const Header = () => {
         
         <div className="flex items-center gap-3">
                   <div className="hidden md:flex items-center gap-2">
-            <button className="text-gray-400 hover:text-white text-sm px-2 py-1">{t.login}</button>
-            <button className="px-4 py-2 bg-amber-400 hover:bg-amber-500 text-black font-semibold rounded-lg">{t.register}</button>
+            <a href="/portal/login" className="text-gray-400 hover:text-white text-sm px-2 py-1">{t.login}</a>
+            <a href="/portal/register" className="px-4 py-2 bg-amber-400 hover:bg-amber-500 text-black font-semibold rounded-lg">{t.register}</a>         
           </div>
           
           <div className="flex items-center gap-1">
@@ -536,8 +536,8 @@ const Header = () => {
             <button onClick={() => { openModal('contact'); setMenuOpen(false); }} className="text-gray-400 py-2 text-left">{t.contact}</button>
             <button onClick={() => { openModal('work'); setMenuOpen(false); }} className="text-gray-400 py-2 text-left">{t.workWithUs}</button>
             <div className="border-t border-white/10 pt-3 mt-2 flex gap-2">
-              <button className="flex-1 py-2 text-gray-400">{t.login}</button>
-              <button className="flex-1 py-2 bg-amber-400 text-black font-semibold rounded-lg">{t.register}</button>
+             <a href="/portal/login" className="flex-1 py-2 text-gray-400 text-center">{t.login}</a>
+             <a href="/portal/register" className="flex-1 py-2 bg-amber-400 text-black font-semibold rounded-lg text-center">{t.register}</a> 
             </div>
           </div>
         </nav>
