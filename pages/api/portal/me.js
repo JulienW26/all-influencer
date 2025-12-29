@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import dbConnect from '../../../lib/dbConnect';
+import dbConnect from '../../../lib/mongodb';
 import PortalUser from '../../../models/PortalUser';
 
 export default async function handler(req, res) {
@@ -8,19 +8,16 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Token aus Cookie lesen
     const token = req.cookies.portal_token;
 
     if (!token) {
       return res.status(401).json({ error: 'Nicht autorisiert' });
     }
 
-    // Token verifizieren
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     await dbConnect();
 
-    // User aus Datenbank laden
     const user = await PortalUser.findById(decoded.userId).select('-password');
 
     if (!user) {
