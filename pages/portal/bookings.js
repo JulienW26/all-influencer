@@ -134,7 +134,7 @@ export default function Bookings() {
           </div>
           <h3 className="text-xl font-semibold text-white mb-2">{t.noBookings}</h3>
           <p className="text-gray-500 max-w-md mx-auto mb-6">{t.noBookingsDesc}</p>
-          
+          <a
             href="/portal/profile"
             className="inline-flex items-center px-6 py-3 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors"
           >
