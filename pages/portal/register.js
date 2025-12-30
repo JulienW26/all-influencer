@@ -79,25 +79,36 @@ export default function PortalRegister() {
     }
   };
 
-  const handleInfluencerSubmit = async (e) => {
+const handleInfluencerSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append('invitationCode', invitationCode);
-      formData.append('userType', 'influencer');
-      formData.append('email', influencerData.email);
-      formData.append('profileLink', influencerData.profileLink);
-      if (influencerData.screenshot) {
-        formData.append('screenshot', influencerData.screenshot);
-      }
-
       const res = await fetch('/api/portal/register', {
         method: 'POST',
-        body: formData
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          invitationCode: invitationCode,
+          userType: 'influencer',
+          email: influencerData.email,
+          profileLink: influencerData.profileLink,
+        })
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Registrierung fehlgeschlagen');
+      }
+
+      setStep(3);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
       const data = await res.json();
 
