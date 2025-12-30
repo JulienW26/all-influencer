@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 
 export default function PortalRegister() {
-  const router = useRouter();
   const [step, setStep] = useState(1);
   const [codeType, setCodeType] = useState(null);
   const [invitationCode, setInvitationCode] = useState('');
@@ -13,6 +11,8 @@ export default function PortalRegister() {
   
   const [influencerData, setInfluencerData] = useState({
     email: '',
+    password: '',
+    passwordConfirm: '',
     profileLink: '',
   });
   
@@ -20,6 +20,8 @@ export default function PortalRegister() {
     companyName: '',
     contactName: '',
     email: '',
+    password: '',
+    passwordConfirm: '',
     phone: '',
     industry: '',
     website: '',
@@ -76,6 +78,17 @@ export default function PortalRegister() {
   const handleInfluencerSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (influencerData.password !== influencerData.passwordConfirm) {
+      setError('Passwörter stimmen nicht überein');
+      return;
+    }
+
+    if (influencerData.password.length < 8) {
+      setError('Passwort muss mindestens 8 Zeichen haben');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -84,8 +97,8 @@ export default function PortalRegister() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           invitationCode: invitationCode,
-          userType: 'influencer',
           email: influencerData.email,
+          password: influencerData.password,
           profileLink: influencerData.profileLink,
         })
       });
@@ -107,6 +120,17 @@ export default function PortalRegister() {
   const handleBrandSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (brandData.password !== brandData.passwordConfirm) {
+      setError('Passwörter stimmen nicht überein');
+      return;
+    }
+
+    if (brandData.password.length < 8) {
+      setError('Passwort muss mindestens 8 Zeichen haben');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -115,8 +139,8 @@ export default function PortalRegister() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           invitationCode: invitationCode,
-          userType: 'brand',
           email: brandData.email,
+          password: brandData.password,
           companyName: brandData.companyName,
           contactName: brandData.contactName,
           phone: brandData.phone,
@@ -202,18 +226,14 @@ export default function PortalRegister() {
           {step === 2 && codeType === 'influencer' && (
             <>
               <h2 className="text-2xl font-bold text-white text-center mb-2">Influencer Registrierung</h2>
-              <p className="text-gray-400 text-center mb-6">Verifiziere deinen Account</p>
+              <p className="text-gray-400 text-center mb-6">Erstelle deinen Account</p>
 
               {error && (
                 <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-sm">{error}</div>
               )}
 
-              <div className="mb-6 p-3 bg-amber-400/10 border border-amber-400/30 rounded-lg">
-                <p className="text-amber-400 text-sm"><strong>Mindest-Follower:</strong> 1.000.000 auf mindestens einer Plattform</p>
-              </div>
-
-              <form onSubmit={handleInfluencerSubmit}>
-                <div className="mb-4">
+              <form onSubmit={handleInfluencerSubmit} className="space-y-4">
+                <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">E-Mail-Adresse *</label>
                   <input
                     type="email"
@@ -225,11 +245,34 @@ export default function PortalRegister() {
                   />
                 </div>
 
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Link zum Hauptprofil *</label>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Passwort *</label>
+                  <input
+                    type="password"
+                    required
+                    value={influencerData.password}
+                    onChange={(e) => setInfluencerData({...influencerData, password: e.target.value})}
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    placeholder="Mindestens 8 Zeichen"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Passwort bestätigen *</label>
+                  <input
+                    type="password"
+                    required
+                    value={influencerData.passwordConfirm}
+                    onChange={(e) => setInfluencerData({...influencerData, passwordConfirm: e.target.value})}
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    placeholder="Passwort wiederholen"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Link zum Hauptprofil</label>
                   <input
                     type="url"
-                    required
                     value={influencerData.profileLink}
                     onChange={(e) => setInfluencerData({...influencerData, profileLink: e.target.value})}
                     className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400"
@@ -243,7 +286,7 @@ export default function PortalRegister() {
                   disabled={loading}
                   className="w-full py-3 px-4 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  {loading ? 'Wird gesendet...' : 'Zur Prüfung einreichen'}
+                  {loading ? 'Wird gesendet...' : 'Registrieren'}
                 </button>
               </form>
             </>
@@ -260,6 +303,21 @@ export default function PortalRegister() {
 
               <form onSubmit={handleBrandSubmit} className="space-y-4">
                 <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">E-Mail-Adresse *</label>
+                  <input type="email" required value={brandData.email} onChange={(e) => setBrandData({...brandData, email: e.target.value})} className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="kontakt@firma.com" />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Passwort *</label>
+                  <input type="password" required value={brandData.password} onChange={(e) => setBrandData({...brandData, password: e.target.value})} className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="Mindestens 8 Zeichen" />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Passwort bestätigen *</label>
+                  <input type="password" required value={brandData.passwordConfirm} onChange={(e) => setBrandData({...brandData, passwordConfirm: e.target.value})} className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="Passwort wiederholen" />
+                </div>
+
+                <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Firmenname *</label>
                   <input type="text" required value={brandData.companyName} onChange={(e) => setBrandData({...brandData, companyName: e.target.value})} className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="Muster GmbH" />
                 </div>
@@ -267,11 +325,6 @@ export default function PortalRegister() {
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Ansprechpartner *</label>
                   <input type="text" required value={brandData.contactName} onChange={(e) => setBrandData({...brandData, contactName: e.target.value})} className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="Max Mustermann" />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">E-Mail-Adresse *</label>
-                  <input type="email" required value={brandData.email} onChange={(e) => setBrandData({...brandData, email: e.target.value})} className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-400" placeholder="kontakt@firma.com" />
                 </div>
 
                 <div>
@@ -306,7 +359,7 @@ export default function PortalRegister() {
                 </div>
 
                 <button type="submit" disabled={loading} className="w-full py-3 px-4 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                  {loading ? 'Wird gesendet...' : 'Antrag absenden'}
+                  {loading ? 'Wird gesendet...' : 'Registrieren'}
                 </button>
               </form>
             </>
@@ -319,11 +372,11 @@ export default function PortalRegister() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-white mb-2">Vielen Dank!</h2>
-              <p className="text-gray-400 mb-6">Wir prüfen deinen Antrag und melden uns per E-Mail bei dir.</p>
+              <h2 className="text-2xl font-bold text-white mb-2">Registrierung erfolgreich!</h2>
+              <p className="text-gray-400 mb-6">Dein Account wird geprüft. Wir melden uns per E-Mail bei dir.</p>
               <p className="text-gray-500 text-sm mb-8">Die Prüfung dauert normalerweise 24-48 Stunden.</p>
-              <Link href="/" className="inline-block py-3 px-6 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">
-                Zurück zur Hauptseite
+              <Link href="/portal/login" className="inline-block py-3 px-6 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
+                Zum Login
               </Link>
             </div>
           )}
