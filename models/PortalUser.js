@@ -1,124 +1,173 @@
-/**
- * Portal User Model
- * Für Influencer und Brands
- */
-
 import mongoose from 'mongoose';
 
+/**
+ * PortalUser Schema für ALL INFLUENCER
+ * 
+ * Enthält alle Felder für Benutzer (Influencer, Brands, Admins)
+ */
 const PortalUserSchema = new mongoose.Schema({
-  // Login-Daten
+  // === Basis-Felder ===
   email: {
     type: String,
-    required: true,
+    required: [true, 'E-Mail ist erforderlich'],
     unique: true,
     lowercase: true,
     trim: true,
+    match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Ungültige E-Mail-Adresse']
   },
   password: {
     type: String,
-    required: true,
+    required: [true, 'Passwort ist erforderlich'],
+    minlength: [8, 'Passwort muss mindestens 8 Zeichen haben']
   },
   
-  // Benutzer-Typ
-  userType: {
+  // === Benutzertyp ===
+  role: {
     type: String,
-    enum: ['influencer', 'brand'],
-    required: true,
+    enum: ['influencer', 'brand', 'admin'],
+    default: 'influencer'
   },
   
-  // Status
+  // === Status ===
   status: {
     type: String,
     enum: ['pending', 'approved', 'rejected', 'suspended'],
-    default: 'pending',
+    default: 'pending'
   },
   
-  // Profil-Daten (Influencer)
-  influencerProfile: {
-    displayName: String,
-    category: {
-      type: String,
-      enum: ['diamond', 'platin', 'gold', 'rising'],
-    },
-    spotNumber: Number,
-    platforms: [{
-      name: String,
-      handle: String,
-      followers: Number,
-      url: String,
-    }],
-    bio: String,
-    profileImage: String,
-    country: String,
-    languages: [String],
-    niche: [String],
-  },
-  
-  // Profil-Daten (Brand)
-  brandProfile: {
-    companyName: String,
-    industry: String,
-    website: String,
-    logo: String,
-    contactPerson: String,
-    phone: String,
-    description: String,
-    country: String,
-  },
-  
-  // Einladungscode
-  invitationCode: {
+  // === Profil-Informationen ===
+  name: {
     type: String,
-    required: true,
+    trim: true
+  },
+  firstName: {
+    type: String,
+    trim: true
+  },
+  lastName: {
+    type: String,
+    trim: true
+  },
+  phone: {
+    type: String,
+    trim: true
   },
   
-  // Gründer-Status
+  // === Social Media (für Influencer) ===
+  instagram: {
+    type: String,
+    trim: true
+  },
+  tiktok: {
+    type: String,
+    trim: true
+  },
+  youtube: {
+    type: String,
+    trim: true
+  },
+  followers: {
+    type: Number,
+    default: 0
+  },
+  
+  // === Unternehmen (für Brands) ===
+  company: {
+    type: String,
+    trim: true
+  },
+  website: {
+    type: String,
+    trim: true
+  },
+  industry: {
+    type: String,
+    trim: true
+  },
+  
+  // === Founder-Programm ===
   isFounder: {
     type: Boolean,
-    default: false,
+    default: false
   },
-  founderNumber: Number,
-  
-  // Shares/Anteile
-  shares: {
-    earned: { type: Number, default: 0 },
-    purchased: { type: Number, default: 0 },
+  founderShares: {
+    type: Number,
+    default: 0
+  },
+  founderSince: {
+    type: Date
   },
   
-  // Zeitstempel
-  createdAt: {
+  // === Passwort-Reset ===
+  resetPasswordToken: {
+    type: String,
+    select: false // Nicht standardmäßig bei Abfragen zurückgeben
+  },
+  resetPasswordExpires: {
     type: Date,
-    default: Date.now,
+    select: false
   },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
-  approvedAt: Date,
-  lastLoginAt: Date,
   
-  // E-Mail Verifizierung
+  // === E-Mail-Verifizierung ===
   emailVerified: {
     type: Boolean,
-    default: false,
+    default: false
   },
-  verificationToken: String,
+  emailVerificationToken: {
+    type: String,
+    select: false
+  },
   
-  // Passwort Reset
-  resetToken: String,
-  resetTokenExpiry: Date,
+  // === Spracheinstellung ===
+  preferredLanguage: {
+    type: String,
+    enum: ['de', 'en', 'es'],
+    default: 'de'
+  },
+  
+  // === Profilbild ===
+  avatar: {
+    type: String
+  },
+  
+  // === Letzte Aktivität ===
+  lastLogin: {
+    type: Date
+  },
+  
+  // === Notizen (für Admins) ===
+  adminNotes: {
+    type: String
+  }
+}, {
+  timestamps: true // createdAt, updatedAt automatisch
 });
 
 // Index für schnelle Suche
 PortalUserSchema.index({ email: 1 });
-PortalUserSchema.index({ status: 1 });
-PortalUserSchema.index({ userType: 1 });
-PortalUserSchema.index({ 'influencerProfile.category': 1 });
+PortalUserSchema.index({ role: 1, status: 1 });
+PortalUserSchema.index({ resetPasswordToken: 1 });
 
-// Update timestamp bei Änderungen
-PortalUserSchema.pre('save', function(next) {
-  this.updatedAt = new Date();
-  next();
+// Virtuelles Feld für vollständigen Namen
+PortalUserSchema.virtual('fullName').get(function() {
+  if (this.firstName && this.lastName) {
+    return `${this.firstName} ${this.lastName}`;
+  }
+  return this.name || this.email.split('@')[0];
 });
 
+// JSON-Transformation (Passwort nie zurückgeben)
+PortalUserSchema.set('toJSON', {
+  virtuals: true,
+  transform: function(doc, ret) {
+    delete ret.password;
+    delete ret.resetPasswordToken;
+    delete ret.resetPasswordExpires;
+    delete ret.emailVerificationToken;
+    delete ret.__v;
+    return ret;
+  }
+});
+
+// Model nur einmal registrieren
 export default mongoose.models.PortalUser || mongoose.model('PortalUser', PortalUserSchema);
