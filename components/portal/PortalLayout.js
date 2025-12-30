@@ -2,11 +2,65 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-export default function PortalLayout({ children }) {
+// Übersetzungen für Navigation
+const navTranslations = {
+  de: {
+    dashboard: 'Dashboard',
+    profile: 'Profil',
+    messages: 'Nachrichten',
+    bookings: 'Buchungen',
+    earnings: 'Einnahmen',
+    shares: 'Aktien',
+    discover: 'Entdecken',
+    marketplace: 'Marktplatz',
+    favorites: 'Favoriten',
+    settings: 'Einstellungen',
+    logout: 'Abmelden',
+    pendingStatus: '⏳ Freischaltung ausstehend',
+    influencer: 'Influencer',
+    brand: 'Brand'
+  },
+  en: {
+    dashboard: 'Dashboard',
+    profile: 'Profile',
+    messages: 'Messages',
+    bookings: 'Bookings',
+    earnings: 'Earnings',
+    shares: 'Shares',
+    discover: 'Discover',
+    marketplace: 'Marketplace',
+    favorites: 'Favorites',
+    settings: 'Settings',
+    logout: 'Logout',
+    pendingStatus: '⏳ Approval pending',
+    influencer: 'Influencer',
+    brand: 'Brand'
+  },
+  es: {
+    dashboard: 'Panel',
+    profile: 'Perfil',
+    messages: 'Mensajes',
+    bookings: 'Reservas',
+    earnings: 'Ingresos',
+    shares: 'Acciones',
+    discover: 'Descubrir',
+    marketplace: 'Mercado',
+    favorites: 'Favoritos',
+    settings: 'Configuración',
+    logout: 'Cerrar sesión',
+    pendingStatus: '⏳ Aprobación pendiente',
+    influencer: 'Influencer',
+    brand: 'Brand'
+  }
+};
+
+export default function PortalLayout({ children, lang = 'de', setLang }) {
   const router = useRouter();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const t = navTranslations[lang] || navTranslations.de;
 
   useEffect(() => {
     checkAuth();
@@ -40,24 +94,24 @@ export default function PortalLayout({ children }) {
   // Navigation Items basierend auf User-Typ
   const getNavItems = () => {
     const baseItems = [
-      { href: '/portal/dashboard', label: 'Dashboard', icon: 'home' },
-      { href: '/portal/profile', label: 'Profil', icon: 'user' },
-      { href: '/portal/messages', label: 'Nachrichten', icon: 'message' },
+      { href: '/portal/dashboard', label: t.dashboard, icon: 'home' },
+      { href: '/portal/profile', label: t.profile, icon: 'user' },
+      { href: '/portal/messages', label: t.messages, icon: 'message' },
     ];
 
     if (user?.userType === 'influencer') {
       return [
         ...baseItems,
-        { href: '/portal/bookings', label: 'Buchungen', icon: 'calendar' },
-        { href: '/portal/earnings', label: 'Einnahmen', icon: 'euro' },
-        { href: '/portal/shares', label: 'Aktien', icon: 'chart' },
+        { href: '/portal/bookings', label: t.bookings, icon: 'calendar' },
+        { href: '/portal/earnings', label: t.earnings, icon: 'euro' },
+        { href: '/portal/shares', label: t.shares, icon: 'chart' },
       ];
     } else if (user?.userType === 'brand') {
       return [
         ...baseItems,
-        { href: '/portal/discover', label: 'Entdecken', icon: 'search' },
-        { href: '/portal/marketplace', label: 'Marktplatz', icon: 'shop' },
-        { href: '/portal/favorites', label: 'Favoriten', icon: 'heart' },
+        { href: '/portal/discover', label: t.discover, icon: 'search' },
+        { href: '/portal/marketplace', label: t.marketplace, icon: 'shop' },
+        { href: '/portal/favorites', label: t.favorites, icon: 'heart' },
       ];
     }
     return baseItems;
@@ -148,7 +202,22 @@ export default function PortalLayout({ children }) {
         <Link href="/" className="text-amber-400 font-bold text-lg">
           ALL INFLUENCER
         </Link>
-        <div className="w-10"></div>
+        {/* Mobile Language Switcher - NEU */}
+        <div className="flex gap-1">
+          {['DE', 'EN', 'ES'].map((l) => (
+            <button
+              key={l}
+              onClick={() => setLang && setLang(l.toLowerCase())}
+              className={`px-2 py-1 text-xs rounded transition-colors ${
+                lang === l.toLowerCase()
+                  ? 'bg-amber-400 text-black font-medium'
+                  : 'bg-gray-800 text-gray-400'
+              }`}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Sidebar Overlay (Mobile) */}
@@ -172,6 +241,23 @@ export default function PortalLayout({ children }) {
           </Link>
         </div>
 
+        {/* Desktop Language Switcher - NEU */}
+        <div className="hidden lg:flex justify-center gap-1 py-3 border-b border-gray-800">
+          {['DE', 'EN', 'ES'].map((l) => (
+            <button
+              key={l}
+              onClick={() => setLang && setLang(l.toLowerCase())}
+              className={`px-3 py-1 text-sm rounded transition-colors ${
+                lang === l.toLowerCase()
+                  ? 'bg-amber-400 text-black font-medium'
+                  : 'bg-gray-800 text-gray-400 hover:text-white'
+              }`}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+
         {/* User Info */}
         <div className="p-4 border-b border-gray-800">
           <div className="flex items-center space-x-3">
@@ -183,13 +269,13 @@ export default function PortalLayout({ children }) {
                 {user?.email || 'Benutzer'}
               </p>
               <p className="text-xs text-gray-400 capitalize">
-                {user?.userType === 'influencer' ? 'Influencer' : 'Brand'}
+                {user?.userType === 'influencer' ? t.influencer : t.brand}
               </p>
             </div>
           </div>
           {user?.status === 'pending' && (
             <div className="mt-2 px-2 py-1 bg-yellow-500/20 border border-yellow-500/50 rounded text-xs text-yellow-500 text-center">
-              ⏳ Freischaltung ausstehend
+              {t.pendingStatus}
             </div>
           )}
         </div>
@@ -224,7 +310,7 @@ export default function PortalLayout({ children }) {
             }`}
           >
             {getIcon('settings')}
-            <span>Einstellungen</span>
+            <span>{t.settings}</span>
           </Link>
 
           <button
@@ -232,7 +318,7 @@ export default function PortalLayout({ children }) {
             className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-400 hover:bg-red-500/20 hover:text-red-400 transition-colors"
           >
             {getIcon('logout')}
-            <span>Abmelden</span>
+            <span>{t.logout}</span>
           </button>
         </nav>
       </aside>
