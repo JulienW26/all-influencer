@@ -15,9 +15,7 @@ const translations = {
     noBookingsDesc: 'Wenn Brands dich buchen, erscheinen die Aufträge hier. Vervollständige dein Profil, um für Brands sichtbar zu werden.',
     comingSoon: 'Coming Soon',
     comingSoonDesc: 'Das Buchungssystem wird bald verfügbar sein. Du wirst benachrichtigt, sobald es aktiviert ist.',
-    completeProfile: 'Profil vervollständigen',
-    filterLabel: 'Filter',
-    sortLabel: 'Sortieren'
+    completeProfile: 'Profil vervollständigen'
   },
   en: {
     pageTitle: 'Bookings | ALL INFLUENCER',
@@ -31,9 +29,7 @@ const translations = {
     noBookingsDesc: 'When brands book you, the orders will appear here. Complete your profile to become visible to brands.',
     comingSoon: 'Coming Soon',
     comingSoonDesc: 'The booking system will be available soon. You will be notified when it is activated.',
-    completeProfile: 'Complete Profile',
-    filterLabel: 'Filter',
-    sortLabel: 'Sort'
+    completeProfile: 'Complete Profile'
   },
   es: {
     pageTitle: 'Reservas | ALL INFLUENCER',
@@ -47,9 +43,7 @@ const translations = {
     noBookingsDesc: 'Cuando las marcas te reserven, los pedidos aparecerán aquí. Completa tu perfil para ser visible para las marcas.',
     comingSoon: 'Próximamente',
     comingSoonDesc: 'El sistema de reservas estará disponible pronto. Se te notificará cuando esté activado.',
-    completeProfile: 'Completar perfil',
-    filterLabel: 'Filtrar',
-    sortLabel: 'Ordenar'
+    completeProfile: 'Completar perfil'
   }
 };
 
@@ -80,15 +74,11 @@ export default function Bookings() {
       </Head>
 
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-white mb-2">{t.title}</h1>
-            <p className="text-gray-400">{t.subtitle}</p>
-          </div>
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-white mb-2">{t.title}</h1>
+          <p className="text-gray-400">{t.subtitle}</p>
         </div>
 
-        {/* Coming Soon Banner */}
         <div className="bg-amber-400/10 border border-amber-400/30 rounded-xl p-6 mb-6">
           <div className="flex items-center">
             <div className="w-12 h-12 bg-amber-400/20 rounded-full flex items-center justify-center mr-4">
@@ -103,7 +93,6 @@ export default function Bookings() {
           </div>
         </div>
 
-        {/* Tabs */}
         <div className="flex flex-wrap gap-2 mb-6">
           {[
             { id: 'all', label: t.tabAll },
@@ -125,7 +114,6 @@ export default function Bookings() {
           ))}
         </div>
 
-        {/* Empty State */}
         <div className="bg-gray-900 rounded-xl border border-gray-800 p-12 text-center">
           <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg className="w-10 h-10 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,10 +122,7 @@ export default function Bookings() {
           </div>
           <h3 className="text-xl font-semibold text-white mb-2">{t.noBookings}</h3>
           <p className="text-gray-500 max-w-md mx-auto mb-6">{t.noBookingsDesc}</p>
-          
-            href="/portal/profile"
-            className="inline-flex items-center px-6 py-3 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors"
-          >
+          <a href="/portal/profile" className="inline-flex items-center px-6 py-3 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 transition-colors">
             {t.completeProfile}
             <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
