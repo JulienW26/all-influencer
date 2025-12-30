@@ -179,7 +179,7 @@ export default function PortalRegister() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
-  // Passwort-Sichtbarkeit States - NEU
+  // Passwort-Sichtbarkeit States
   const [showInfluencerPassword, setShowInfluencerPassword] = useState(false);
   const [showInfluencerPasswordConfirm, setShowInfluencerPasswordConfirm] = useState(false);
   const [showBrandPassword, setShowBrandPassword] = useState(false);
@@ -276,6 +276,8 @@ export default function PortalRegister() {
           email: influencerData.email,
           password: influencerData.password,
           profileLink: influencerData.profileLink,
+          userType: 'influencer',
+          role: 'influencer'
         })
       });
 
@@ -323,6 +325,8 @@ export default function PortalRegister() {
           industry: brandData.industry,
           website: brandData.website,
           description: brandData.description,
+          userType: 'brand',
+          role: 'brand'
         })
       });
 
@@ -340,7 +344,7 @@ export default function PortalRegister() {
     }
   };
 
-  // Auge-Symbol Komponente - NEU
+  // Auge-Symbol Komponente
   const PasswordToggle = ({ show, onClick }) => (
     <button
       type="button"
@@ -368,7 +372,7 @@ export default function PortalRegister() {
       </Head>
 
       <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
-        {/* Language Switcher - NEU */}
+        {/* Language Switcher */}
         <div className="absolute top-4 right-4 flex gap-1">
           {['DE', 'EN', 'ES'].map((l) => (
             <button
