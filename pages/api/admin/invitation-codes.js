@@ -70,14 +70,21 @@ export default async function handler(req, res) {
       return res.status(201).json({ success: true, code: newCode });
     }
 
-    // DELETE - Code deaktivieren
+    // DELETE - Code deaktivieren oder permanent löschen
     if (req.method === 'DELETE') {
-      const { id } = req.query;
+      const { id, permanent } = req.query;
       if (!id) return res.status(400).json({ error: 'Code-ID erforderlich' });
 
       const code = await InvitationCode.findById(id);
       if (!code) return res.status(404).json({ error: 'Code nicht gefunden' });
 
+      // NEU: Permanent löschen wenn ?permanent=true
+      if (permanent === 'true') {
+        await InvitationCode.findByIdAndDelete(id);
+        return res.status(200).json({ success: true, message: 'Code permanent gelöscht' });
+      }
+
+      // Sonst: Nur deaktivieren (wie bisher)
       code.status = 'deactivated';
       await code.save();
 
