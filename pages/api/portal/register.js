@@ -18,6 +18,7 @@ export default async function handler(req, res) {
     email, 
     password, 
     role = 'influencer',
+    userType,
     name,
     firstName,
     lastName,
@@ -30,6 +31,9 @@ export default async function handler(req, res) {
     industry,
     lang = 'de'
   } = req.body;
+
+  // userType hat Priorität, fallback auf role für Kompatibilität
+  const finalUserType = userType || role;
 
   // === Validierung ===
   
@@ -52,9 +56,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Passwort muss mindestens 8 Zeichen haben' });
   }
 
-  // Rolle
-  if (!['influencer', 'brand'].includes(role)) {
-    return res.status(400).json({ error: 'Ungültige Rolle' });
+  // UserType
+  if (!['influencer', 'brand'].includes(finalUserType)) {
+    return res.status(400).json({ error: 'Ungültiger Benutzertyp' });
   }
 
   try {
@@ -77,7 +81,8 @@ export default async function handler(req, res) {
     const userData = {
       email: email.toLowerCase().trim(),
       password: hashedPassword,
-      role,
+      userType: finalUserType,
+      role: finalUserType, // Für Kompatibilität beide setzen
       status: 'pending', // Muss von Admin freigeschaltet werden
       preferredLanguage: lang
     };
@@ -89,21 +94,21 @@ export default async function handler(req, res) {
     if (phone) userData.phone = phone.trim();
     
     // Influencer-spezifische Felder
-    if (role === 'influencer') {
+    if (finalUserType === 'influencer') {
       if (instagram) userData.instagram = instagram.trim().replace('@', '');
       if (tiktok) userData.tiktok = tiktok.trim().replace('@', '');
       if (youtube) userData.youtube = youtube.trim();
     }
     
     // Brand-spezifische Felder
-    if (role === 'brand') {
+    if (finalUserType === 'brand') {
       if (company) userData.company = company.trim();
       if (website) userData.website = website.trim();
       if (industry) userData.industry = industry.trim();
     }
 
     const user = await PortalUser.create(userData);
-    console.log('✅ Neuer Benutzer registriert:', user.email, '| Rolle:', user.role);
+    console.log('✅ Neuer Benutzer registriert:', user.email, '| Typ:', user.userType);
 
     // Welcome-E-Mail senden
     try {
@@ -123,7 +128,7 @@ export default async function handler(req, res) {
       user: {
         id: user._id,
         email: user.email,
-        role: user.role,
+        userType: user.userType,
         status: user.status
       }
     });
