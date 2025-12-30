@@ -2,7 +2,144 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import PortalLayout from '../../components/portal/PortalLayout';
 
+// Übersetzungen
+const translations = {
+  de: {
+    pageTitle: 'Profil bearbeiten | ALL INFLUENCER',
+    title: 'Profil bearbeiten',
+    subtitleInfluencer: 'Vervollständige dein Profil, um für Brands sichtbar zu sein.',
+    subtitleBrand: 'Aktualisiere deine Unternehmensinformationen.',
+    // Influencer sections
+    basicInfo: 'Grundinformationen',
+    displayName: 'Anzeigename',
+    displayNamePlaceholder: 'Dein Name / Künstlername',
+    bio: 'Bio',
+    bioPlaceholder: 'Erzähle etwas über dich...',
+    location: 'Standort',
+    locationPlaceholder: 'z.B. Berlin, Deutschland',
+    categoriesTitle: 'Kategorien',
+    categoriesHint: 'Wähle passende Kategorien für deinen Content',
+    platformsTitle: 'Social Media Plattformen',
+    handle: 'Handle',
+    followers: 'Follower',
+    followersPlaceholder: 'z.B. 1.5M',
+    pricingTitle: 'Preisvorstellung',
+    priceFrom: 'Ab (€)',
+    priceTo: 'Bis (€)',
+    languagesTitle: 'Sprachen',
+    // Brand fields
+    companyName: 'Firmenname',
+    contactName: 'Ansprechpartner',
+    phone: 'Telefon',
+    industry: 'Branche',
+    industryPlaceholder: 'Bitte wählen...',
+    website: 'Website',
+    description: 'Beschreibung',
+    // Industries
+    industryFashion: 'Fashion & Beauty',
+    industryTech: 'Technologie',
+    industryFood: 'Food & Beverage',
+    industryTravel: 'Travel & Hospitality',
+    industryFitness: 'Fitness & Sport',
+    industryEntertainment: 'Entertainment',
+    industryFinance: 'Finanzen',
+    industryAutomotive: 'Automotive',
+    industryOther: 'Sonstige',
+    // Actions
+    saveButton: 'Profil speichern',
+    saving: 'Wird gespeichert...',
+    successMessage: 'Profil erfolgreich gespeichert!'
+  },
+  en: {
+    pageTitle: 'Edit Profile | ALL INFLUENCER',
+    title: 'Edit Profile',
+    subtitleInfluencer: 'Complete your profile to be visible to brands.',
+    subtitleBrand: 'Update your company information.',
+    basicInfo: 'Basic Information',
+    displayName: 'Display Name',
+    displayNamePlaceholder: 'Your name / stage name',
+    bio: 'Bio',
+    bioPlaceholder: 'Tell us about yourself...',
+    location: 'Location',
+    locationPlaceholder: 'e.g. Berlin, Germany',
+    categoriesTitle: 'Categories',
+    categoriesHint: 'Select categories that match your content',
+    platformsTitle: 'Social Media Platforms',
+    handle: 'Handle',
+    followers: 'Followers',
+    followersPlaceholder: 'e.g. 1.5M',
+    pricingTitle: 'Pricing',
+    priceFrom: 'From (€)',
+    priceTo: 'To (€)',
+    languagesTitle: 'Languages',
+    companyName: 'Company Name',
+    contactName: 'Contact Person',
+    phone: 'Phone',
+    industry: 'Industry',
+    industryPlaceholder: 'Please select...',
+    website: 'Website',
+    description: 'Description',
+    industryFashion: 'Fashion & Beauty',
+    industryTech: 'Technology',
+    industryFood: 'Food & Beverage',
+    industryTravel: 'Travel & Hospitality',
+    industryFitness: 'Fitness & Sport',
+    industryEntertainment: 'Entertainment',
+    industryFinance: 'Finance',
+    industryAutomotive: 'Automotive',
+    industryOther: 'Other',
+    saveButton: 'Save Profile',
+    saving: 'Saving...',
+    successMessage: 'Profile saved successfully!'
+  },
+  es: {
+    pageTitle: 'Editar Perfil | ALL INFLUENCER',
+    title: 'Editar Perfil',
+    subtitleInfluencer: 'Completa tu perfil para ser visible para las marcas.',
+    subtitleBrand: 'Actualiza la información de tu empresa.',
+    basicInfo: 'Información Básica',
+    displayName: 'Nombre para mostrar',
+    displayNamePlaceholder: 'Tu nombre / nombre artístico',
+    bio: 'Biografía',
+    bioPlaceholder: 'Cuéntanos sobre ti...',
+    location: 'Ubicación',
+    locationPlaceholder: 'ej. Berlín, Alemania',
+    categoriesTitle: 'Categorías',
+    categoriesHint: 'Selecciona categorías que coincidan con tu contenido',
+    platformsTitle: 'Plataformas de Redes Sociales',
+    handle: 'Usuario',
+    followers: 'Seguidores',
+    followersPlaceholder: 'ej. 1.5M',
+    pricingTitle: 'Precios',
+    priceFrom: 'Desde (€)',
+    priceTo: 'Hasta (€)',
+    languagesTitle: 'Idiomas',
+    companyName: 'Nombre de la empresa',
+    contactName: 'Persona de contacto',
+    phone: 'Teléfono',
+    industry: 'Industria',
+    industryPlaceholder: 'Por favor selecciona...',
+    website: 'Sitio web',
+    description: 'Descripción',
+    industryFashion: 'Moda y Belleza',
+    industryTech: 'Tecnología',
+    industryFood: 'Alimentación y Bebidas',
+    industryTravel: 'Viajes y Hospitalidad',
+    industryFitness: 'Fitness y Deporte',
+    industryEntertainment: 'Entretenimiento',
+    industryFinance: 'Finanzas',
+    industryAutomotive: 'Automotriz',
+    industryOther: 'Otros',
+    saveButton: 'Guardar Perfil',
+    saving: 'Guardando...',
+    successMessage: '¡Perfil guardado exitosamente!'
+  }
+};
+
 export default function Profile() {
+  const [lang, setLang] = useState('de');
+  const t = translations[lang];
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -131,7 +268,7 @@ export default function Profile() {
         throw new Error(data.error || 'Speichern fehlgeschlagen');
       }
 
-      setMessage({ type: 'success', text: 'Profil erfolgreich gespeichert!' });
+      setMessage({ type: 'success', text: t.successMessage });
     } catch (error) {
       setMessage({ type: 'error', text: error.message });
     } finally {
@@ -141,7 +278,7 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <PortalLayout>
+      <PortalLayout lang={lang} setLang={setLang}>
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-400"></div>
         </div>
@@ -150,18 +287,16 @@ export default function Profile() {
   }
 
   return (
-    <PortalLayout>
+    <PortalLayout lang={lang} setLang={setLang}>
       <Head>
-        <title>Profil bearbeiten | ALL INFLUENCER</title>
+        <title>{t.pageTitle}</title>
       </Head>
 
       <div className="max-w-3xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-white mb-2">Profil bearbeiten</h1>
+          <h1 className="text-2xl font-bold text-white mb-2">{t.title}</h1>
           <p className="text-gray-400">
-            {user?.userType === 'influencer' 
-              ? 'Vervollständige dein Profil, um für Brands sichtbar zu sein.'
-              : 'Aktualisiere deine Unternehmensinformationen.'}
+            {user?.userType === 'influencer' ? t.subtitleInfluencer : t.subtitleBrand}
           </p>
         </div>
 
@@ -182,45 +317,45 @@ export default function Profile() {
             <div className="space-y-6">
               {/* Basic Info */}
               <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-                <h2 className="text-lg font-semibold text-white mb-4">Grundinformationen</h2>
+                <h2 className="text-lg font-semibold text-white mb-4">{t.basicInfo}</h2>
                 
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Anzeigename
+                      {t.displayName}
                     </label>
                     <input
                       type="text"
                       value={influencerProfile.displayName}
                       onChange={(e) => handleInfluencerChange('displayName', e.target.value)}
                       className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
-                      placeholder="Dein Name / Künstlername"
+                      placeholder={t.displayNamePlaceholder}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Bio
+                      {t.bio}
                     </label>
                     <textarea
                       value={influencerProfile.bio}
                       onChange={(e) => handleInfluencerChange('bio', e.target.value)}
                       rows={4}
                       className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-400 resize-none"
-                      placeholder="Erzähle etwas über dich..."
+                      placeholder={t.bioPlaceholder}
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Standort
+                      {t.location}
                     </label>
                     <input
                       type="text"
                       value={influencerProfile.location}
                       onChange={(e) => handleInfluencerChange('location', e.target.value)}
                       className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
-                      placeholder="z.B. Berlin, Deutschland"
+                      placeholder={t.locationPlaceholder}
                     />
                   </div>
                 </div>
@@ -228,8 +363,8 @@ export default function Profile() {
 
               {/* Categories */}
               <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-                <h2 className="text-lg font-semibold text-white mb-4">Kategorien</h2>
-                <p className="text-sm text-gray-400 mb-4">Wähle passende Kategorien für deinen Content</p>
+                <h2 className="text-lg font-semibold text-white mb-4">{t.categoriesTitle}</h2>
+                <p className="text-sm text-gray-400 mb-4">{t.categoriesHint}</p>
                 
                 <div className="flex flex-wrap gap-2">
                   {categories.map((category) => (
@@ -251,14 +386,14 @@ export default function Profile() {
 
               {/* Social Platforms */}
               <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-                <h2 className="text-lg font-semibold text-white mb-4">Social Media Plattformen</h2>
+                <h2 className="text-lg font-semibold text-white mb-4">{t.platformsTitle}</h2>
                 
                 <div className="space-y-4">
                   {['instagram', 'tiktok', 'youtube', 'twitter'].map((platform) => (
                     <div key={platform} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2 capitalize">
-                          {platform} Handle
+                          {platform} {t.handle}
                         </label>
                         <input
                           type="text"
@@ -270,14 +405,14 @@ export default function Profile() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">
-                          Follower
+                          {t.followers}
                         </label>
                         <input
                           type="text"
                           value={influencerProfile.platforms[platform]?.followers || ''}
                           onChange={(e) => handlePlatformChange(platform, 'followers', e.target.value)}
                           className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
-                          placeholder="z.B. 1.5M"
+                          placeholder={t.followersPlaceholder}
                         />
                       </div>
                     </div>
@@ -287,12 +422,12 @@ export default function Profile() {
 
               {/* Pricing */}
               <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-                <h2 className="text-lg font-semibold text-white mb-4">Preisvorstellung</h2>
+                <h2 className="text-lg font-semibold text-white mb-4">{t.pricingTitle}</h2>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Ab (€)
+                      {t.priceFrom}
                     </label>
                     <input
                       type="number"
@@ -307,7 +442,7 @@ export default function Profile() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Bis (€)
+                      {t.priceTo}
                     </label>
                     <input
                       type="number"
@@ -325,7 +460,7 @@ export default function Profile() {
 
               {/* Languages */}
               <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-                <h2 className="text-lg font-semibold text-white mb-4">Sprachen</h2>
+                <h2 className="text-lg font-semibold text-white mb-4">{t.languagesTitle}</h2>
                 
                 <div className="flex flex-wrap gap-2">
                   {languages.map((language) => (
@@ -352,7 +487,7 @@ export default function Profile() {
             <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Firmenname
+                  {t.companyName}
                 </label>
                 <input
                   type="text"
@@ -364,7 +499,7 @@ export default function Profile() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Ansprechpartner
+                  {t.contactName}
                 </label>
                 <input
                   type="text"
@@ -376,7 +511,7 @@ export default function Profile() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Telefon
+                  {t.phone}
                 </label>
                 <input
                   type="tel"
@@ -388,29 +523,29 @@ export default function Profile() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Branche
+                  {t.industry}
                 </label>
                 <select
                   value={brandProfile.industry}
                   onChange={(e) => handleBrandChange('industry', e.target.value)}
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
                 >
-                  <option value="">Bitte wählen...</option>
-                  <option value="fashion">Fashion & Beauty</option>
-                  <option value="tech">Technologie</option>
-                  <option value="food">Food & Beverage</option>
-                  <option value="travel">Travel & Hospitality</option>
-                  <option value="fitness">Fitness & Sport</option>
-                  <option value="entertainment">Entertainment</option>
-                  <option value="finance">Finanzen</option>
-                  <option value="automotive">Automotive</option>
-                  <option value="other">Sonstige</option>
+                  <option value="">{t.industryPlaceholder}</option>
+                  <option value="fashion">{t.industryFashion}</option>
+                  <option value="tech">{t.industryTech}</option>
+                  <option value="food">{t.industryFood}</option>
+                  <option value="travel">{t.industryTravel}</option>
+                  <option value="fitness">{t.industryFitness}</option>
+                  <option value="entertainment">{t.industryEntertainment}</option>
+                  <option value="finance">{t.industryFinance}</option>
+                  <option value="automotive">{t.industryAutomotive}</option>
+                  <option value="other">{t.industryOther}</option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Website
+                  {t.website}
                 </label>
                 <input
                   type="url"
@@ -423,7 +558,7 @@ export default function Profile() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Beschreibung
+                  {t.description}
                 </label>
                 <textarea
                   value={brandProfile.description}
@@ -442,7 +577,7 @@ export default function Profile() {
               disabled={saving}
               className="w-full md:w-auto px-8 py-3 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {saving ? 'Wird gespeichert...' : 'Profil speichern'}
+              {saving ? t.saving : t.saveButton}
             </button>
           </div>
         </form>
