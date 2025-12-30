@@ -3,11 +3,15 @@
  * POST /api/portal/register
  */
 
-import bcrypt from 'bcryptjs';
 import dbConnect from '../../../lib/mongodb';
 import PortalUser from '../../../models/PortalUser';
 import InvitationCode from '../../../models/InvitationCode';
-import { createToken, setTokenCookie } from '../../../lib/jwt';
+
+export const config = {
+  api: {
+    bodyParser: true,
+  },
+};
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -17,30 +21,26 @@ export default async function handler(req, res) {
   try {
     await dbConnect();
 
+    // Daten aus Request
     const { 
-      email, 
-      password, 
       invitationCode,
-      // Influencer-Felder
-      displayName,
-      platforms,
-      bio,
-      country,
-      languages,
-      niche,
-      // Brand-Felder
+      userType,
+      email,
+      // Influencer
+      profileLink,
+      // Brand
       companyName,
+      contactName,
+      phone,
       industry,
       website,
-      contactPerson,
-      phone,
       description,
     } = req.body;
 
     // Validierung
-    if (!email || !password || !invitationCode) {
+    if (!invitationCode || !email) {
       return res.status(400).json({ 
-        error: 'E-Mail, Passwort und Einladungscode sind erforderlich' 
+        error: 'Einladungscode und E-Mail sind erforderlich' 
       });
     }
 
@@ -50,20 +50,17 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Ungültige E-Mail-Adresse' });
     }
 
-    // Passwort-Stärke prüfen
-    if (password.length < 8) {
-      return res.status(400).json({ 
-        error: 'Passwort muss mindestens 8 Zeichen haben' 
-      });
-    }
-
     // Einladungscode prüfen
     const invitation = await InvitationCode.findOne({ 
       code: invitationCode.toUpperCase().trim() 
     });
 
-    if (!invitation || !invitation.isValid()) {
+    if (!invitation) {
       return res.status(400).json({ error: 'Ungültiger Einladungscode' });
+    }
+
+    if (invitation.status !== 'active') {
+      return res.status(400).json({ error: 'Dieser Code ist nicht mehr gültig' });
     }
 
     // Prüfen ob E-Mail bereits existiert
@@ -77,65 +74,41 @@ export default async function handler(req, res) {
       });
     }
 
-    // Passwort hashen
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    // Gründer-Nummer ermitteln (falls Gründer-Code)
-    let founderNumber = null;
-    if (invitation.isFounderCode) {
-      const founderCount = await PortalUser.countDocuments({ isFounder: true });
-      founderNumber = founderCount + 1;
-    }
-
     // Benutzer erstellen
     const userData = {
       email: email.toLowerCase(),
-      password: hashedPassword,
       userType: invitation.type,
       invitationCode: invitation.code,
-      isFounder: invitation.isFounderCode,
-      founderNumber,
-      status: 'pending', // Muss vom Admin freigegeben werden
+      status: 'pending',
+      profile: {},
     };
 
     // Profil-Daten je nach Typ
     if (invitation.type === 'influencer') {
-      userData.influencerProfile = {
-        displayName: displayName || '',
+      userData.profile = {
+        profileLink: profileLink || '',
         category: invitation.category,
         spotNumber: invitation.spotNumber,
-        platforms: platforms || [],
-        bio: bio || '',
-        country: country || '',
-        languages: languages || [],
-        niche: niche || [],
       };
     } else {
-      userData.brandProfile = {
+      userData.profile = {
         companyName: companyName || '',
+        contactName: contactName || '',
+        phone: phone || '',
         industry: industry || '',
         website: website || '',
-        contactPerson: contactPerson || '',
-        phone: phone || '',
         description: description || '',
-        country: country || '',
       };
     }
 
     const user = await PortalUser.create(userData);
 
     // Code als verwendet markieren
-    await invitation.markAsUsed(user._id);
-
-    // Token erstellen und Cookie setzen
-    const token = createToken({
-      userId: user._id.toString(),
-      email: user.email,
-      userType: user.userType,
-      status: user.status,
+    await InvitationCode.findByIdAndUpdate(invitation._id, {
+      status: 'used',
+      usedCount: invitation.usedCount + 1,
+      $push: { usedBy: user._id }
     });
-
-    setTokenCookie(res, token);
 
     // Erfolg
     return res.status(201).json({
@@ -146,8 +119,6 @@ export default async function handler(req, res) {
         email: user.email,
         userType: user.userType,
         status: user.status,
-        isFounder: user.isFounder,
-        founderNumber: user.founderNumber,
       },
     });
 
