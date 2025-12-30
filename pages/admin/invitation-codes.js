@@ -14,6 +14,8 @@ export default function InvitationCodesPage() {
   const [filter, setFilter] = useState({ status: 'all', type: 'all' });
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [actionLoading, setActionLoading] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({ show: false, action: null, code: null });
 
   // Texte
   const txt = {
@@ -47,6 +49,11 @@ export default function InvitationCodesPage() {
       cancel: 'Abbrechen',
       create: 'Code erstellen',
       success: 'Code erfolgreich erstellt!',
+      delete: 'Löschen',
+      confirmTitle: 'Aktion bestätigen',
+      confirmDeleteTitle: 'Code löschen?',
+      confirmDelete: 'Möchtest du diesen Einladungscode wirklich permanent löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
+      confirm: 'Bestätigen',
     },
     en: {
       title: 'Invitation Codes',
@@ -78,6 +85,11 @@ export default function InvitationCodesPage() {
       cancel: 'Cancel',
       create: 'Create Code',
       success: 'Code created successfully!',
+      delete: 'Delete',
+      confirmTitle: 'Confirm Action',
+      confirmDeleteTitle: 'Delete Code?',
+      confirmDelete: 'Do you really want to permanently delete this invitation code? This action cannot be undone.',
+      confirm: 'Confirm',
     },
   };
   const t = txt[lang] || txt.en;
@@ -134,6 +146,38 @@ export default function InvitationCodesPage() {
       loadCodes();
     } catch (error) {
       console.error('Error deactivating code:', error);
+    }
+  };
+
+  // Code permanent löschen (NEU)
+  const handleDelete = async (id) => {
+    setActionLoading(id);
+    try {
+      const res = await fetch(`/api/admin/invitation-codes?id=${id}&permanent=true`, { 
+        method: 'DELETE' 
+      });
+      if (res.ok) {
+        loadCodes();
+      }
+    } catch (error) {
+      console.error('Error deleting code:', error);
+    } finally {
+      setActionLoading(null);
+      setConfirmDialog({ show: false, action: null, code: null });
+    }
+  };
+
+  // Confirmation Dialog öffnen (NEU)
+  const openConfirmDialog = (action, code) => {
+    setConfirmDialog({ show: true, action, code });
+  };
+
+  // Confirmation Dialog Aktion ausführen (NEU)
+  const executeConfirmAction = () => {
+    if (!confirmDialog.code) return;
+    
+    if (confirmDialog.action === 'delete') {
+      handleDelete(confirmDialog.code._id);
     }
   };
 
@@ -272,20 +316,60 @@ export default function InvitationCodesPage() {
                   {new Date(code.createdAt).toLocaleDateString()}
                 </td>
                 <td style={{ padding: '16px', textAlign: 'right' }}>
-                  <button
-                    onClick={() => copyCode(code.code)}
-                    style={{ padding: '6px 12px', marginRight: '8px', backgroundColor: 'rgba(251, 191, 36, 0.1)', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '6px', color: '#f59e0b', cursor: 'pointer', fontSize: '12px' }}
-                  >
-                    {t.copy}
-                  </button>
-                  {code.status === 'active' && (
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '8px' }}>
                     <button
-                      onClick={() => handleDeactivate(code._id)}
-                      style={{ padding: '6px 12px', backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: '6px', color: '#ef4444', cursor: 'pointer', fontSize: '12px' }}
+                      onClick={() => copyCode(code.code)}
+                      disabled={actionLoading === code._id}
+                      style={{ 
+                        padding: '6px 12px', 
+                        backgroundColor: 'rgba(251, 191, 36, 0.1)', 
+                        border: '1px solid rgba(251, 191, 36, 0.3)', 
+                        borderRadius: '6px', 
+                        color: '#f59e0b', 
+                        cursor: 'pointer', 
+                        fontSize: '12px',
+                        opacity: actionLoading === code._id ? 0.5 : 1,
+                      }}
                     >
-                      {t.deactivate}
+                      {t.copy}
                     </button>
-                  )}
+                    {code.status === 'active' && (
+                      <button
+                        onClick={() => handleDeactivate(code._id)}
+                        disabled={actionLoading === code._id}
+                        style={{ 
+                          padding: '6px 12px', 
+                          backgroundColor: 'rgba(239, 68, 68, 0.1)', 
+                          border: '1px solid rgba(239, 68, 68, 0.3)', 
+                          borderRadius: '6px', 
+                          color: '#ef4444', 
+                          cursor: 'pointer', 
+                          fontSize: '12px',
+                          opacity: actionLoading === code._id ? 0.5 : 1,
+                        }}
+                      >
+                        {t.deactivate}
+                      </button>
+                    )}
+                    {/* Löschen Button (NEU) */}
+                    <button
+                      onClick={() => openConfirmDialog('delete', code)}
+                      disabled={actionLoading === code._id}
+                      title={t.delete}
+                      style={{ 
+                        padding: '6px 8px', 
+                        backgroundColor: 'transparent', 
+                        border: 'none', 
+                        color: '#ef4444', 
+                        cursor: 'pointer',
+                        opacity: actionLoading === code._id ? 0.5 : 1,
+                      }}
+                    >
+                      <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -302,6 +386,70 @@ export default function InvitationCodesPage() {
           onCreate={handleCreate}
           creating={creating}
         />
+      )}
+
+      {/* Confirmation Dialog (NEU) */}
+      {confirmDialog.show && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 150,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          backgroundColor: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(4px)',
+          padding: '16px',
+        }} onClick={() => setConfirmDialog({ show: false, action: null, code: null })}>
+          <div style={{
+            backgroundColor: '#111827',
+            border: '1px solid rgba(251, 191, 36, 0.3)',
+            borderRadius: '16px',
+            padding: '24px',
+            maxWidth: '400px',
+            width: '100%',
+          }} onClick={(e) => e.stopPropagation()}>
+            <h3 style={{ color: '#fff', fontSize: '18px', margin: '0 0 16px 0' }}>
+              {t.confirmDeleteTitle}
+            </h3>
+            <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 8px 0' }}>
+              <code style={{ backgroundColor: 'rgba(251, 191, 36, 0.1)', padding: '4px 8px', borderRadius: '4px', color: '#f59e0b', fontFamily: 'monospace' }}>
+                {confirmDialog.code?.code}
+              </code>
+            </p>
+            <p style={{ color: '#9ca3af', fontSize: '14px', margin: '0 0 24px 0' }}>
+              {t.confirmDelete}
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+              <button
+                onClick={() => setConfirmDialog({ show: false, action: null, code: null })}
+                style={{
+                  padding: '10px 20px',
+                  backgroundColor: '#1f2937',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '8px',
+                  color: '#d1d5db',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                }}
+              >
+                {t.cancel}
+              </button>
+              <button
+                onClick={executeConfirmAction}
+                disabled={actionLoading}
+                style={{
+                  padding: '10px 20px',
+                  backgroundColor: '#ef4444',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#fff',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  opacity: actionLoading ? 0.5 : 1,
+                }}
+              >
+                {t.delete}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </AdminLayout>
   );
