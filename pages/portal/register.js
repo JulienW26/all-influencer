@@ -124,31 +124,41 @@ const handleInfluencerSubmit = async (e) => {
     }
   };
 
-  const handleBrandSubmit = async (e) => {
+const handleBrandSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append('invitationCode', invitationCode);
-      formData.append('userType', 'brand');
-      formData.append('companyName', brandData.companyName);
-      formData.append('contactName', brandData.contactName);
-      formData.append('email', brandData.email);
-      formData.append('phone', brandData.phone);
-      formData.append('industry', brandData.industry);
-      formData.append('website', brandData.website);
-      formData.append('description', brandData.description);
-      if (brandData.logo) {
-        formData.append('logo', brandData.logo);
-      }
-
       const res = await fetch('/api/portal/register', {
         method: 'POST',
-        body: formData
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          invitationCode: invitationCode,
+          userType: 'brand',
+          email: brandData.email,
+          companyName: brandData.companyName,
+          contactName: brandData.contactName,
+          phone: brandData.phone,
+          industry: brandData.industry,
+          website: brandData.website,
+          description: brandData.description,
+        })
       });
 
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Registrierung fehlgeschlagen');
+      }
+
+      setStep(3);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
       const data = await res.json();
 
       if (!res.ok) {
