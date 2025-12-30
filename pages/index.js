@@ -20,6 +20,7 @@
 import React, { useState, useEffect, useContext, createContext, useRef, useCallback } from 'react';
 import FounderLOIModal from '../components/FounderLOIModal';
 import { marked } from 'marked';
+import { startCheckout } from '../lib/stripe';
 
 // ============================================================================
 // MARKDOWN KONFIGURATION
@@ -620,20 +621,30 @@ const CalendarModal = ({ spot, category, onClose, onBook, onInvitationCode }) =>
     });
   };
   
-  const handleBook = async () => {
-    if (selectedMonths.length === 0) return;
-    setSending(true);
-    const fullMonthNames = [t.january, t.february, t.march, t.april, t.may, t.june, t.july, t.august, t.september, t.october, t.november, t.december];
-    const categoryNames = { diamond: 'Diamond', platinum: 'Platin', gold: 'Gold', risingStar: 'Rising Star' };
-    await sendEmail('influencer_booking', {
-      category: categoryNames[category],
+const handleBook = async () => {
+  if (selectedMonths.length === 0) return;
+  setSending(true);
+  
+  const fullMonthNames = [t.january, t.february, t.march, t.april, t.may, t.june, t.july, t.august, t.september, t.october, t.november, t.december];
+  const categoryNames = { diamond: 'Diamond', platinum: 'Platin', gold: 'Gold', risingStar: 'Rising Star' };
+  
+  try {
+    // Stripe Checkout starten
+    await startCheckout({
+      category: category,
       rank: spot.rank,
-      months: selectedMonths.map(m => fullMonthNames[m]).join(', ') + ' 2026',
-      totalPrice: formatPrice(cat.price * selectedMonths.length)
+      months: selectedMonths,
+      monthNames: selectedMonths.map(m => fullMonthNames[m]).join(', '),
+      pricePerMonth: cat.price,
+      totalAmount: cat.price * selectedMonths.length,
+      influencerName: spot.name || ''
     });
+  } catch (error) {
+    console.error('Checkout error:', error);
+    alert('Fehler beim Starten des Checkouts. Bitte versuche es erneut.');
     setSending(false);
-    onBook(selectedMonths);
-  };
+  }
+};
   
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
