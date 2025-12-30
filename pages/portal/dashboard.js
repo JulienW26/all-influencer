@@ -3,7 +3,104 @@ import Head from 'next/head';
 import Link from 'next/link';
 import PortalLayout from '../../components/portal/PortalLayout';
 
+// Übersetzungen
+const translations = {
+  de: {
+    pageTitle: 'Dashboard | ALL INFLUENCER',
+    pendingTitle: 'Dein Account wird geprüft',
+    pendingMessage: 'Wir überprüfen deine Registrierung. Dies dauert normalerweise 24-48 Stunden. Du erhältst eine E-Mail, sobald dein Account freigeschaltet wurde.',
+    pendingLock: 'Freischaltung ausstehend',
+    welcomeBack: 'Willkommen zurück! 👋',
+    welcomeSubtitle: 'Hier ist deine Übersicht für heute.',
+    recentActivity: 'Letzte Aktivitäten',
+    noActivity: 'Noch keine Aktivitäten vorhanden',
+    // Influencer Stats
+    profileViews: 'Profil-Aufrufe',
+    activeBookings: 'Aktive Buchungen',
+    earningsMonth: 'Einnahmen (Monat)',
+    messages: 'Nachrichten',
+    // Brand Stats
+    savedInfluencers: 'Gespeicherte Influencer',
+    activeOrders: 'Aktive Aufträge',
+    spendingMonth: 'Ausgaben (Monat)',
+    // Quick Actions
+    editProfile: 'Profil bearbeiten',
+    editProfileDesc: 'Aktualisiere deine Informationen',
+    viewBookings: 'Buchungen ansehen',
+    viewBookingsDesc: 'Verwalte deine Aufträge',
+    viewEarnings: 'Einnahmen',
+    viewEarningsDesc: 'Deine Verdienste im Überblick',
+    findInfluencers: 'Influencer finden',
+    findInfluencersDesc: 'Entdecke passende Creator',
+    createOrder: 'Auftrag erstellen',
+    createOrderDesc: 'Poste einen neuen Job',
+    viewFavorites: 'Favoriten',
+    viewFavoritesDesc: 'Deine gespeicherten Influencer'
+  },
+  en: {
+    pageTitle: 'Dashboard | ALL INFLUENCER',
+    pendingTitle: 'Your account is being reviewed',
+    pendingMessage: 'We are reviewing your registration. This usually takes 24-48 hours. You will receive an email once your account has been approved.',
+    pendingLock: 'Approval pending',
+    welcomeBack: 'Welcome back! 👋',
+    welcomeSubtitle: 'Here is your overview for today.',
+    recentActivity: 'Recent Activity',
+    noActivity: 'No activity yet',
+    profileViews: 'Profile Views',
+    activeBookings: 'Active Bookings',
+    earningsMonth: 'Earnings (Month)',
+    messages: 'Messages',
+    savedInfluencers: 'Saved Influencers',
+    activeOrders: 'Active Orders',
+    spendingMonth: 'Spending (Month)',
+    editProfile: 'Edit Profile',
+    editProfileDesc: 'Update your information',
+    viewBookings: 'View Bookings',
+    viewBookingsDesc: 'Manage your orders',
+    viewEarnings: 'Earnings',
+    viewEarningsDesc: 'Your earnings overview',
+    findInfluencers: 'Find Influencers',
+    findInfluencersDesc: 'Discover matching creators',
+    createOrder: 'Create Order',
+    createOrderDesc: 'Post a new job',
+    viewFavorites: 'Favorites',
+    viewFavoritesDesc: 'Your saved influencers'
+  },
+  es: {
+    pageTitle: 'Panel | ALL INFLUENCER',
+    pendingTitle: 'Tu cuenta está siendo revisada',
+    pendingMessage: 'Estamos revisando tu registro. Esto normalmente toma 24-48 horas. Recibirás un email cuando tu cuenta sea aprobada.',
+    pendingLock: 'Aprobación pendiente',
+    welcomeBack: '¡Bienvenido de nuevo! 👋',
+    welcomeSubtitle: 'Aquí está tu resumen de hoy.',
+    recentActivity: 'Actividad Reciente',
+    noActivity: 'Sin actividad aún',
+    profileViews: 'Visitas al perfil',
+    activeBookings: 'Reservas activas',
+    earningsMonth: 'Ingresos (Mes)',
+    messages: 'Mensajes',
+    savedInfluencers: 'Influencers guardados',
+    activeOrders: 'Pedidos activos',
+    spendingMonth: 'Gastos (Mes)',
+    editProfile: 'Editar perfil',
+    editProfileDesc: 'Actualiza tu información',
+    viewBookings: 'Ver reservas',
+    viewBookingsDesc: 'Administra tus pedidos',
+    viewEarnings: 'Ingresos',
+    viewEarningsDesc: 'Resumen de tus ganancias',
+    findInfluencers: 'Buscar Influencers',
+    findInfluencersDesc: 'Descubre creadores',
+    createOrder: 'Crear pedido',
+    createOrderDesc: 'Publica un nuevo trabajo',
+    viewFavorites: 'Favoritos',
+    viewFavoritesDesc: 'Tus influencers guardados'
+  }
+};
+
 export default function Dashboard() {
+  const [lang, setLang] = useState('de');
+  const t = translations[lang];
+
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,7 +133,7 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <PortalLayout>
+      <PortalLayout lang={lang} setLang={setLang}>
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-400"></div>
         </div>
@@ -47,9 +144,9 @@ export default function Dashboard() {
   // Pending Status View
   if (user?.status === 'pending') {
     return (
-      <PortalLayout>
+      <PortalLayout lang={lang} setLang={setLang}>
         <Head>
-          <title>Dashboard | ALL INFLUENCER</title>
+          <title>{t.pageTitle}</title>
         </Head>
 
         <div className="max-w-2xl mx-auto text-center py-12">
@@ -59,11 +156,10 @@ export default function Dashboard() {
             </svg>
           </div>
           <h1 className="text-2xl font-bold text-white mb-4">
-            Dein Account wird geprüft
+            {t.pendingTitle}
           </h1>
           <p className="text-gray-400 mb-8">
-            Wir überprüfen deine Registrierung. Dies dauert normalerweise 24-48 Stunden.
-            Du erhältst eine E-Mail, sobald dein Account freigeschaltet wurde.
+            {t.pendingMessage}
           </p>
           
           {/* Blurred Preview */}
@@ -74,7 +170,7 @@ export default function Dashboard() {
                   <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                   </svg>
-                  Freischaltung ausstehend
+                  {t.pendingLock}
                 </p>
               </div>
             </div>
@@ -96,18 +192,18 @@ export default function Dashboard() {
 
   // Active User Dashboard
   return (
-    <PortalLayout>
+    <PortalLayout lang={lang} setLang={setLang}>
       <Head>
-        <title>Dashboard | ALL INFLUENCER</title>
+        <title>{t.pageTitle}</title>
       </Head>
 
       {/* Welcome Header */}
       <div className="mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">
-          Willkommen zurück! 👋
+          {t.welcomeBack}
         </h1>
         <p className="text-gray-400">
-          Hier ist deine Übersicht für heute.
+          {t.welcomeSubtitle}
         </p>
       </div>
 
@@ -116,25 +212,25 @@ export default function Dashboard() {
         {user?.userType === 'influencer' ? (
           <>
             <StatCard
-              label="Profil-Aufrufe"
+              label={t.profileViews}
               value="0"
               icon="eye"
               trend="+0%"
             />
             <StatCard
-              label="Aktive Buchungen"
+              label={t.activeBookings}
               value="0"
               icon="calendar"
               color="blue"
             />
             <StatCard
-              label="Einnahmen (Monat)"
+              label={t.earningsMonth}
               value="€0"
               icon="euro"
               color="green"
             />
             <StatCard
-              label="Nachrichten"
+              label={t.messages}
               value="0"
               icon="message"
               color="purple"
@@ -143,24 +239,24 @@ export default function Dashboard() {
         ) : (
           <>
             <StatCard
-              label="Gespeicherte Influencer"
+              label={t.savedInfluencers}
               value="0"
               icon="heart"
             />
             <StatCard
-              label="Aktive Aufträge"
+              label={t.activeOrders}
               value="0"
               icon="briefcase"
               color="blue"
             />
             <StatCard
-              label="Ausgaben (Monat)"
+              label={t.spendingMonth}
               value="€0"
               icon="euro"
               color="green"
             />
             <StatCard
-              label="Nachrichten"
+              label={t.messages}
               value="0"
               icon="message"
               color="purple"
@@ -178,20 +274,20 @@ export default function Dashboard() {
               <QuickAction
                 href="/portal/profile"
                 icon="user"
-                title="Profil bearbeiten"
-                description="Aktualisiere deine Informationen"
+                title={t.editProfile}
+                description={t.editProfileDesc}
               />
               <QuickAction
                 href="/portal/bookings"
                 icon="calendar"
-                title="Buchungen ansehen"
-                description="Verwalte deine Aufträge"
+                title={t.viewBookings}
+                description={t.viewBookingsDesc}
               />
               <QuickAction
                 href="/portal/earnings"
                 icon="chart"
-                title="Einnahmen"
-                description="Deine Verdienste im Überblick"
+                title={t.viewEarnings}
+                description={t.viewEarningsDesc}
               />
             </>
           ) : (
@@ -199,20 +295,20 @@ export default function Dashboard() {
               <QuickAction
                 href="/portal/discover"
                 icon="search"
-                title="Influencer finden"
-                description="Entdecke passende Creator"
+                title={t.findInfluencers}
+                description={t.findInfluencersDesc}
               />
               <QuickAction
                 href="/portal/marketplace/create"
                 icon="plus"
-                title="Auftrag erstellen"
-                description="Poste einen neuen Job"
+                title={t.createOrder}
+                description={t.createOrderDesc}
               />
               <QuickAction
                 href="/portal/favorites"
                 icon="heart"
-                title="Favoriten"
-                description="Deine gespeicherten Influencer"
+                title={t.viewFavorites}
+                description={t.viewFavoritesDesc}
               />
             </>
           )}
@@ -221,19 +317,19 @@ export default function Dashboard() {
 
       {/* Recent Activity */}
       <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-        <h2 className="text-lg font-semibold text-white mb-4">Letzte Aktivitäten</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">{t.recentActivity}</h2>
         <div className="text-center py-8 text-gray-500">
           <svg className="w-12 h-12 mx-auto mb-3 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
-          <p>Noch keine Aktivitäten vorhanden</p>
+          <p>{t.noActivity}</p>
         </div>
       </div>
     </PortalLayout>
   );
 }
 
-// Stat Card Component
+// Stat Card Component - BEIBEHALTEN
 function StatCard({ label, value, icon, color = 'amber', trend }) {
   const colorClasses = {
     amber: 'bg-amber-400/10 text-amber-400',
@@ -297,7 +393,7 @@ function StatCard({ label, value, icon, color = 'amber', trend }) {
   );
 }
 
-// Quick Action Component
+// Quick Action Component - BEIBEHALTEN
 function QuickAction({ href, icon, title, description }) {
   const icons = {
     user: (
