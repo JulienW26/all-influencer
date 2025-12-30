@@ -22,6 +22,12 @@ const PortalUserSchema = new mongoose.Schema({
   },
   
   // === Benutzertyp ===
+  userType: {
+    type: String,
+    enum: ['influencer', 'brand', 'admin'],
+    default: 'influencer'
+  },
+  // Für Kompatibilität behalten
   role: {
     type: String,
     enum: ['influencer', 'brand', 'admin'],
@@ -145,6 +151,7 @@ const PortalUserSchema = new mongoose.Schema({
 
 // Index für schnelle Suche
 PortalUserSchema.index({ email: 1 });
+PortalUserSchema.index({ userType: 1, status: 1 });
 PortalUserSchema.index({ role: 1, status: 1 });
 PortalUserSchema.index({ resetPasswordToken: 1 });
 
