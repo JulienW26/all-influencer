@@ -1,7 +1,7 @@
 import dbConnect from '../../../../lib/mongodb';
 import PortalUser from '../../../../models/PortalUser';
 import { sendApprovedEmail } from '../../../../lib/email';
-import { getSession } from 'next-auth/react';
+import { getSession } from '../../../../lib/auth';
 
 /**
  * Admin API: Benutzer-Status ändern
@@ -14,7 +14,7 @@ import { getSession } from 'next-auth/react';
  */
 export default async function handler(req, res) {
   // Session prüfen
-  const session = await getSession({ req });
+  const session = getSession(req);
   
   if (!session) {
     return res.status(401).json({ error: 'Nicht authentifiziert' });
@@ -139,4 +139,4 @@ export default async function handler(req, res) {
   // Andere Methoden nicht erlaubt
   res.setHeader('Allow', ['GET', 'PATCH', 'DELETE']);
   return res.status(405).json({ error: `Methode ${req.method} nicht erlaubt` });
-  }
+}
