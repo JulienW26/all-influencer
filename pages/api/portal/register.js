@@ -3,15 +3,10 @@
  * POST /api/portal/register
  */
 
+import bcrypt from 'bcryptjs';
 import dbConnect from '../../../lib/mongodb';
 import PortalUser from '../../../models/PortalUser';
 import InvitationCode from '../../../models/InvitationCode';
-
-export const config = {
-  api: {
-    bodyParser: true,
-  },
-};
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -21,11 +16,10 @@ export default async function handler(req, res) {
   try {
     await dbConnect();
 
-    // Daten aus Request
     const { 
       invitationCode,
-      userType,
       email,
+      password,
       // Influencer
       profileLink,
       // Brand
@@ -38,9 +32,16 @@ export default async function handler(req, res) {
     } = req.body;
 
     // Validierung
-    if (!invitationCode || !email) {
+    if (!invitationCode || !email || !password) {
       return res.status(400).json({ 
-        error: 'Einladungscode und E-Mail sind erforderlich' 
+        error: 'Einladungscode, E-Mail und Passwort sind erforderlich' 
+      });
+    }
+
+    // Passwort-Länge prüfen
+    if (password.length < 8) {
+      return res.status(400).json({ 
+        error: 'Passwort muss mindestens 8 Zeichen haben' 
       });
     }
 
@@ -74,26 +75,29 @@ export default async function handler(req, res) {
       });
     }
 
+    // Passwort hashen
+    const hashedPassword = await bcrypt.hash(password, 12);
+
     // Benutzer erstellen
     const userData = {
       email: email.toLowerCase(),
+      password: hashedPassword,
       userType: invitation.type,
       invitationCode: invitation.code,
       status: 'pending',
-      profile: {},
     };
 
     // Profil-Daten je nach Typ
     if (invitation.type === 'influencer') {
-      userData.profile = {
-        profileLink: profileLink || '',
+      userData.influencerProfile = {
         category: invitation.category,
         spotNumber: invitation.spotNumber,
+        platforms: profileLink ? [{ url: profileLink }] : [],
       };
     } else {
-      userData.profile = {
+      userData.brandProfile = {
         companyName: companyName || '',
-        contactName: contactName || '',
+        contactPerson: contactName || '',
         phone: phone || '',
         industry: industry || '',
         website: website || '',
@@ -106,7 +110,7 @@ export default async function handler(req, res) {
     // Code als verwendet markieren
     await InvitationCode.findByIdAndUpdate(invitation._id, {
       status: 'used',
-      usedCount: invitation.usedCount + 1,
+      usedCount: (invitation.usedCount || 0) + 1,
       $push: { usedBy: user._id }
     });
 
@@ -125,7 +129,7 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error('Registration error:', error);
     return res.status(500).json({ 
-      error: 'Serverfehler. Bitte später erneut versuchen.' 
+      error: 'Serverfehler: ' + error.message 
     });
   }
 }
