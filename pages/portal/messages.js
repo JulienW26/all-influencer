@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import PortalLayout from '../../components/portal/PortalLayout';
+import { usePortalLanguage } from '../../lib/usePortalLanguage';
 
 const translations = {
   de: {
@@ -45,7 +46,7 @@ const translations = {
 };
 
 export default function Messages() {
-  const [lang, setLang] = useState('de');
+  const { lang, setLang } = usePortalLanguage();
   const t = translations[lang];
   const [activeTab, setActiveTab] = useState('all');
   const [loading, setLoading] = useState(true);
