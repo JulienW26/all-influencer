@@ -1,31 +1,14 @@
 /**
- * E-Mail Template Generator V3
- * 
- * Features:
- * - Kurze Templates (Original V2)
- * - Ausführliche Templates (NEU: Entwurf 1 & 2)
- * - Alle 3 Sprachen (DE, EN, ES)
- * - Zwei Buttons bei ausführlichen Templates (LOI + Video)
+ * E-Mail Template Generator V2
  */
 
 import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
-import { 
-  ui, 
-  templatesShort, 
-  templatesDetailed,
-  templateTypes,
-  categories, 
-  languages, 
-  replacePlaceholders, 
-  generateHTML, 
-  generatePlainText 
-} from '../../lib/email-templates-v3';
+import { ui, templates, categories, languages, replacePlaceholders, generateHTML, generatePlainText } from '../../lib/email-templates-v2';
 
 export default function EmailsPage() {
   const [lang, setLang] = useState('de');
   const [cat, setCat] = useState('diamond');
-  const [templateType, setTemplateType] = useState('short'); // NEU: 'short' oder 'detailed'
   const [name, setName] = useState('');
   const [spot, setSpot] = useState('');
   const [editMode, setEditMode] = useState(false);
@@ -33,14 +16,9 @@ export default function EmailsPage() {
   const [copied, setCopied] = useState('');
 
   const u = ui[lang];
+  const baseTemplate = templates[lang][cat];
   
-  // Template basierend auf Typ auswählen
-  const baseTemplate = templateType === 'detailed' 
-    ? templatesDetailed[lang][cat] 
-    : templatesShort[lang][cat];
-  
-  // Für kurze Templates: Custom Texts anwenden
-  const template = templateType === 'short' ? {
+  const template = {
     ...baseTemplate,
     subject: customTexts.subject || baseTemplate.subject,
     greeting: customTexts.greeting || baseTemplate.greeting,
@@ -49,14 +27,14 @@ export default function EmailsPage() {
     ctaText: customTexts.ctaText || baseTemplate.ctaText,
     buttonText: customTexts.buttonText || baseTemplate.buttonText,
     ps: customTexts.ps || baseTemplate.ps
-  } : baseTemplate;
+  };
 
   const displayName = name || '[Name]';
   const displaySpot = spot || '[XX]';
 
   useEffect(() => {
     setCustomTexts({});
-  }, [lang, cat, templateType]);
+  }, [lang, cat]);
 
   const useBrevoCodes = () => {
     setName('{{contact.FIRSTNAME}}');
@@ -68,14 +46,14 @@ export default function EmailsPage() {
   };
 
   const copyHTML = () => {
-    const html = generateHTML(lang, cat, template, name, spot, templateType);
+    const html = generateHTML(lang, cat, template, name, spot);
     navigator.clipboard.writeText(html);
     setCopied('html');
     setTimeout(() => setCopied(''), 2000);
   };
 
   const copyPlainText = () => {
-    const text = generatePlainText(lang, template, name, spot, templateType);
+    const text = generatePlainText(lang, template, name, spot);
     navigator.clipboard.writeText(text);
     setCopied('text');
     setTimeout(() => setCopied(''), 2000);
@@ -88,166 +66,15 @@ export default function EmailsPage() {
   };
 
   const downloadHTML = () => {
-    const html = generateHTML(lang, cat, template, name, spot, templateType);
+    const html = generateHTML(lang, cat, template, name, spot);
     const blob = new Blob([html], { type: 'text/html' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `email-template-${lang}-${cat}-${templateType}.html`;
+    a.download = `email-template-${lang}-${cat}.html`;
     a.click();
   };
 
   const loiUrl = `https://all-influencer.com/?loi=true&lang=${lang}`;
-  const videoUrl = `https://all-influencer.com/video/founder-invitation?lang=${lang}`;
-
-  // Render Preview für kurze Templates
-  const renderShortPreview = () => (
-    <>
-      <p style={{ color: '#fff', marginBottom: '20px' }}>{replacePlaceholders(template.greeting, displayName, displaySpot)}</p>
-      <p style={{ color: '#9ca3af', marginBottom: '16px', lineHeight: '1.6' }}>{template.intro}</p>
-      
-      <div style={{ background: 'rgba(251, 191, 36, 0.1)', borderLeft: '4px solid #f59e0b', padding: '20px', margin: '24px 0', borderRadius: '0 8px 8px 0' }}>
-        <p style={{ color: '#fbbf24', fontWeight: '500', margin: 0 }}>{template.highlight}</p>
-      </div>
-      
-      <h3 style={{ color: '#f59e0b', fontWeight: '600', marginTop: '32px', marginBottom: '16px' }}>{template.modelTitle}</h3>
-      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-        {template.model.map((item, i) => (
-          <li key={i} style={{ display: 'flex', gap: '12px', color: '#d1d5db', marginBottom: '12px' }}>
-            <span style={{ color: '#f59e0b' }}>▸</span>{item}
-          </li>
-        ))}
-      </ul>
-      
-      <h3 style={{ color: '#f59e0b', fontWeight: '600', marginTop: '32px', marginBottom: '16px' }}>{template.benefitsTitle}</h3>
-      <div style={{ backgroundColor: 'rgba(251, 191, 36, 0.05)', borderRadius: '8px', padding: '16px' }}>
-        {template.benefits.map((item, i) => (
-          <p key={i} style={{ display: 'flex', gap: '12px', color: '#fff', margin: i === 0 ? 0 : '12px 0 0 0' }}>
-            <span style={{ color: '#22c55e' }}>✓</span>{item}
-          </p>
-        ))}
-      </div>
-      
-      <h3 style={{ color: '#fff', fontWeight: '600', marginTop: '32px', marginBottom: '12px' }}>{template.ctaTitle}</h3>
-      <p style={{ color: '#9ca3af', marginBottom: '24px' }}>{template.ctaText}</p>
-      
-      <div style={{ textAlign: 'center' }}>
-        <a href={loiUrl} target="_blank" rel="noopener noreferrer" style={{
-          display: 'inline-block',
-          background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-          color: '#000',
-          fontWeight: 'bold',
-          padding: '16px 40px',
-          borderRadius: '8px',
-          textDecoration: 'none'
-        }}>{template.buttonText}</a>
-      </div>
-      
-      <p style={{ color: '#f59e0b', textAlign: 'center', marginTop: '24px', fontWeight: '500' }}>{replacePlaceholders(template.spotText, displayName, displaySpot)}</p>
-    </>
-  );
-
-  // Render Preview für ausführliche Templates
-  const renderDetailedPreview = () => (
-    <>
-      <p style={{ color: '#fff', marginBottom: '20px' }}>{replacePlaceholders(template.greeting, displayName, displaySpot)}</p>
-      <p style={{ color: '#9ca3af', marginBottom: '16px', lineHeight: '1.7' }} dangerouslySetInnerHTML={{ __html: template.intro }} />
-      
-      <div style={{ background: 'rgba(251, 191, 36, 0.1)', borderLeft: '4px solid #f59e0b', padding: '20px', margin: '24px 0', borderRadius: '0 8px 8px 0' }}>
-        <p style={{ color: '#fbbf24', fontWeight: '500', margin: 0 }}>{template.highlight}</p>
-      </div>
-      
-      {/* Sections */}
-      {template.sections && template.sections.map((section, i) => (
-        <div key={i}>
-          <h3 style={{ color: '#f59e0b', fontWeight: '600', marginTop: '32px', marginBottom: '16px' }}>{section.title}</h3>
-          
-          {section.content && (
-            <div style={{ color: '#9ca3af', lineHeight: '1.7', marginBottom: '16px' }} 
-                 dangerouslySetInnerHTML={{ __html: section.content.replace(/\n\n/g, '</p><p style="margin:14px 0;">').replace(/\n/g, '<br/>') }} />
-          )}
-          
-          {section.categories && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', margin: '16px 0' }}>
-              <span style={{ padding: '6px 14px', background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.3)', borderRadius: '20px', fontSize: '12px', color: '#fbbf24' }}>💎 Diamond (20M+)</span>
-              <span style={{ padding: '6px 14px', background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.3)', borderRadius: '20px', fontSize: '12px', color: '#fbbf24' }}>💠 Platin (10-20M)</span>
-              <span style={{ padding: '6px 14px', background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.3)', borderRadius: '20px', fontSize: '12px', color: '#fbbf24' }}>🥇 Gold (5-10M)</span>
-              <span style={{ padding: '6px 14px', background: 'rgba(251,191,36,0.1)', border: '1px solid rgba(251,191,36,0.3)', borderRadius: '20px', fontSize: '12px', color: '#fbbf24' }}>⭐ Rising Star (1-5M)</span>
-            </div>
-          )}
-          
-          {section.list && (
-            <ul style={{ listStyle: 'none', padding: 0, margin: '16px 0' }}>
-              {section.list.map((item, j) => (
-                <li key={j} style={{ display: 'flex', gap: '12px', color: '#d1d5db', marginBottom: '10px', lineHeight: '1.5' }}>
-                  <span style={{ color: '#f59e0b' }}>▸</span>
-                  <span dangerouslySetInnerHTML={{ __html: item }} />
-                </li>
-              ))}
-            </ul>
-          )}
-          
-          {section.note && (
-            <p style={{ color: '#e5e7eb', lineHeight: '1.7', margin: '16px 0' }} dangerouslySetInnerHTML={{ __html: section.note }} />
-          )}
-          
-          {section.highlight && (
-            <div style={{ background: 'rgba(251, 191, 36, 0.1)', borderLeft: '4px solid #f59e0b', padding: '16px 18px', margin: '20px 0', borderRadius: '0 8px 8px 0' }}>
-              <p style={{ color: '#fbbf24', fontWeight: '500', margin: 0, lineHeight: '1.6' }}>{section.highlight}</p>
-            </div>
-          )}
-          
-          {section.after && (
-            <p style={{ color: '#9ca3af', lineHeight: '1.7', marginTop: '16px' }} dangerouslySetInnerHTML={{ __html: section.after }} />
-          )}
-        </div>
-      ))}
-      
-      {/* Benefits */}
-      <h3 style={{ color: '#f59e0b', fontWeight: '600', marginTop: '32px', marginBottom: '16px' }}>{template.benefitsTitle}</h3>
-      <p style={{ color: '#9ca3af', marginBottom: '16px' }}>{template.benefitsIntro}</p>
-      <div style={{ backgroundColor: 'rgba(251, 191, 36, 0.05)', borderRadius: '8px', padding: '16px' }}>
-        {template.benefits.map((item, i) => (
-          <p key={i} style={{ display: 'flex', gap: '12px', color: '#fff', margin: i === 0 ? 0 : '12px 0 0 0', lineHeight: '1.5' }}>
-            <span style={{ color: '#22c55e' }}>✓</span>
-            <span dangerouslySetInnerHTML={{ __html: item }} />
-          </p>
-        ))}
-      </div>
-      
-      {/* Value Note (für Gold/Rising Star) */}
-      {template.valueNote && (
-        <p style={{ color: '#e5e7eb', fontSize: '14px', fontWeight: '500', margin: '16px 0' }}>{template.valueNote}</p>
-      )}
-      
-      {/* Spot Text */}
-      <p style={{ color: '#f59e0b', textAlign: 'center', marginTop: '24px', fontWeight: '500' }}>{replacePlaceholders(template.spotText, displayName, displaySpot)}</p>
-      
-      {/* Two Buttons */}
-      <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <a href={loiUrl} target="_blank" rel="noopener noreferrer" style={{
-          display: 'inline-block',
-          background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-          color: '#000',
-          fontWeight: 'bold',
-          padding: '16px 40px',
-          borderRadius: '8px',
-          textDecoration: 'none',
-          marginBottom: '12px'
-        }}>📝 {template.buttonText}</a>
-      </div>
-      <div style={{ textAlign: 'center' }}>
-        <a href={videoUrl} target="_blank" rel="noopener noreferrer" style={{
-          display: 'inline-block',
-          background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-          color: '#000',
-          fontWeight: 'bold',
-          padding: '16px 40px',
-          borderRadius: '8px',
-          textDecoration: 'none'
-        }}>🎬 {template.videoButtonText}</a>
-      </div>
-    </>
-  );
 
   return (
     <AdminLayout title={u.title}>
@@ -287,29 +114,6 @@ export default function EmailsPage() {
         </div>
       </div>
 
-      {/* NEU: Template Typ */}
-      <div style={{ marginBottom: '24px' }}>
-        <p style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '8px' }}>{u.templateLabel}</p>
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          {templateTypes.map(t => (
-            <button key={t.id} onClick={() => setTemplateType(t.id)} style={{
-              padding: '10px 20px',
-              borderRadius: '8px',
-              border: templateType === t.id ? 'none' : '1px solid rgba(251, 191, 36, 0.3)',
-              fontWeight: '500',
-              cursor: 'pointer',
-              background: templateType === t.id ? 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)' : 'transparent',
-              color: templateType === t.id ? '#000' : '#fbbf24'
-            }}>{t.label[lang]}</button>
-          ))}
-        </div>
-        {templateType === 'detailed' && (
-          <p style={{ color: '#22c55e', fontSize: '12px', marginTop: '8px' }}>
-            ✨ Ausführliches Template mit zwei Buttons (LOI + Video)
-          </p>
-        )}
-      </div>
-
       {/* Personalisierung */}
       <div style={{ backgroundColor: 'rgba(55, 65, 81, 0.5)', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid #374151' }}>
         <h3 style={{ color: '#f59e0b', fontWeight: '600', marginBottom: '16px', marginTop: 0 }}>{u.personalTitle}</h3>
@@ -331,23 +135,21 @@ export default function EmailsPage() {
         </div>
       </div>
 
-      {/* Edit Mode Toggle - nur für kurze Templates */}
-      {templateType === 'short' && (
-        <div style={{ marginBottom: '24px' }}>
-          <button onClick={() => setEditMode(!editMode)} style={{
-            padding: '10px 20px',
-            borderRadius: '8px',
-            border: 'none',
-            backgroundColor: editMode ? '#f59e0b' : '#374151',
-            color: editMode ? '#000' : '#fff',
-            cursor: 'pointer',
-            fontWeight: '500'
-          }}>✏️ {u.editLabel}</button>
-        </div>
-      )}
+      {/* Edit Mode Toggle */}
+      <div style={{ marginBottom: '24px' }}>
+        <button onClick={() => setEditMode(!editMode)} style={{
+          padding: '10px 20px',
+          borderRadius: '8px',
+          border: 'none',
+          backgroundColor: editMode ? '#f59e0b' : '#374151',
+          color: editMode ? '#000' : '#fff',
+          cursor: 'pointer',
+          fontWeight: '500'
+        }}>✏️ {u.editLabel}</button>
+      </div>
 
-      {/* Edit Section - nur für kurze Templates */}
-      {editMode && templateType === 'short' && (
+      {/* Edit Section */}
+      {editMode && (
         <div style={{ backgroundColor: 'rgba(55, 65, 81, 0.5)', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid rgba(251, 191, 36, 0.3)' }}>
           <h3 style={{ color: '#f59e0b', fontWeight: '600', marginBottom: '8px', marginTop: 0 }}>{u.editTitle}</h3>
           <p style={{ color: '#9ca3af', fontSize: '13px', marginBottom: '16px' }}>{u.editHint}</p>
@@ -448,11 +250,50 @@ export default function EmailsPage() {
             <p style={{ color: 'rgba(0,0,0,0.7)', fontSize: '12px', letterSpacing: '3px', marginTop: '4px' }}>PREMIUM NETWORK</p>
           </div>
           
-          {/* Content - dynamisch basierend auf Template-Typ */}
+          {/* Content */}
           <div style={{ padding: '32px' }}>
-            {templateType === 'detailed' ? renderDetailedPreview() : renderShortPreview()}
+            <p style={{ color: '#fff', marginBottom: '20px' }}>{replacePlaceholders(template.greeting, displayName, displaySpot)}</p>
+            <p style={{ color: '#9ca3af', marginBottom: '16px', lineHeight: '1.6' }}>{template.intro}</p>
             
-            {/* Closing - gemeinsam für beide */}
+            <div style={{ background: 'rgba(251, 191, 36, 0.1)', borderLeft: '4px solid #f59e0b', padding: '20px', margin: '24px 0', borderRadius: '0 8px 8px 0' }}>
+              <p style={{ color: '#fbbf24', fontWeight: '500', margin: 0 }}>{template.highlight}</p>
+            </div>
+            
+            <h3 style={{ color: '#f59e0b', fontWeight: '600', marginTop: '32px', marginBottom: '16px' }}>{template.modelTitle}</h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {template.model.map((item, i) => (
+                <li key={i} style={{ display: 'flex', gap: '12px', color: '#d1d5db', marginBottom: '12px' }}>
+                  <span style={{ color: '#f59e0b' }}>▸</span>{item}
+                </li>
+              ))}
+            </ul>
+            
+            <h3 style={{ color: '#f59e0b', fontWeight: '600', marginTop: '32px', marginBottom: '16px' }}>{template.benefitsTitle}</h3>
+            <div style={{ backgroundColor: 'rgba(251, 191, 36, 0.05)', borderRadius: '8px', padding: '16px' }}>
+              {template.benefits.map((item, i) => (
+                <p key={i} style={{ display: 'flex', gap: '12px', color: '#fff', margin: i === 0 ? 0 : '12px 0 0 0' }}>
+                  <span style={{ color: '#22c55e' }}>✓</span>{item}
+                </p>
+              ))}
+            </div>
+            
+            <h3 style={{ color: '#fff', fontWeight: '600', marginTop: '32px', marginBottom: '12px' }}>{template.ctaTitle}</h3>
+            <p style={{ color: '#9ca3af', marginBottom: '24px' }}>{template.ctaText}</p>
+            
+            <div style={{ textAlign: 'center' }}>
+              <a href={loiUrl} target="_blank" rel="noopener noreferrer" style={{
+                display: 'inline-block',
+                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                color: '#000',
+                fontWeight: 'bold',
+                padding: '16px 40px',
+                borderRadius: '8px',
+                textDecoration: 'none'
+              }}>{template.buttonText}</a>
+            </div>
+            
+            <p style={{ color: '#f59e0b', textAlign: 'center', marginTop: '24px', fontWeight: '500' }}>{replacePlaceholders(template.spotText, displayName, displaySpot)}</p>
+            
             <div style={{ marginTop: '40px', paddingTop: '24px', borderTop: '1px solid rgba(251, 191, 36, 0.3)' }}>
               <p style={{ color: '#9ca3af', marginBottom: '20px' }}>{template.closing}</p>
               <p style={{ color: '#fff', fontWeight: 'bold', fontSize: '18px', margin: 0 }}>Julien Weiss</p>
@@ -462,7 +303,7 @@ export default function EmailsPage() {
                 <a href="mailto:contact@all-influencer.com" style={{ color: '#fbbf24', textDecoration: 'none', fontWeight: '500' }}>✉️ contact@all-influencer.com</a>
               </div>
             </div>
-
+            
             <div style={{ marginTop: '32px', padding: '16px', backgroundColor: 'rgba(251, 191, 36, 0.08)', borderLeft: '3px solid #f59e0b', borderRadius: '0 8px 8px 0' }}>
               <p style={{ color: '#d1d5db', fontSize: '13px', fontStyle: 'italic', margin: 0 }}>{template.ps}</p>
             </div>
