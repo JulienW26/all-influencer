@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import PortalLayout from '../../components/portal/PortalLayout';
+import { usePortalLanguage } from '../../lib/usePortalLanguage';
 
 const translations = {
   de: {
@@ -84,7 +85,7 @@ const categories = ['Fashion', 'Beauty', 'Fitness', 'Travel', 'Food', 'Tech', 'G
 const platforms = ['Instagram', 'TikTok', 'YouTube', 'Twitter'];
 
 export default function Discover() {
-  const [lang, setLang] = useState('de');
+  const { lang, setLang } = usePortalLanguage();
   const t = translations[lang];
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
