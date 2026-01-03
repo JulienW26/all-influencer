@@ -21,8 +21,8 @@ const CATEGORIES = {
   rising: { min: 1000000, price: 250, label: 'Rising Star', icon: '⭐' },
 };
 
-// Erlaubte Plattformen
-const PLATFORMS = ['instagram', 'tiktok', 'youtube', 'facebook', 'x', 'twitch'];
+// Erlaubte Plattformen (7 Plattformen)
+const PLATFORMS = ['instagram', 'tiktok', 'youtube', 'facebook', 'x', 'twitch', 'linkedin'];
 
 // Maximale Spots
 const MAX_SPOTS = 333;
