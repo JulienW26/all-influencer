@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { usePortalLanguage } from '../../lib/usePortalLanguage';
 
 const translations = {
   de: {
@@ -51,7 +52,7 @@ const translations = {
 };
 
 export default function ForgotPassword() {
-  const [lang, setLang] = useState('de');
+  const { lang, setLang } = usePortalLanguage();
   const t = translations[lang];
   
   const [email, setEmail] = useState('');
