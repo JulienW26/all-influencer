@@ -5,7 +5,7 @@
  * Features:
  * - 333 exklusive Spots verwalten
  * - Profilbild aus Medien-Bibliothek wählen
- * - 6 Plattformen: Instagram, TikTok, YouTube, Facebook, X, Twitch
+ * - 7 Plattformen: Instagram, TikTok, YouTube, Facebook, X, Twitch, LinkedIn
  * - Automatische Kategorie nach Follower-Zahl
  * - Sortierung nach Follower-Zahl
  */
@@ -14,7 +14,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import AdminLayout from '../../components/admin/AdminLayout';
 
-// Plattform-Icons und Farben
+// Plattform-Icons und Farben (7 Plattformen)
 const PLATFORM_INFO = {
   instagram: { icon: '📸', label: 'Instagram', color: '#E4405F' },
   tiktok: { icon: '🎵', label: 'TikTok', color: '#000000' },
@@ -22,6 +22,7 @@ const PLATFORM_INFO = {
   facebook: { icon: '📘', label: 'Facebook', color: '#1877F2' },
   x: { icon: '✖️', label: 'X', color: '#000000' },
   twitch: { icon: '🎮', label: 'Twitch', color: '#9146FF' },
+  linkedin: { icon: '💼', label: 'LinkedIn', color: '#0A66C2' },
 };
 
 // Kategorie-Styles
@@ -664,7 +665,7 @@ export default function InfluencerManager() {
                     cursor: 'pointer',
                     boxSizing: 'border-box'
                   }}
-                >
+                > 
                   {Object.entries(PLATFORM_INFO).map(([key, info]) => (
                     <option key={key} value={key}>{info.icon} {info.label}</option>
                   ))}
