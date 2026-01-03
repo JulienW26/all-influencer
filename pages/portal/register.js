@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { usePortalLanguage } from '../../lib/usePortalLanguage';
 
 // Übersetzungen
 const translations = {
@@ -170,7 +171,7 @@ const translations = {
 };
 
 export default function PortalRegister() {
-  const [lang, setLang] = useState('de');
+  const { lang, setLang } = usePortalLanguage();
   const t = translations[lang];
 
   const [step, setStep] = useState(1);
