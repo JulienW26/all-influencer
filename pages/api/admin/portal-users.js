@@ -6,6 +6,7 @@
 import { getSession } from '../../../lib/auth';
 import dbConnect from '../../../lib/mongodb';
 import PortalUser from '../../../models/PortalUser';
+import { sendApprovedEmail } from '../../../lib/email';
 
 export default async function handler(req, res) {
   // Admin-Auth prüfen
@@ -76,18 +77,33 @@ export default async function handler(req, res) {
         return res.status(404).json({ error: 'Benutzer nicht gefunden' });
       }
 
+      // Vorherigen Status merken
+      const previousStatus = user.status;
+
       // Status aktualisieren
       if (status) {
-        const oldStatus = user.status;
         user.status = status;
 
         // Bei Freischaltung: approvedAt setzen
-        if (status === 'approved' && oldStatus !== 'approved') {
+        if (status === 'approved' && previousStatus !== 'approved') {
           user.approvedAt = new Date();
         }
       }
 
       await user.save();
+
+      // Approved-E-Mail senden wenn Status auf "approved" geändert wurde
+      if (status === 'approved' && previousStatus !== 'approved') {
+        try {
+          await sendApprovedEmail(user.email, {
+            name: user.firstName || user.name || user.email.split('@')[0]
+          }, user.preferredLanguage || 'de');
+          console.log('✅ Approved-E-Mail gesendet an:', user.email);
+        } catch (emailError) {
+          console.error('Approved-E-Mail Fehler:', emailError);
+          // Nicht kritisch - Status wurde trotzdem geändert
+        }
+      }
 
       return res.status(200).json({ 
         success: true, 
