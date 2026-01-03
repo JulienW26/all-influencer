@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { usePortalLanguage } from '../../lib/usePortalLanguage';
 
 const translations = {
   de: {
@@ -82,7 +83,7 @@ export default function ResetPassword() {
   const router = useRouter();
   const { token, lang: queryLang } = router.query;
   
-  const [lang, setLang] = useState('de');
+  const { lang, setLang } = usePortalLanguage();
   const t = translations[lang];
   
   const [password, setPassword] = useState('');
