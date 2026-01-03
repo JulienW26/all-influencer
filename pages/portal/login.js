@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
+import { usePortalLanguage } from '../../lib/usePortalLanguage';
 
 // Übersetzungen
 const translations = {
@@ -69,7 +70,7 @@ const translations = {
 
 export default function PortalLogin() {
   const router = useRouter();
-  const [lang, setLang] = useState('de');
+  const { lang, setLang } = usePortalLanguage();
   const t = translations[lang];
 
   const [loginMethod, setLoginMethod] = useState('email'); // 'email' oder 'code'
