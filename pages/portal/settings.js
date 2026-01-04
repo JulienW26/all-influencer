@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import PortalLayout from '../../components/portal/PortalLayout';
 import { usePortalLanguage } from '../../lib/usePortalLanguage';
+import { NICHE_CATEGORIES, NICHE_MAX, hasOtherNiche } from '../../lib/niche-categories';
 
 // Übersetzungen
 const translations = {
@@ -42,7 +43,19 @@ const translations = {
     // Messages
     errorPasswordMatch: 'Die Passwörter stimmen nicht überein.',
     errorPasswordLength: 'Das Passwort muss mindestens 8 Zeichen lang sein.',
-    successPasswordChanged: 'Passwort erfolgreich geändert!'
+    successPasswordChanged: 'Passwort erfolgreich geändert!',
+    // NEU: Nischen
+    nichesTitle: 'Deine Nischen',
+    nichesSubtitle: 'Wähle 1-3 Kategorien, die zu deinem Content passen',
+    nicheCustomLabel: 'Eigene Nische',
+    nicheCustomPlaceholder: 'z.B. Automobile, Musik, Kunst...',
+    nicheSaved: 'Nischen erfolgreich gespeichert!',
+    nicheSaveError: 'Fehler beim Speichern der Nischen',
+    saveNiches: 'Nischen speichern',
+    savingNiches: 'Wird gespeichert...',
+    nicheMinError: 'Mindestens 1 Nische erforderlich',
+    nicheCustomRequired: 'Bitte eigene Nische angeben',
+    selected: 'ausgewählt'
   },
   en: {
     pageTitle: 'Settings | ALL INFLUENCER',
@@ -76,7 +89,19 @@ const translations = {
     deleteAccountButton: 'Delete Account',
     errorPasswordMatch: 'Passwords do not match.',
     errorPasswordLength: 'Password must be at least 8 characters long.',
-    successPasswordChanged: 'Password changed successfully!'
+    successPasswordChanged: 'Password changed successfully!',
+    // NEU: Nischen
+    nichesTitle: 'Your Niches',
+    nichesSubtitle: 'Select 1-3 categories that match your content',
+    nicheCustomLabel: 'Custom Niche',
+    nicheCustomPlaceholder: 'e.g. Automotive, Music, Art...',
+    nicheSaved: 'Niches saved successfully!',
+    nicheSaveError: 'Error saving niches',
+    saveNiches: 'Save Niches',
+    savingNiches: 'Saving...',
+    nicheMinError: 'At least 1 niche required',
+    nicheCustomRequired: 'Please enter your custom niche',
+    selected: 'selected'
   },
   es: {
     pageTitle: 'Configuración | ALL INFLUENCER',
@@ -110,7 +135,19 @@ const translations = {
     deleteAccountButton: 'Eliminar cuenta',
     errorPasswordMatch: 'Las contraseñas no coinciden.',
     errorPasswordLength: 'La contraseña debe tener al menos 8 caracteres.',
-    successPasswordChanged: '¡Contraseña cambiada exitosamente!'
+    successPasswordChanged: '¡Contraseña cambiada exitosamente!',
+    // NEU: Nischen
+    nichesTitle: 'Tus Nichos',
+    nichesSubtitle: 'Selecciona 1-3 categorías que coincidan con tu contenido',
+    nicheCustomLabel: 'Nicho Personalizado',
+    nicheCustomPlaceholder: 'ej. Automotriz, Música, Arte...',
+    nicheSaved: '¡Nichos guardados exitosamente!',
+    nicheSaveError: 'Error al guardar los nichos',
+    saveNiches: 'Guardar Nichos',
+    savingNiches: 'Guardando...',
+    nicheMinError: 'Se requiere al menos 1 nicho',
+    nicheCustomRequired: 'Por favor ingresa tu nicho personalizado',
+    selected: 'seleccionados'
   }
 };
 
@@ -133,6 +170,12 @@ export default function Settings() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
+  // NEU: Nischen-State
+  const [nicheCategories, setNicheCategories] = useState([]);
+  const [nicheCustom, setNicheCustom] = useState('');
+  const [savingNiches, setSavingNiches] = useState(false);
+  const [nicheMessage, setNicheMessage] = useState({ type: '', text: '' });
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -143,11 +186,68 @@ export default function Settings() {
       if (res.ok) {
         const data = await res.json();
         setUser(data.user);
+        // NEU: Nischen aus User-Daten laden
+        if (data.user?.nicheCategories) {
+          setNicheCategories(data.user.nicheCategories);
+        }
+        if (data.user?.nicheCustom) {
+          setNicheCustom(data.user.nicheCustom);
+        }
       }
     } catch (error) {
       console.error('Error:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // NEU: Nische togglen
+  const toggleNiche = (nicheId) => {
+    setNicheCategories(prev => {
+      if (prev.includes(nicheId)) {
+        return prev.filter(n => n !== nicheId);
+      } else if (prev.length < NICHE_MAX) {
+        return [...prev, nicheId];
+      }
+      return prev;
+    });
+  };
+
+  // NEU: Nischen speichern
+  const handleSaveNiches = async () => {
+    setNicheMessage({ type: '', text: '' });
+
+    // Validierung
+    if (nicheCategories.length === 0) {
+      setNicheMessage({ type: 'error', text: t.nicheMinError });
+      return;
+    }
+    if (hasOtherNiche(nicheCategories) && !nicheCustom.trim()) {
+      setNicheMessage({ type: 'error', text: t.nicheCustomRequired });
+      return;
+    }
+
+    setSavingNiches(true);
+    try {
+      const res = await fetch('/api/portal/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nicheCategories,
+          nicheCustom: hasOtherNiche(nicheCategories) ? nicheCustom : null
+        })
+      });
+
+      if (res.ok) {
+        setNicheMessage({ type: 'success', text: t.nicheSaved });
+      } else {
+        const data = await res.json();
+        throw new Error(data.error || t.nicheSaveError);
+      }
+    } catch (error) {
+      setNicheMessage({ type: 'error', text: error.message });
+    } finally {
+      setSavingNiches(false);
     }
   };
 
@@ -291,6 +391,76 @@ export default function Settings() {
           </div>
         </div>
 
+        {/* NEU: Nischen-Auswahl (nur für Influencer) */}
+        {user?.userType === 'influencer' && (
+          <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 mb-6">
+            <h2 className="text-lg font-semibold text-white mb-2">{t.nichesTitle}</h2>
+            <p className="text-sm text-gray-400 mb-4">{t.nichesSubtitle}</p>
+            
+            {/* Niche Message */}
+            {nicheMessage.text && (
+              <div className={`mb-4 p-3 rounded-lg text-sm ${
+                nicheMessage.type === 'success' 
+                  ? 'bg-green-500/20 border border-green-500/50 text-green-400'
+                  : 'bg-red-500/20 border border-red-500/50 text-red-400'
+              }`}>
+                {nicheMessage.text}
+              </div>
+            )}
+            
+            {/* Nischen-Buttons */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {NICHE_CATEGORIES.map((niche) => {
+                const isSelected = nicheCategories.includes(niche.id);
+                return (
+                  <button
+                    key={niche.id}
+                    type="button"
+                    onClick={() => toggleNiche(niche.id)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      isSelected
+                        ? 'bg-amber-400 text-black border-2 border-amber-400'
+                        : 'bg-gray-800 text-gray-400 border border-gray-700 hover:border-gray-600 hover:text-white'
+                    }`}
+                  >
+                    {niche.icon} {niche.label[lang] || niche.label.de}
+                  </button>
+                );
+              })}
+            </div>
+            
+            {/* Ausgewählt-Anzeige */}
+            <p className="text-xs text-gray-500 mb-4">
+              {nicheCategories.length}/{NICHE_MAX} {t.selected}
+            </p>
+            
+            {/* Custom-Nische wenn "other" gewählt */}
+            {hasOtherNiche(nicheCategories) && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  {t.nicheCustomLabel} *
+                </label>
+                <input
+                  type="text"
+                  value={nicheCustom}
+                  onChange={(e) => setNicheCustom(e.target.value)}
+                  placeholder={t.nicheCustomPlaceholder}
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-amber-400"
+                />
+              </div>
+            )}
+            
+            {/* Speichern-Button */}
+            <button
+              onClick={handleSaveNiches}
+              disabled={savingNiches}
+              className="px-6 py-3 bg-amber-400 text-black font-semibold rounded-lg hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {savingNiches ? t.savingNiches : t.saveNiches}
+            </button>
+          </div>
+        )}
+
         {/* Change Password mit Auge-Symbolen */}
         <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 mb-6">
           <h2 className="text-lg font-semibold text-white mb-4">{t.changePasswordTitle}</h2>
@@ -416,3 +586,4 @@ export default function Settings() {
     </PortalLayout>
   );
 }
+          
