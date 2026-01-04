@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import dbConnect from '../../../lib/mongodb';
 import PortalUser from '../../../models/PortalUser';
+import { validateNicheSelection, hasOtherNiche } from '../../../lib/niche-categories';
 
 export default async function handler(req, res) {
   if (req.method !== 'PUT') {
@@ -18,18 +19,37 @@ export default async function handler(req, res) {
 
     await dbConnect();
 
-    const { profile } = req.body;
+    const { profile, nicheCategories, nicheCustom } = req.body;
 
-    if (!profile) {
-      return res.status(400).json({ error: 'Profildaten erforderlich' });
+    // NEU: Nischen validieren wenn angegeben
+    if (nicheCategories !== undefined && nicheCategories.length > 0) {
+      const validation = validateNicheSelection(nicheCategories, nicheCustom);
+      if (!validation.valid) {
+        return res.status(400).json({ 
+          error: validation.errors[0]?.de || 'Ungültige Nischen-Auswahl' 
+        });
+      }
+    }
+
+    // Update-Objekt erstellen
+    const updateData = {
+      updatedAt: new Date()
+    };
+
+    // Profil-Daten wenn vorhanden
+    if (profile) {
+      updateData.profile = profile;
+    }
+
+    // NEU: Nischen wenn vorhanden
+    if (nicheCategories !== undefined) {
+      updateData.nicheCategories = nicheCategories;
+      updateData.nicheCustom = hasOtherNiche(nicheCategories) ? (nicheCustom || null) : null;
     }
 
     const updatedUser = await PortalUser.findByIdAndUpdate(
       decoded.userId,
-      { 
-        $set: { profile: profile },
-        updatedAt: new Date()
-      },
+      { $set: updateData },
       { new: true }
     ).select('-password');
 
@@ -45,7 +65,9 @@ export default async function handler(req, res) {
         email: updatedUser.email,
         userType: updatedUser.userType,
         status: updatedUser.status,
-        profile: updatedUser.profile
+        profile: updatedUser.profile,
+        nicheCategories: updatedUser.nicheCategories,
+        nicheCustom: updatedUser.nicheCustom
       }
     });
   } catch (error) {
