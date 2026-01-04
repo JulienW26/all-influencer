@@ -1,21 +1,48 @@
 /**
- * E-Mail Versand Seite
+ * E-Mail Versand Seite V3
+ * Unterstützt kurze und ausführliche Templates
  */
 
 import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { useAdminLanguage } from '../../lib/useAdminLanguage';
 import { getRecipients, getLists } from '../../lib/recipients';
-import { emailTemplates, generateEmailHTML } from '../../lib/email-templates';
+import { 
+  templatesShort, 
+  templatesDetailed, 
+  generateHTML, 
+  replacePlaceholders 
+} from '../../lib/email-templates-v3';
 import { trackSentEmail } from '../../lib/tracking';
 
+// Template-Liste: Kurz (Original) + Ausführlich (Neu)
 const templateList = [
-  { id: 'de-diamond', name: '🇩🇪 Diamond & Platin - Deutsch', lang: 'de', cat: 'diamond' },
-  { id: 'de-gold', name: '🇩🇪 Gold & Rising Star - Deutsch', lang: 'de', cat: 'gold' },
-  { id: 'en-diamond', name: '🇬🇧 Diamond & Platinum - English', lang: 'en', cat: 'diamond' },
-  { id: 'en-gold', name: '🇬🇧 Gold & Rising Star - English', lang: 'en', cat: 'gold' },
-  { id: 'es-diamond', name: '🇪🇸 Diamond & Platino - Español', lang: 'es', cat: 'diamond' },
-  { id: 'es-gold', name: '🇪🇸 Gold & Rising Star - Español', lang: 'es', cat: 'gold' },
+  // Kurze Templates (Original)
+  { id: 'short-de-diamond', name: '⚡ 🇩🇪 Diamond - Kurz', lang: 'de', cat: 'diamond', type: 'short' },
+  { id: 'short-de-platin', name: '⚡ 🇩🇪 Platin - Kurz', lang: 'de', cat: 'platin', type: 'short' },
+  { id: 'short-de-gold', name: '⚡ 🇩🇪 Gold - Kurz', lang: 'de', cat: 'gold', type: 'short' },
+  { id: 'short-de-rising', name: '⚡ 🇩🇪 Rising Star - Kurz', lang: 'de', cat: 'rising', type: 'short' },
+  { id: 'short-en-diamond', name: '⚡ 🇬🇧 Diamond - Short', lang: 'en', cat: 'diamond', type: 'short' },
+  { id: 'short-en-platin', name: '⚡ 🇬🇧 Platinum - Short', lang: 'en', cat: 'platin', type: 'short' },
+  { id: 'short-en-gold', name: '⚡ 🇬🇧 Gold - Short', lang: 'en', cat: 'gold', type: 'short' },
+  { id: 'short-en-rising', name: '⚡ 🇬🇧 Rising Star - Short', lang: 'en', cat: 'rising', type: 'short' },
+  { id: 'short-es-diamond', name: '⚡ 🇪🇸 Diamond - Corto', lang: 'es', cat: 'diamond', type: 'short' },
+  { id: 'short-es-platin', name: '⚡ 🇪🇸 Platino - Corto', lang: 'es', cat: 'platin', type: 'short' },
+  { id: 'short-es-gold', name: '⚡ 🇪🇸 Gold - Corto', lang: 'es', cat: 'gold', type: 'short' },
+  { id: 'short-es-rising', name: '⚡ 🇪🇸 Rising Star - Corto', lang: 'es', cat: 'rising', type: 'short' },
+  // Ausführliche Templates (Neu - Entwurf 1 & 2)
+  { id: 'detailed-de-diamond', name: '📄 🇩🇪 Diamond - Ausführlich (2 Buttons)', lang: 'de', cat: 'diamond', type: 'detailed' },
+  { id: 'detailed-de-platin', name: '📄 🇩🇪 Platin - Ausführlich (2 Buttons)', lang: 'de', cat: 'platin', type: 'detailed' },
+  { id: 'detailed-de-gold', name: '📄 🇩🇪 Gold - Ausführlich (2 Buttons)', lang: 'de', cat: 'gold', type: 'detailed' },
+  { id: 'detailed-de-rising', name: '📄 🇩🇪 Rising Star - Ausführlich (2 Buttons)', lang: 'de', cat: 'rising', type: 'detailed' },
+  { id: 'detailed-en-diamond', name: '📄 🇬🇧 Diamond - Detailed (2 Buttons)', lang: 'en', cat: 'diamond', type: 'detailed' },
+  { id: 'detailed-en-platin', name: '📄 🇬🇧 Platinum - Detailed (2 Buttons)', lang: 'en', cat: 'platin', type: 'detailed' },
+  { id: 'detailed-en-gold', name: '📄 🇬🇧 Gold - Detailed (2 Buttons)', lang: 'en', cat: 'gold', type: 'detailed' },
+  { id: 'detailed-en-rising', name: '📄 🇬🇧 Rising Star - Detailed (2 Buttons)', lang: 'en', cat: 'rising', type: 'detailed' },
+  { id: 'detailed-es-diamond', name: '📄 🇪🇸 Diamond - Detallado (2 Botones)', lang: 'es', cat: 'diamond', type: 'detailed' },
+  { id: 'detailed-es-platin', name: '📄 🇪🇸 Platino - Detallado (2 Botones)', lang: 'es', cat: 'platin', type: 'detailed' },
+  { id: 'detailed-es-gold', name: '📄 🇪🇸 Gold - Detallado (2 Botones)', lang: 'es', cat: 'gold', type: 'detailed' },
+  { id: 'detailed-es-rising', name: '📄 🇪🇸 Rising Star - Detallado (2 Botones)', lang: 'es', cat: 'rising', type: 'detailed' },
 ];
 
 export default function SendPage() {
@@ -46,11 +73,18 @@ export default function SendPage() {
     return true;
   });
 
-  // Template holen
+  // Template holen (V3)
   const getTemplate = (templateId) => {
     const tpl = templateList.find(t => t.id === templateId);
     if (!tpl) return null;
-    return emailTemplates[tpl.lang]?.[tpl.cat] || null;
+    
+    const templates = tpl.type === 'detailed' ? templatesDetailed : templatesShort;
+    return templates[tpl.lang]?.[tpl.cat] || null;
+  };
+
+  // Template-Info holen (für HTML-Generierung)
+  const getTemplateInfo = (templateId) => {
+    return templateList.find(t => t.id === templateId) || null;
   };
 
   // Template-Name holen
@@ -85,12 +119,21 @@ export default function SendPage() {
     }
 
     const template = getTemplate(selectedTemplate);
-    if (!template) return;
+    const templateInfo = getTemplateInfo(selectedTemplate);
+    if (!template || !templateInfo) return;
 
     setSending(true);
     try {
-      const html = generateEmailHTML(template, { NAME: 'Test', SPOT: '1' });
-      const subject = template.subject.replace(/\{\{NAME\}\}/g, 'Test').replace(/\{\{SPOT\}\}/g, '1');
+      // V3: generateHTML mit templateType
+      const html = generateHTML(
+        templateInfo.lang, 
+        templateInfo.cat, 
+        template, 
+        'Test', 
+        '1', 
+        templateInfo.type
+      );
+      const subject = replacePlaceholders(template.subject, 'Test', '1');
 
       const res = await fetch('/api/admin/send', {
         method: 'POST',
@@ -135,7 +178,8 @@ export default function SendPage() {
     }
 
     const template = getTemplate(selectedTemplate);
-    if (!template) return;
+    const templateInfo = getTemplateInfo(selectedTemplate);
+    if (!template || !templateInfo) return;
 
     setSendingBulk(true);
     setProgress({ current: 0, total: selectedRecipients.length });
@@ -152,13 +196,19 @@ export default function SendPage() {
       setProgress({ current: i + 1, total: selectedRecipients.length });
 
       try {
-        const html = generateEmailHTML(template, { 
-          NAME: recipient.firstName || 'Influencer', 
-          SPOT: recipient.spotNumber || '1' 
-        });
-        const subject = template.subject
-          .replace(/\{\{NAME\}\}/g, recipient.firstName || 'Influencer')
-          .replace(/\{\{SPOT\}\}/g, recipient.spotNumber || '1');
+        const recipientName = recipient.firstName || 'Influencer';
+        const recipientSpot = recipient.spotNumber || '1';
+        
+        // V3: generateHTML mit templateType
+        const html = generateHTML(
+          templateInfo.lang, 
+          templateInfo.cat, 
+          template, 
+          recipientName, 
+          recipientSpot, 
+          templateInfo.type
+        );
+        const subject = replacePlaceholders(template.subject, recipientName, recipientSpot);
 
         const res = await fetch('/api/admin/send', {
           method: 'POST',
@@ -244,9 +294,16 @@ export default function SendPage() {
           }}
         >
           <option value="">{txt.selectTemplate || '-- Template wählen --'}</option>
-          {templateList.map(t => (
-            <option key={t.id} value={t.id}>{t.name}</option>
-          ))}
+          <optgroup label="⚡ Kurze Templates (Original)">
+            {templateList.filter(t => t.type === 'short').map(t => (
+              <option key={t.id} value={t.id}>{t.name}</option>
+            ))}
+          </optgroup>
+          <optgroup label="📄 Ausführliche Templates (2 Buttons - LOI + Video)">
+            {templateList.filter(t => t.type === 'detailed').map(t => (
+              <option key={t.id} value={t.id}>{t.name}</option>
+            ))}
+          </optgroup>
         </select>
       </div>
 
@@ -314,7 +371,9 @@ export default function SendPage() {
           }}>
             <option value="all">{txt.allCategories || 'Alle Kategorien'}</option>
             <option value="diamond">💎 Diamond</option>
+            <option value="platin">🏆 Platin</option>
             <option value="gold">🥇 Gold</option>
+            <option value="rising">⭐ Rising Star</option>
           </select>
           <select value={filterLanguage} onChange={(e) => setFilterLanguage(e.target.value)} style={{
             padding: '10px 16px',
