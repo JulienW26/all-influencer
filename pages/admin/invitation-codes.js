@@ -16,6 +16,7 @@ export default function InvitationCodesPage() {
   const [creating, setCreating] = useState(false);
   const [actionLoading, setActionLoading] = useState(null);
   const [confirmDialog, setConfirmDialog] = useState({ show: false, action: null, code: null });
+  const [copiedCode, setCopiedCode] = useState(null); // NEU: Für Copy-Feedback
 
   // Texte
   const txt = {
@@ -181,9 +182,11 @@ export default function InvitationCodesPage() {
     }
   };
 
-  // Code kopieren
+  // Code kopieren mit Feedback
   const copyCode = (code) => {
     navigator.clipboard.writeText(code);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(null), 2000);
   };
 
   const statusColors = {
@@ -322,16 +325,18 @@ export default function InvitationCodesPage() {
                       disabled={actionLoading === code._id}
                       style={{ 
                         padding: '6px 12px', 
-                        backgroundColor: 'rgba(251, 191, 36, 0.1)', 
-                        border: '1px solid rgba(251, 191, 36, 0.3)', 
+                        backgroundColor: copiedCode === code.code ? 'rgba(34, 197, 94, 0.2)' : 'rgba(251, 191, 36, 0.1)', 
+                        border: copiedCode === code.code ? '1px solid rgba(34, 197, 94, 0.3)' : '1px solid rgba(251, 191, 36, 0.3)', 
                         borderRadius: '6px', 
-                        color: '#f59e0b', 
+                        color: copiedCode === code.code ? '#22c55e' : '#f59e0b', 
                         cursor: 'pointer', 
                         fontSize: '12px',
                         opacity: actionLoading === code._id ? 0.5 : 1,
+                        transition: 'all 0.2s ease',
+                        minWidth: '70px',
                       }}
                     >
-                      {t.copy}
+                      {copiedCode === code.code ? t.copied : t.copy}
                     </button>
                     {code.status === 'active' && (
                       <button
