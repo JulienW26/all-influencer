@@ -2,10 +2,11 @@
  * E-Mail Template Generator V3
  * 
  * Features:
- * - Kurze Templates (Original V2)
- * - Ausführliche Templates (NEU: Entwurf 1 & 2)
- * - Alle 3 Sprachen (DE, EN, ES)
- * - Zwei Buttons bei ausführlichen Templates (LOI + Video)
+ * - 24 V3 Templates (12 kurz + 12 ausführlich) in 3 Sprachen
+ * - Direkter Versand über Resend API
+ * - Einladungscode Integration (Dropdown + manuell)
+ * - Live-Vorschau
+ * - Copy HTML für Backup
  */
 
 import { useState, useEffect } from 'react';
@@ -25,12 +26,24 @@ import {
 export default function EmailsPage() {
   const [lang, setLang] = useState('de');
   const [cat, setCat] = useState('diamond');
-  const [templateType, setTemplateType] = useState('short'); // NEU: 'short' oder 'detailed'
+  const [templateType, setTemplateType] = useState('short');
   const [name, setName] = useState('');
   const [spot, setSpot] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [customTexts, setCustomTexts] = useState({});
   const [copied, setCopied] = useState('');
+
+  // NEU: Versand-State
+  const [recipientEmail, setRecipientEmail] = useState('');
+  const [sending, setSending] = useState(false);
+  const [sendStatus, setSendStatus] = useState({ type: '', message: '' });
+
+  // NEU: Einladungscode-State
+  const [invitationCodes, setInvitationCodes] = useState([]);
+  const [selectedCode, setSelectedCode] = useState('');
+  const [manualCode, setManualCode] = useState('');
+  const [codeMode, setCodeMode] = useState('dropdown'); // 'dropdown' oder 'manual'
+  const [loadingCodes, setLoadingCodes] = useState(false);
 
   const u = ui[lang];
   
@@ -54,9 +67,29 @@ export default function EmailsPage() {
   const displayName = name || '[Name]';
   const displaySpot = spot || '[XX]';
 
+  // Aktueller Code (aus Dropdown oder manuell)
+  const currentCode = codeMode === 'dropdown' ? selectedCode : manualCode;
+
   useEffect(() => {
     setCustomTexts({});
   }, [lang, cat, templateType]);
+
+  // NEU: Einladungscodes laden
+  useEffect(() => {
+    loadInvitationCodes();
+  }, []);
+
+  const loadInvitationCodes = async () => {
+    setLoadingCodes(true);
+    try {
+      const res = await fetch('/api/admin/invitation-codes?status=active');
+      const data = await res.json();
+      setInvitationCodes(data.codes || []);
+    } catch (error) {
+      console.error('Error loading codes:', error);
+    }
+    setLoadingCodes(false);
+  };
 
   const useBrevoCodes = () => {
     setName('{{contact.FIRSTNAME}}');
@@ -67,15 +100,33 @@ export default function EmailsPage() {
     setCustomTexts({});
   };
 
+  // Placeholder-Ersetzung mit Code-Unterstützung
+  const replaceAllPlaceholders = (text, nameVal, spotVal, codeVal = '') => {
+    return text
+      .replace(/\{NAME\}/g, nameVal)
+      .replace(/\{SPOT\}/g, spotVal)
+      .replace(/\{CODE\}/g, codeVal)
+      .replace(/\{\{NAME\}\}/g, nameVal)
+      .replace(/\{\{SPOT\}\}/g, spotVal)
+      .replace(/\{\{CODE\}\}/g, codeVal);
+  };
+
   const copyHTML = () => {
-    const html = generateHTML(lang, cat, template, name, spot, templateType);
+    let html = generateHTML(lang, cat, template, name, spot, templateType);
+    // Code-Placeholder ersetzen falls vorhanden
+    if (currentCode) {
+      html = html.replace(/\{CODE\}/g, currentCode).replace(/\{\{CODE\}\}/g, currentCode);
+    }
     navigator.clipboard.writeText(html);
     setCopied('html');
     setTimeout(() => setCopied(''), 2000);
   };
 
   const copyPlainText = () => {
-    const text = generatePlainText(lang, template, name, spot, templateType);
+    let text = generatePlainText(lang, template, name, spot, templateType);
+    if (currentCode) {
+      text = text.replace(/\{CODE\}/g, currentCode).replace(/\{\{CODE\}\}/g, currentCode);
+    }
     navigator.clipboard.writeText(text);
     setCopied('text');
     setTimeout(() => setCopied(''), 2000);
@@ -88,7 +139,10 @@ export default function EmailsPage() {
   };
 
   const downloadHTML = () => {
-    const html = generateHTML(lang, cat, template, name, spot, templateType);
+    let html = generateHTML(lang, cat, template, name, spot, templateType);
+    if (currentCode) {
+      html = html.replace(/\{CODE\}/g, currentCode).replace(/\{\{CODE\}\}/g, currentCode);
+    }
     const blob = new Blob([html], { type: 'text/html' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -96,8 +150,108 @@ export default function EmailsPage() {
     a.click();
   };
 
+  // NEU: E-Mail senden
+  const sendEmail = async () => {
+    if (!recipientEmail || !recipientEmail.includes('@')) {
+      setSendStatus({ type: 'error', message: lang === 'de' ? 'Bitte gültige E-Mail-Adresse eingeben' : 'Please enter a valid email address' });
+      return;
+    }
+
+    setSending(true);
+    setSendStatus({ type: '', message: '' });
+
+    try {
+      let html = generateHTML(lang, cat, template, name || 'Name', spot || '1', templateType);
+      // Code-Placeholder ersetzen
+      if (currentCode) {
+        html = html.replace(/\{CODE\}/g, currentCode).replace(/\{\{CODE\}\}/g, currentCode);
+      }
+
+      const subject = replacePlaceholders(template.subject, name || 'Name', spot || '1');
+
+      const res = await fetch('/api/admin/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: recipientEmail,
+          subject: subject,
+          html: html
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setSendStatus({ 
+          type: 'success', 
+          message: lang === 'de' ? '✅ E-Mail erfolgreich gesendet!' : '✅ Email sent successfully!' 
+        });
+        // Optional: Empfänger-Feld leeren nach erfolgreichem Versand
+        // setRecipientEmail('');
+      } else {
+        setSendStatus({ 
+          type: 'error', 
+          message: data.error || (lang === 'de' ? 'Fehler beim Senden' : 'Error sending email')
+        });
+      }
+    } catch (error) {
+      console.error('Send error:', error);
+      setSendStatus({ 
+        type: 'error', 
+        message: lang === 'de' ? 'Verbindungsfehler' : 'Connection error'
+      });
+    }
+
+    setSending(false);
+    setTimeout(() => setSendStatus({ type: '', message: '' }), 5000);
+  };
+
   const loiUrl = `https://all-influencer.com/?loi=true&lang=${lang}`;
   const videoUrl = `https://all-influencer.com/video/founder-invitation?lang=${lang}`;
+
+  // UI-Texte für neue Features
+  const sendTexts = {
+    de: {
+      recipientLabel: '📧 Empfänger-E-Mail:',
+      recipientPlaceholder: 'z.B. influencer@example.com',
+      codeLabel: '🎟️ Einladungscode (optional):',
+      codeDropdown: 'Aus Liste wählen',
+      codeManual: 'Manuell eingeben',
+      selectCode: '-- Code auswählen --',
+      codePlaceholder: 'z.B. IN-AHJ6-Z3SK-4FE2',
+      sendBtn: '📧 E-Mail senden',
+      sending: 'Sende...',
+      codeHint: 'Der Code wird im Template für {CODE} eingesetzt',
+      refreshCodes: '🔄 Aktualisieren'
+    },
+    en: {
+      recipientLabel: '📧 Recipient Email:',
+      recipientPlaceholder: 'e.g. influencer@example.com',
+      codeLabel: '🎟️ Invitation Code (optional):',
+      codeDropdown: 'Select from list',
+      codeManual: 'Enter manually',
+      selectCode: '-- Select code --',
+      codePlaceholder: 'e.g. IN-AHJ6-Z3SK-4FE2',
+      sendBtn: '📧 Send Email',
+      sending: 'Sending...',
+      codeHint: 'The code replaces {CODE} in the template',
+      refreshCodes: '🔄 Refresh'
+    },
+    es: {
+      recipientLabel: '📧 Email del destinatario:',
+      recipientPlaceholder: 'ej. influencer@example.com',
+      codeLabel: '🎟️ Código de invitación (opcional):',
+      codeDropdown: 'Seleccionar de lista',
+      codeManual: 'Ingresar manualmente',
+      selectCode: '-- Seleccionar código --',
+      codePlaceholder: 'ej. IN-AHJ6-Z3SK-4FE2',
+      sendBtn: '📧 Enviar Email',
+      sending: 'Enviando...',
+      codeHint: 'El código reemplaza {CODE} en la plantilla',
+      refreshCodes: '🔄 Actualizar'
+    }
+  };
+  const st = sendTexts[lang] || sendTexts.en;
 
   // Render Preview für kurze Templates
   const renderShortPreview = () => (
@@ -287,7 +441,7 @@ export default function EmailsPage() {
         </div>
       </div>
 
-      {/* NEU: Template Typ */}
+      {/* Template Typ */}
       <div style={{ marginBottom: '24px' }}>
         <p style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '8px' }}>{u.templateLabel}</p>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -305,7 +459,7 @@ export default function EmailsPage() {
         </div>
         {templateType === 'detailed' && (
           <p style={{ color: '#22c55e', fontSize: '12px', marginTop: '8px' }}>
-            ✨ Ausführliches Template mit zwei Buttons (LOI + Video)
+            ✨ {lang === 'de' ? 'Ausführliches Template mit zwei Buttons (LOI + Video)' : lang === 'en' ? 'Detailed template with two buttons (LOI + Video)' : 'Plantilla detallada con dos botones (LOI + Video)'}
           </p>
         )}
       </div>
@@ -328,6 +482,173 @@ export default function EmailsPage() {
             <label style={{ color: '#9ca3af', fontSize: '14px' }}>{u.brevoLabel}</label>
             <button onClick={useBrevoCodes} style={{ width: '100%', marginTop: '4px', padding: '10px 12px', backgroundColor: '#d97706', border: 'none', borderRadius: '8px', color: '#000', fontWeight: '500', cursor: 'pointer' }}>{u.brevoBtn}</button>
           </div>
+        </div>
+      </div>
+
+      {/* NEU: Versand-Sektion */}
+      <div style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)', borderRadius: '12px', padding: '24px', marginBottom: '24px', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
+        <h3 style={{ color: '#22c55e', fontWeight: '600', marginBottom: '16px', marginTop: 0 }}>
+          🚀 {lang === 'de' ? 'Direktversand' : lang === 'en' ? 'Direct Send' : 'Envío Directo'}
+        </h3>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+          {/* Empfänger E-Mail */}
+          <div>
+            <label style={{ color: '#9ca3af', fontSize: '14px' }}>{st.recipientLabel}</label>
+            <input 
+              type="email" 
+              value={recipientEmail} 
+              onChange={(e) => setRecipientEmail(e.target.value)} 
+              placeholder={st.recipientPlaceholder}
+              style={{ 
+                width: '100%', 
+                marginTop: '4px', 
+                padding: '12px', 
+                backgroundColor: '#1f2937', 
+                border: '1px solid rgba(34, 197, 94, 0.3)', 
+                borderRadius: '8px', 
+                color: '#fff', 
+                boxSizing: 'border-box',
+                fontSize: '14px'
+              }} 
+            />
+          </div>
+
+          {/* Einladungscode */}
+          <div>
+            <label style={{ color: '#9ca3af', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {st.codeLabel}
+              <button 
+                onClick={loadInvitationCodes}
+                style={{ 
+                  padding: '2px 8px', 
+                  fontSize: '11px', 
+                  backgroundColor: 'transparent', 
+                  border: '1px solid rgba(251, 191, 36, 0.3)', 
+                  borderRadius: '4px', 
+                  color: '#f59e0b', 
+                  cursor: 'pointer' 
+                }}
+              >
+                {st.refreshCodes}
+              </button>
+            </label>
+            
+            {/* Toggle zwischen Dropdown und Manual */}
+            <div style={{ display: 'flex', gap: '8px', marginTop: '4px', marginBottom: '8px' }}>
+              <button 
+                onClick={() => setCodeMode('dropdown')}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '12px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: codeMode === 'dropdown' ? '#f59e0b' : '#374151',
+                  color: codeMode === 'dropdown' ? '#000' : '#9ca3af'
+                }}
+              >
+                {st.codeDropdown}
+              </button>
+              <button 
+                onClick={() => setCodeMode('manual')}
+                style={{
+                  padding: '6px 12px',
+                  fontSize: '12px',
+                  borderRadius: '6px',
+                  border: 'none',
+                  cursor: 'pointer',
+                  backgroundColor: codeMode === 'manual' ? '#f59e0b' : '#374151',
+                  color: codeMode === 'manual' ? '#000' : '#9ca3af'
+                }}
+              >
+                {st.codeManual}
+              </button>
+            </div>
+
+            {codeMode === 'dropdown' ? (
+              <select
+                value={selectedCode}
+                onChange={(e) => setSelectedCode(e.target.value)}
+                disabled={loadingCodes}
+                style={{ 
+                  width: '100%', 
+                  padding: '12px', 
+                  backgroundColor: '#1f2937', 
+                  border: '1px solid rgba(251, 191, 36, 0.3)', 
+                  borderRadius: '8px', 
+                  color: '#fff', 
+                  boxSizing: 'border-box',
+                  fontSize: '14px'
+                }}
+              >
+                <option value="">{st.selectCode}</option>
+                {invitationCodes.map(code => (
+                  <option key={code._id} value={code.code}>
+                    {code.code} ({code.type} - {code.category || 'n/a'})
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input 
+                type="text"
+                value={manualCode}
+                onChange={(e) => setManualCode(e.target.value.toUpperCase())}
+                placeholder={st.codePlaceholder}
+                style={{ 
+                  width: '100%', 
+                  padding: '12px', 
+                  backgroundColor: '#1f2937', 
+                  border: '1px solid rgba(251, 191, 36, 0.3)', 
+                  borderRadius: '8px', 
+                  color: '#fff', 
+                  boxSizing: 'border-box',
+                  fontSize: '14px',
+                  fontFamily: 'monospace'
+                }}
+              />
+            )}
+            <p style={{ color: '#6b7280', fontSize: '11px', marginTop: '4px' }}>{st.codeHint}</p>
+          </div>
+        </div>
+
+        {/* Senden Button */}
+        <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+          <button 
+            onClick={sendEmail}
+            disabled={sending || !recipientEmail}
+            style={{
+              padding: '14px 32px',
+              background: (sending || !recipientEmail) ? '#4b5563' : 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+              border: 'none',
+              borderRadius: '10px',
+              color: '#fff',
+              fontWeight: 'bold',
+              fontSize: '15px',
+              cursor: (sending || !recipientEmail) ? 'not-allowed' : 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            {sending ? (
+              <>⏳ {st.sending}</>
+            ) : (
+              <>{st.sendBtn}</>
+            )}
+          </button>
+
+          {sendStatus.message && (
+            <span style={{ 
+              padding: '10px 16px',
+              borderRadius: '8px',
+              fontSize: '14px',
+              backgroundColor: sendStatus.type === 'success' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+              color: sendStatus.type === 'success' ? '#22c55e' : '#ef4444'
+            }}>
+              {sendStatus.message}
+            </span>
+          )}
         </div>
       </div>
 
@@ -467,7 +788,7 @@ export default function EmailsPage() {
               <p style={{ color: '#d1d5db', fontSize: '13px', fontStyle: 'italic', margin: 0 }}>{template.ps}</p>
             </div>
           </div>
-          
+
           {/* Footer */}
           <div style={{ backgroundColor: '#000', padding: '24px', textAlign: 'center', borderTop: '1px solid rgba(251, 191, 36, 0.2)' }}>
             <p style={{ color: '#6b7280', fontSize: '11px', margin: 0 }}>© 2025 ALL INFLUENCER. All rights reserved.</p>
