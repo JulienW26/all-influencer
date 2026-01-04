@@ -59,6 +59,11 @@ export default function Sidebar({ onLogout }) {
       icon: '📧',
     },
     {
+      href: '/admin/template-builder',
+      label: txt.templateBuilder || 'Template-Builder',
+      icon: '🎨',
+    },
+    {
       href: '/admin/recipients',
       label: txt.recipients || 'Empfänger',
       icon: '👥',
