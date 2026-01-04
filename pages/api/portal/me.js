@@ -31,6 +31,16 @@ export default async function handler(req, res) {
         userType: user.userType,
         status: user.status,
         profile: user.profile || {},
+        // NEU: Nischen-Daten
+        nicheCategories: user.nicheCategories || [],
+        nicheCustom: user.nicheCustom || null,
+        additionalPlatforms: user.additionalPlatforms || [],
+        // NEU: Spot & Founder Status
+        hasSpot: user.hasSpot || false,
+        spotNumber: user.spotNumber || null,
+        isFounder: user.isFounder || false,
+        founderSince: user.founderSince || null,
+        // Timestamps
         createdAt: user.createdAt
       }
     });
