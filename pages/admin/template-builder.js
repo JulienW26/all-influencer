@@ -69,7 +69,22 @@ const ui = {
     },
     remaining: 'verbleibend',
     copyHtml: '📋 HTML kopieren',
-    copied: '✅ Kopiert!'
+    copied: '✅ Kopiert!',
+    // NEU: Versand & Code
+    recipientLabel: '📧 Empfänger-E-Mail:',
+    recipientPlaceholder: 'z.B. influencer@example.com',
+    codeLabel: '🎟️ Einladungscode (optional):',
+    codeDropdown: 'Aus Liste',
+    codeManual: 'Manuell',
+    selectCode: '-- Code wählen --',
+    codePlaceholder: 'z.B. IN-AHJ6-Z3SK-4FE2',
+    sendBtn: '📧 Senden',
+    sending: 'Sende...',
+    refreshCodes: '🔄',
+    personalizeTitle: '✏️ Personalisierung:',
+    nameLabel: 'Name:',
+    spotLabel: 'Spot-Nr:',
+    companyLabel: 'Firma:'
   },
   en: {
     title: 'Email Template Builder',
@@ -125,7 +140,22 @@ const ui = {
     },
     remaining: 'remaining',
     copyHtml: '📋 Copy HTML',
-    copied: '✅ Copied!'
+    copied: '✅ Copied!',
+    // NEU: Versand & Code
+    recipientLabel: '📧 Recipient Email:',
+    recipientPlaceholder: 'e.g. influencer@example.com',
+    codeLabel: '🎟️ Invitation Code (optional):',
+    codeDropdown: 'From list',
+    codeManual: 'Manual',
+    selectCode: '-- Select code --',
+    codePlaceholder: 'e.g. IN-AHJ6-Z3SK-4FE2',
+    sendBtn: '📧 Send',
+    sending: 'Sending...',
+    refreshCodes: '🔄',
+    personalizeTitle: '✏️ Personalization:',
+    nameLabel: 'Name:',
+    spotLabel: 'Spot #:',
+    companyLabel: 'Company:'
   },
   es: {
     title: 'Constructor de Plantillas',
@@ -181,7 +211,22 @@ const ui = {
     },
     remaining: 'restantes',
     copyHtml: '📋 Copiar HTML',
-    copied: '✅ ¡Copiado!'
+    copied: '✅ ¡Copiado!',
+    // NEU: Versand & Code
+    recipientLabel: '📧 Email del destinatario:',
+    recipientPlaceholder: 'ej. influencer@example.com',
+    codeLabel: '🎟️ Código de invitación (opcional):',
+    codeDropdown: 'De lista',
+    codeManual: 'Manual',
+    selectCode: '-- Seleccionar --',
+    codePlaceholder: 'ej. IN-AHJ6-Z3SK-4FE2',
+    sendBtn: '📧 Enviar',
+    sending: 'Enviando...',
+    refreshCodes: '🔄',
+    personalizeTitle: '✏️ Personalización:',
+    nameLabel: 'Nombre:',
+    spotLabel: 'Spot #:',
+    companyLabel: 'Empresa:'
   }
 };
 
@@ -252,12 +297,37 @@ export default function TemplateBuilderPage() {
   const [closing, setClosing] = useState('Mit freundlichen Grüßen,');
   const [ps, setPs] = useState('');
 
+  // NEU: Versand-State
+  const [recipientEmail, setRecipientEmail] = useState('');
+  const [sending, setSending] = useState(false);
+  const [sendStatus, setSendStatus] = useState({ type: '', message: '' });
+
+  // NEU: Einladungscode-State
+  const [invitationCodes, setInvitationCodes] = useState([]);
+  const [selectedCode, setSelectedCode] = useState('');
+  const [manualCode, setManualCode] = useState('');
+  const [codeMode, setCodeMode] = useState('dropdown');
+  const [loadingCodes, setLoadingCodes] = useState(false);
+
+  // NEU: Personalisierungs-State
+  const [personName, setPersonName] = useState('');
+  const [personSpot, setPersonSpot] = useState('');
+  const [personCompany, setPersonCompany] = useState('');
+
   const u = ui[lang];
+  
+  // Aktueller Code (aus Dropdown oder manuell)
+  const currentCode = codeMode === 'dropdown' ? selectedCode : manualCode;
 
   // Templates laden
   useEffect(() => {
     loadTemplates();
   }, [lang]);
+
+  // NEU: Einladungscodes laden
+  useEffect(() => {
+    loadInvitationCodes();
+  }, []);
 
   const loadTemplates = async () => {
     setLoading(true);
@@ -269,6 +339,81 @@ export default function TemplateBuilderPage() {
       console.error('Error loading templates:', error);
     }
     setLoading(false);
+  };
+
+  // NEU: Einladungscodes laden
+  const loadInvitationCodes = async () => {
+    setLoadingCodes(true);
+    try {
+      const res = await fetch('/api/admin/invitation-codes?status=active');
+      const data = await res.json();
+      setInvitationCodes(data.codes || []);
+    } catch (error) {
+      console.error('Error loading codes:', error);
+    }
+    setLoadingCodes(false);
+  };
+
+  // NEU: Placeholder-Ersetzung
+  const replaceAllPlaceholders = (text, nameVal = '', spotVal = '', codeVal = '', companyVal = '') => {
+    return text
+      .replace(/\{\{NAME\}\}/g, nameVal || '{{NAME}}')
+      .replace(/\{\{SPOT\}\}/g, spotVal || '{{SPOT}}')
+      .replace(/\{\{CODE\}\}/g, codeVal || '{{CODE}}')
+      .replace(/\{\{COMPANY\}\}/g, companyVal || '{{COMPANY}}')
+      .replace(/\{\{LANG\}\}/g, lang);
+  };
+
+  // NEU: E-Mail senden
+  const sendEmail = async () => {
+    if (!recipientEmail || !recipientEmail.includes('@')) {
+      setSendStatus({ type: 'error', message: lang === 'de' ? 'Bitte gültige E-Mail-Adresse eingeben' : 'Please enter a valid email address' });
+      return;
+    }
+
+    setSending(true);
+    setSendStatus({ type: '', message: '' });
+
+    try {
+      let html = generateHTML();
+      // Placeholders ersetzen
+      html = replaceAllPlaceholders(html, personName, personSpot, currentCode, personCompany);
+
+      const emailSubject = replaceAllPlaceholders(subject, personName, personSpot, currentCode, personCompany);
+
+      const res = await fetch('/api/admin/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: recipientEmail,
+          subject: emailSubject || 'All-Influencer.com',
+          html: html
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setSendStatus({ 
+          type: 'success', 
+          message: lang === 'de' ? '✅ E-Mail erfolgreich gesendet!' : '✅ Email sent successfully!' 
+        });
+      } else {
+        setSendStatus({ 
+          type: 'error', 
+          message: data.error || (lang === 'de' ? 'Fehler beim Senden' : 'Error sending email')
+        });
+      }
+    } catch (error) {
+      console.error('Send error:', error);
+      setSendStatus({ 
+        type: 'error', 
+        message: lang === 'de' ? 'Verbindungsfehler' : 'Connection error'
+      });
+    }
+
+    setSending(false);
+    setTimeout(() => setSendStatus({ type: '', message: '' }), 5000);
   };
 
   // Neues Template starten
@@ -759,7 +904,7 @@ export default function TemplateBuilderPage() {
                     placeholder={u.customButtonText}
                     style={{ ...inputStyle, marginBottom: '8px' }}
                   />
-                  
+
                   {btn.type === 'custom' && (
                     <input 
                       type="text"
@@ -803,6 +948,101 @@ export default function TemplateBuilderPage() {
                 rows={2}
                 style={{ ...inputStyle, resize: 'vertical' }}
               />
+            </div>
+
+            {/* NEU: Personalisierung */}
+            <div style={{ backgroundColor: 'rgba(251, 191, 36, 0.1)', borderRadius: '12px', padding: '16px', marginBottom: '16px', border: '1px solid rgba(251, 191, 36, 0.3)' }}>
+              <label style={{ color: '#fbbf24', fontSize: '14px', display: 'block', marginBottom: '12px', fontWeight: '600' }}>{u.personalizeTitle}</label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '12px' }}>
+                <div>
+                  <label style={{ color: '#9ca3af', fontSize: '12px' }}>{u.nameLabel}</label>
+                  <input 
+                    type="text" 
+                    value={personName} 
+                    onChange={(e) => setPersonName(e.target.value)} 
+                    placeholder="Max"
+                    style={{ ...inputStyle, padding: '8px 10px', fontSize: '13px' }} 
+                  />
+                </div>
+                <div>
+                  <label style={{ color: '#9ca3af', fontSize: '12px' }}>{u.spotLabel}</label>
+                  <input 
+                    type="text" 
+                    value={personSpot} 
+                    onChange={(e) => setPersonSpot(e.target.value)} 
+                    placeholder="42"
+                    style={{ ...inputStyle, padding: '8px 10px', fontSize: '13px' }} 
+                  />
+                </div>
+                <div>
+                  <label style={{ color: '#9ca3af', fontSize: '12px' }}>{u.companyLabel}</label>
+                  <input 
+                    type="text" 
+                    value={personCompany} 
+                    onChange={(e) => setPersonCompany(e.target.value)} 
+                    placeholder="Firma"
+                    style={{ ...inputStyle, padding: '8px 10px', fontSize: '13px' }} 
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* NEU: Versand-Sektion */}
+            <div style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)', borderRadius: '12px', padding: '16px', marginBottom: '16px', border: '1px solid rgba(34, 197, 94, 0.3)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                {/* Empfänger */}
+                <div>
+                  <label style={{ color: '#9ca3af', fontSize: '12px' }}>{u.recipientLabel}</label>
+                  <input 
+                    type="email" 
+                    value={recipientEmail} 
+                    onChange={(e) => setRecipientEmail(e.target.value)} 
+                    placeholder={u.recipientPlaceholder}
+                    style={{ ...inputStyle, padding: '10px', fontSize: '13px', borderColor: 'rgba(34, 197, 94, 0.3)' }} 
+                  />
+                </div>
+                
+                {/* Code */}
+                <div>
+                  <label style={{ color: '#9ca3af', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    {u.codeLabel}
+                    <button onClick={loadInvitationCodes} style={{ padding: '2px 6px', fontSize: '10px', backgroundColor: 'transparent', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: '4px', color: '#f59e0b', cursor: 'pointer' }}>{u.refreshCodes}</button>
+                  </label>
+                  <div style={{ display: 'flex', gap: '4px', marginBottom: '6px' }}>
+                    <button onClick={() => setCodeMode('dropdown')} style={{ padding: '4px 8px', fontSize: '11px', borderRadius: '4px', border: 'none', cursor: 'pointer', backgroundColor: codeMode === 'dropdown' ? '#f59e0b' : '#374151', color: codeMode === 'dropdown' ? '#000' : '#9ca3af' }}>{u.codeDropdown}</button>
+                    <button onClick={() => setCodeMode('manual')} style={{ padding: '4px 8px', fontSize: '11px', borderRadius: '4px', border: 'none', cursor: 'pointer', backgroundColor: codeMode === 'manual' ? '#f59e0b' : '#374151', color: codeMode === 'manual' ? '#000' : '#9ca3af' }}>{u.codeManual}</button>
+                  </div>
+                  {codeMode === 'dropdown' ? (
+                    <select value={selectedCode} onChange={(e) => setSelectedCode(e.target.value)} style={{ ...inputStyle, padding: '10px', fontSize: '13px' }}>
+                      <option value="">{u.selectCode}</option>
+                      {invitationCodes.map(code => (
+                        <option key={code._id} value={code.code}>{code.code}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input type="text" value={manualCode} onChange={(e) => setManualCode(e.target.value.toUpperCase())} placeholder={u.codePlaceholder} style={{ ...inputStyle, padding: '10px', fontSize: '13px', fontFamily: 'monospace' }} />
+                  )}
+                </div>
+              </div>
+              
+              {/* Senden Button */}
+              <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <button onClick={sendEmail} disabled={sending || !recipientEmail} style={{
+                  padding: '12px 24px',
+                  background: (sending || !recipientEmail) ? '#4b5563' : 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                  border: 'none',
+                  borderRadius: '8px',
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  fontSize: '14px',
+                  cursor: (sending || !recipientEmail) ? 'not-allowed' : 'pointer',
+                }}>
+                  {sending ? u.sending : u.sendBtn}
+                </button>
+                {sendStatus.message && (
+                  <span style={{ fontSize: '13px', padding: '6px 12px', borderRadius: '6px', backgroundColor: sendStatus.type === 'success' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)', color: sendStatus.type === 'success' ? '#22c55e' : '#ef4444' }}>{sendStatus.message}</span>
+                )}
+              </div>
             </div>
 
             {/* Aktionen */}
@@ -874,15 +1114,42 @@ export default function TemplateBuilderPage() {
                   <div style={{ textAlign: 'center', margin: '20px 0' }}>
                     {buttons.map(btn => (
                       <div key={btn.id} style={{ marginBottom: '10px' }}>
-                        <span style={{
-                          display: 'inline-block',
-                          background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                          color: '#000',
-                          fontWeight: 'bold',
-                          padding: '12px 32px',
-                          borderRadius: '8px',
-                          fontSize: '13px'
-                        }}>{btn.text || 'Button'}</span>
+                        {/* NEU: Code-Anzeige für invite_code Button */}
+                        {btn.type === 'invite_code' && currentCode && (
+                          <div style={{
+                            display: 'inline-block',
+                            backgroundColor: 'rgba(251, 191, 36, 0.15)',
+                            border: '1px dashed rgba(251, 191, 36, 0.5)',
+                            borderRadius: '8px',
+                            padding: '10px 20px',
+                            marginBottom: '8px',
+                          }}>
+                            <p style={{ color: '#9ca3af', fontSize: '11px', margin: '0 0 4px 0' }}>
+                              {lang === 'de' ? 'Dein Code:' : lang === 'en' ? 'Your Code:' : 'Tu Código:'}
+                            </p>
+                            <p style={{ 
+                              color: '#fbbf24', 
+                              fontWeight: 'bold', 
+                              fontSize: '14px', 
+                              margin: 0,
+                              fontFamily: 'monospace',
+                              letterSpacing: '1px'
+                            }}>
+                              {currentCode}
+                            </p>
+                          </div>
+                        )}
+                        <div>
+                          <span style={{
+                            display: 'inline-block',
+                            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+                            color: '#000',
+                            fontWeight: 'bold',
+                            padding: '12px 32px',
+                            borderRadius: '8px',
+                            fontSize: '13px'
+                          }}>{btn.text || 'Button'}</span>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -954,3 +1221,4 @@ export default function TemplateBuilderPage() {
     </AdminLayout>
   );
 }
+                                                                       
