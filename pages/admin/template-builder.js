@@ -743,7 +743,7 @@ export default function TemplateBuilderPage() {
                 <div key={btn.id} style={{ 
                   backgroundColor: 'rgba(251, 191, 36, 0.1)', 
                   borderRadius: '8px', 
-                  padding: '12px',     
+                  padding: '12px', 
                   marginBottom: '8px',
                   border: '1px solid rgba(251, 191, 36, 0.3)'
                 }}>
@@ -783,7 +783,7 @@ export default function TemplateBuilderPage() {
               )}
             </div>
 
-            {/* Abschluss */}                
+            {/* Abschluss */}
             <div style={{ marginBottom: '16px' }}>
               <label style={{ color: '#9ca3af', fontSize: '14px', display: 'block', marginBottom: '4px' }}>{u.closing}</label>
               <input 
