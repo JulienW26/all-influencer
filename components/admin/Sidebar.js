@@ -69,11 +69,6 @@ export default function Sidebar({ onLogout }) {
       icon: '👥',
     },
     {
-      href: '/admin/send',
-      label: txt.send || 'Versand',
-      icon: '🚀',
-    },
-    {
       href: '/admin/tracking',
       label: txt.tracking || 'Tracking',
       icon: '📈',
