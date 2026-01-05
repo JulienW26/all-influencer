@@ -104,6 +104,48 @@ const PortalUserSchema = new mongoose.Schema({
     type: Date
   },
   
+  // === Nischen-Kategorien (NEU) ===
+  nicheCategories: {
+    type: [String],
+    default: [],
+    validate: {
+      validator: function(v) {
+        return v.length <= 3;
+      },
+      message: 'Maximal 3 Nischen erlaubt'
+    }
+  },
+  nicheCustom: {
+    type: String,
+    trim: true
+  },
+  
+  // === Zusätzliche Plattformen (NEU) ===
+  additionalPlatforms: {
+    type: [{
+      platform: String,
+      link: String,
+      followers: Number
+    }],
+    default: [],
+    validate: {
+      validator: function(v) {
+        return v.length <= 2;
+      },
+      message: 'Maximal 2 zusätzliche Plattformen erlaubt'
+    }
+  },
+  
+  // === Spot-System (NEU) ===
+  hasSpot: {
+    type: Boolean,
+    default: false
+  },
+  spotNumber: {
+    type: Number,
+    default: null
+  },
+  
   // === Passwort-Reset ===
   resetPasswordToken: {
     type: String,
