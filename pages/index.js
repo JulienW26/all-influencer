@@ -1165,4 +1165,354 @@ const GoldenClientsSection = () => {
 // ============================================================================
 
 const Footer = () => {
+  const { config } = useConfig();
+  const { t } = useLanguage();
+  const { openModal } = useModal();
+
+    const socialIcons = { instagram: <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>, youtube: <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>, x: <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>, facebook: <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>, tiktok: <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/> };
+
+  return (  
+      <footer className="bg-black border-t border-white/10 py-10 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex items-center justify-center gap-3 mb-6"><div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center font-bold text-black text-sm">AI</div><div><div className="font-bold text-lg">{config.site.name}</div><div className="text-xs text-gray-500">{config.site.tagline}</div></div></div>
+        <div className="flex justify-center gap-4 mb-8">{Object.entries(config.socialLinks).map(([platform, url]) => <a key={platform} href={url || '#'} target="_blank" rel="noopener noreferrer" className={`w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-amber-400/20 transition-colors ${!url && 'opacity-30 pointer-events-none'}`}><svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">{socialIcons[platform]}</svg></a>)}</div>
+        <div className="text-center mb-6"><h4 className="text-sm font-semibold mb-3">Quick Links</h4><nav className="flex flex-wrap justify-center gap-6 text-sm"><button onClick={() => openModal('about')} className="text-gray-400 hover:text-white">{t.aboutUs}</button><button onClick={() => openModal('contact')} className="text-gray-400 hover:text-white">{t.contact}</button><button onClick={() => openModal('work')} className="text-gray-400 hover:text-white">{t.workWithUs}</button></nav></div>
+        <nav className="flex flex-wrap justify-center gap-6 mb-6 text-sm"><button onClick={() => openModal('privacy')} className="text-gray-400 hover:text-white">{t.privacy}</button><button onClick={() => openModal('terms')} className="text-gray-400 hover:text-white">{t.terms}</button><button onClick={() => openModal('imprint')} className="text-gray-400 hover:text-white">{t.imprint}</button></nav>
+        <p className="text-center text-gray-600 text-xs">© {new Date().getFullYear()} {config.site.name}</p>
+      </div>
+    </footer>
+  );
+};
+
+// ============================================================================
+// FOOTER MODAL (MIT INTERAKTIVEN FORMULAREN)
+// ============================================================================
+
+    const FooterModal = ({ type, onClose }) => {
+  const { config } = useConfig();
+  const { lang, t } = useLanguage();
+  const [sending, setSending] = useState(false);
+  const [status, setStatus] = useState(null);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '', position: '', motivation: '' });
   
+  const titles = { about: t.aboutUs, contact: t.contact, work: t.workWithUs, privacy: t.privacy, terms: t.terms, imprint: t.imprint };
+  
+  const handleContactSubmit = async (e) => {
+      e.preventDefault();
+    setSending(true);
+    setStatus(null);
+    const result = await sendEmail('contact', { name: formData.name, email: formData.email, message: formData.message });
+    setSending(false);
+    if (result.success) { setStatus('success'); setTimeout(() => onClose(), 1500); }
+    else setStatus('error');
+  };
+  
+  const handleWorkSubmit = async (e) => {
+        e.preventDefault();
+    setSending(true);
+    setStatus(null);
+    const result = await sendEmail('application', { name: formData.name, email: formData.email, position: formData.position, motivation: formData.motivation });
+    setSending(false);
+    if (result.success) { setStatus('success'); setTimeout(() => onClose(), 1500); }
+    else setStatus('error');
+  };
+  
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-gray-900 rounded-2xl p-6 max-w-lg w-full max-h-[85vh] overflow-y-auto border border-white/10" onClick={e => e.stopPropagation()}>
+        <div className="flex justify-between items-center mb-4">
+          {type === 'about' ? <div className="flex items-center gap-3"><div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-lg flex items-center justify-center font-bold text-black text-sm">AI</div><h2 className="text-lg font-bold text-white">{titles[type]}</h2></div> : <h2 className="text-lg font-bold text-white">{titles[type]}</h2>}
+          <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg text-white"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg></button>
+        </div>
+
+             {type === 'about' && <div>{(config.aboutUs?.[lang]?.paragraphs || []).map((p, i) => <p key={i} className="text-gray-300 mb-4">{p}</p>)}<h3 className="font-semibold text-white mt-6 mb-4">{t.ourCategories}</h3><div className="grid grid-cols-2 gap-3">{Object.entries(config.categories).map(([key, cat]) => { const names = { diamond: { de: 'Diamond', en: 'Diamond', es: 'Diamante' }, platinum: { de: 'Platin', en: 'Platinum', es: 'Platino' }, gold: { de: 'Gold', en: 'Gold', es: 'Oro' }, risingStar: { de: 'Rising Star', en: 'Rising Star', es: 'Rising Star' } }; return <div key={key} className={`p-4 rounded-xl bg-gradient-to-br ${cat.gradient}`}><span className="text-2xl">{cat.icon}</span><h4 className="font-semibold text-white mt-2">{names[key][lang]}</h4><p className="text-white/80 text-xs">{t.minFollowers}: {formatFollowers(cat.minFollowers)}</p><p className="text-white/80 text-xs">{formatPrice(cat.price)}{t.perMonth}</p></div>; })}</div></div>}
+        
+        {type === 'imprint' && <pre className="text-gray-300 whitespace-pre-wrap font-sans">{config.legalTexts?.imprint?.[lang] || `${config.impressum.name}\n${config.impressum.street}\n${config.impressum.city}\n\nTel: ${config.impressum.mobile}\nE-Mail: ${config.impressum.email}`}</pre>}
+        
+{(type === 'privacy' || type === 'terms') && (
+  <div 
+    className="text-gray-300 leading-relaxed prose prose-invert prose-sm max-w-none prose-headings:text-amber-400 prose-strong:text-white prose-a:text-amber-400"
+    dangerouslySetInnerHTML={{ 
+      __html: marked.parse(config.legalTexts?.[type]?.[lang] || (lang === 'de' ? 'Dieser Bereich kann vom Administrator bearbeitet werden.' : lang === 'en' ? 'This section can be edited by the administrator.' : 'Esta sección puede ser editada por el administrador.'))
+    }}
+  />
+)}
+        
+        {type === 'contact' && (
+          <form className="space-y-4" onSubmit={handleContactSubmit}>
+            <input type="text" placeholder={t.name} required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none text-white " />
+            <input type="email" placeholder={t.email} required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none text-white" />
+            <textarea placeholder={t.message} rows={4} required value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none resize-none text-white" />
+            <button type="submit" disabled={sending} className={`w-full py-3 rounded-lg font-semibold transition-colors ${sending ? 'bg-gray-600 text-gray-400' : status === 'success' ? 'bg-green-500 text-white' : 'bg-amber-400 hover:bg-amber-500 text-black'}`}>
+              {sending ? t.sending : status === 'success' ? t.sent : t.send}
+            </button>
+            {status === 'error' && <p className="text-red-400 text-center text-sm">{t.error}</p>}
+          </form>
+               )}
+        
+        {type === 'work' && (
+          <form className="space-y-4" onSubmit={handleWorkSubmit}>
+            <input type="text" placeholder={t.name} required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none text-white" />
+            <input type="email" placeholder={t.email} required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none text-white" />
+            <select required value={formData.position} onChange={e => setFormData({...formData, position: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none text-white">
+              <option value="">{t.selectPosition}</option>
+              <option value={t.marketing}>{t.marketing}</option>
+              <option value={t.technology}>{t.technology}</option>
+              <option value={t.content}>{t.content}</option>
+              <option value={t.sales}>{t.sales}</option>
+              <option value={t.other}>{t.other}</option>
+            </select>
+                      <textarea placeholder={t.motivation} rows={3} required value={formData.motivation} onChange={e => setFormData({...formData, motivation: e.target.value})} className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-amber-400 focus:outline-none resize-none text-white" />
+            <button type="submit" disabled={sending} className={`w-full py-3 rounded-lg font-semibold transition-colors ${sending ? 'bg-gray-600 text-gray-400' : status === 'success' ? 'bg-green-500 text-white' : 'bg-amber-400 hover:bg-amber-500 text-black'}`}>
+              {sending ? t.sending : status === 'success' ? t.sent : t.submitApplication}
+            </button>
+            {status === 'error' && <p className="text-red-400 text-center text-sm">{t.error}</p>}
+          </form>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
+// MAIN APP
+// ============================================================================
+
+const App = () => {
+  const { config, loading } = useConfig();
+const generateSpots = (category) => {
+    const realInfluencers = config.influencerData?.[category] || [];
+    const count = config.categories[category]?.spots || 3;
+    const spots = [];
+    for (let i = 0; i < count; i++) {
+      if (realInfluencers[i]) {
+        spots.push({ ...realInfluencers[i], rank: i + 1 });
+      } else {
+        spots.push({ id: `${category}-${i + 1}`, rank: i + 1, name: null, followers: null, image: null, booked: false, bookedMonths: [] });
+      }
+    }
+    return spots;
+  };
+  
+  if (loading) return <div className="min-h-screen bg-black flex items-center justify-center"><div className="w-8 h-8 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" /></div>;
+  
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-white">
+      <Header /><HeroSection /><MarqueeBanner />
+      <main><CategoryRow category="diamond" spots={generateSpots('diamond')} /><CategoryRow category="platinum" spots={generateSpots('platinum')} /><CategoryRow category="gold" spots={generateSpots('gold')} /><CategoryRow category="risingStar" spots={generateSpots('risingStar')} /><GoldenClientsSection /><FAQSection /></main>
+      <Footer />
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');.font-serif{font-family:'Playfair Display',serif;}body{font-family:'Inter',sans-serif;}@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}.animate-marquee{animation:marquee linear infinite;}@keyframes slideIn{from{transform:translateX(100%);}to{transform:translateX(0);}}.animate-slideIn{animation:slideIn 0.3s ease-out;}`}</style>
+    </div>
+  );
+};
+
+// ============================================================================
+// MODAL PROVIDER
+// ============================================================================
+
+const ModalProvider = ({ children }) => {
+  const { t } = useLanguage();
+  const [footerModal, setFooterModal] = useState(null);
+  const [calendarModal, setCalendarModal] = useState(null);
+  const [invitationModal, setInvitationModal] = useState(null);
+  const [proofModal, setProofModal] = useState(null);
+  
+  const openModal = useCallback(type => setFooterModal(type), []);
+  const closeModal = useCallback(() => setFooterModal(null), []);
+  const openCalendar = useCallback((spot, category) => setCalendarModal({ spot, category }), []);
+  const closeCalendar = useCallback(() => setCalendarModal(null), []);
+  
+  const handleBook = useCallback((months) => {
+    const currentCalendar = calendarModal;
+    setCalendarModal(null);
+    setProofModal({ category: currentCalendar.category, spot: currentCalendar.spot });
+  }, [calendarModal]);
+
+    const handleInvitationCode = useCallback(() => {
+    if (calendarModal) {
+      const currentCalendar = calendarModal;
+      setCalendarModal(null);
+      setInvitationModal({ 
+        type: 'influencer', 
+        data: { category: currentCalendar.category, rank: currentCalendar.spot.rank },
+        onSuccess: () => {
+          setInvitationModal(null);
+          setProofModal({ category: currentCalendar.category, spot: currentCalendar.spot });
+        }
+      });
+    }
+  }, [calendarModal]);
+  
+  return (
+       <ModalContext.Provider value={{ openModal, closeModal, openCalendar, closeCalendar }}>
+      {children}
+      {footerModal && <FooterModal type={footerModal} onClose={closeModal} />}
+      {calendarModal && <CalendarModal spot={calendarModal.spot} category={calendarModal.category} onClose={closeCalendar} onBook={handleBook} onInvitationCode={handleInvitationCode} />}
+      {invitationModal && <InvitationCodeModal type={invitationModal.type} data={invitationModal.data} onClose={() => setInvitationModal(null)} onSuccess={invitationModal.onSuccess} />}
+      {proofModal && <ProofModal category={proofModal.category} spot={proofModal.spot} onClose={() => setProofModal(null)} />}
+    </ModalContext.Provider>
+  );
+};
+
+// ============================================================================
+// EXPORT
+// ============================================================================
+
+export default function InfluencerPlatformV4() {
+  const [config, setConfig] = useState(DEFAULT_CONFIG);
+  const [loading, setLoading] = useState(true);
+const [lang, setLang] = useState(() => {
+  if (typeof window !== 'undefined') {
+    const browserLang = navigator.language?.slice(0, 2);
+    if (['de', 'en', 'es'].includes(browserLang)) return browserLang;
+  }
+  return 'de';
+});
+  const [loiModalOpen, setLoiModalOpen] = useState(false);
+  
+useEffect(() => {
+    const loadData = async () => {
+      try {
+        // Config und CMS-Daten parallel laden
+const [configRes, cmsRes, influencerRes] = await Promise.all([
+          fetch('/config.json').then(r => r.ok ? r.json() : {}),
+fetch('/api/content').then(r => r.ok ? r.json() : {}),
+          fetch('/api/admin/influencers?forWebsite=true').then(r => r.ok ? r.json() : { influencers: [] })
+        ]);
+        
+        // Config mergen
+        let merged = deepMerge(DEFAULT_CONFIG, configRes);
+        
+        // CMS-Daten integrieren
+        if (cmsRes.global) {
+          merged.site.name = cmsRes.global.companyName || merged.site.name;
+          merged.impressum.email = cmsRes.global.contact?.email || merged.impressum.email;
+          merged.impressum.mobile = cmsRes.global.contact?.phone || merged.impressum.mobile;
+          merged.impressum.name = cmsRes.global.contact?.founder || merged.impressum.name;
+          // Slogan in Translations
+          if (cmsRes.global.slogan) {
+            merged.translations.de.heroTitle = cmsRes.global.slogan.de || merged.translations.de.heroTitle;
+            merged.translations.en.heroTitle = cmsRes.global.slogan.en || merged.translations.en.heroTitle;
+            merged.translations.es.heroTitle = cmsRes.global.slogan.es || merged.translations.es.heroTitle;
+          }
+        }
+        
+        // CMS Sections integrieren
+        if (cmsRes.sections?.hero) {
+          const hero = cmsRes.sections.hero;
+          if (hero.headline) {
+            merged.translations.de.heroTitle = hero.headline.de || merged.translations.de.heroTitle;
+            merged.translations.en.heroTitle = hero.headline.en || merged.translations.en.heroTitle;
+            merged.translations.es.heroTitle = hero.headline.es || merged.translations.es.heroTitle;
+          }
+          if (hero.subheadline) {
+            merged.translations.de.heroSubtitle = hero.subheadline.de || merged.translations.de.heroSubtitle;
+            merged.translations.en.heroSubtitle = hero.subheadline.en || merged.translations.en.heroSubtitle;
+            merged.translations.es.heroSubtitle = hero.subheadline.es || merged.translations.es.heroSubtitle;
+          }
+        }
+
+        // About Section
+        if (cmsRes.sections?.about) {
+          const about = cmsRes.sections.about;
+          if (about.title) {
+            merged.aboutUs.de.title = about.title.de || merged.aboutUs.de.title;
+            merged.aboutUs.en.title = about.title.en || merged.aboutUs.en.title;
+            merged.aboutUs.es.title = about.title.es || merged.aboutUs.es.title;
+          }
+          if (about.description) {
+            merged.aboutUs.de.paragraphs = [about.description.de, ...(merged.aboutUs.de.paragraphs?.slice(1) || [])];
+            merged.aboutUs.en.paragraphs = [about.description.en, ...(merged.aboutUs.en.paragraphs?.slice(1) || [])];
+            merged.aboutUs.es.paragraphs = [about.description.es, ...(merged.aboutUs.es.paragraphs?.slice(1) || [])];
+          }
+        }
+        
+        // Golden Clients
+        if (cmsRes.customers?.customers) {
+          merged.goldenClientsData = cmsRes.customers.customers;
+        }
+
+        // FAQ Daten
+        if (cmsRes.sections?.faq) {
+          merged.faq = cmsRes.sections.faq;
+        }
+        // Legal Texte (Datenschutz, AGB, Impressum)
+        if (cmsRes.sections?.legal) {
+          const legal = cmsRes.sections.legal;
+          if (legal.privacy) {
+            merged.legalTexts.privacy = {
+              de: legal.privacy.content?.de || '',
+              en: legal.privacy.content?.en || '',
+              es: legal.privacy.content?.es || ''
+            };
+          }
+          if (legal.terms) {
+            merged.legalTexts.terms = {
+              de: legal.terms.content?.de || '',
+              en: legal.terms.content?.en || '',
+              es: legal.terms.content?.es || ''
+            };
+          }
+          if (legal.imprint) {
+            merged.legalTexts.imprint = {
+              de: legal.imprint.content?.de || '',
+              en: legal.imprint.content?.en || '',
+              es: legal.imprint.content?.es || ''
+            };
+          }
+        }
+// Influencer aus Datenbank in Config integrieren
+        if (influencerRes.influencers && influencerRes.influencers.length > 0) {
+          merged.influencerData = {
+            diamond: influencerRes.influencers.filter(i => i.category === 'diamond').map((inf, idx) => ({
+              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username, platform: inf.platform
+            })),
+            platinum: influencerRes.influencers.filter(i => i.category === 'platin').map((inf, idx) => ({
+              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username, platform: inf.platform
+            })),
+            gold: influencerRes.influencers.filter(i => i.category === 'gold').map((inf, idx) => ({
+              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username, platform: inf.platform
+            })),
+            risingStar: influencerRes.influencers.filter(i => i.category === 'rising').map((inf, idx) => ({
+              id: inf.id, rank: idx + 1, name: inf.name, followers: inf.followers, image: inf.profileImage, booked: true, username: inf.username, platform: inf.platform
+            }))
+          };
+        } 
+        setConfig(merged);
+      } catch (error) {
+        console.warn('Using default config:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
+  
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('loi') === 'true') {
+      setLoiModalOpen(true);
+      const langParam = urlParams.get('lang');
+      if (langParam && ['de', 'en', 'es'].includes(langParam)) {
+        setLang(langParam);
+      }
+    }
+  }, []);
+  const t = config.translations[lang] || config.translations.de;
+  
+return (
+    <ConfigContext.Provider value={{ config, setConfig, loading }}>
+      <LanguageContext.Provider value={{ lang, setLang, t }}>
+        <ModalProvider>
+          <App />
+          <FounderLOIModal 
+            isOpen={loiModalOpen}
+            onClose={() => setLoiModalOpen(false)}
+            initialLanguage={lang}
+          />
+        </ModalProvider>
+      </LanguageContext.Provider>
+    </ConfigContext.Provider>
+  );
+}
+          
